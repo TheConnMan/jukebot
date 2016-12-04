@@ -38,7 +38,10 @@ function parseYouTubeVideo(data, user) {
 
 function parseDuration(duration) {
   var seconds = 0;
-  duration.substring(2).match(/[1-9]+[A-Za-z]+/g).forEach(function(item) {
+  if (duration.substring(2).indexOf('M') == -1) {
+    return parseInt(duration.substring(2, duration.length));
+  }
+  duration.substring(2).match(/[1-9]+[A-Za-z]/g).forEach(function(item) {
     switch(item.slice(-1)) {
       case 'H':
         seconds += 3600 * parseInt(item.substring(0, item.length));
