@@ -1,23 +1,27 @@
 var app = angular.module('app', []);
 app.controller('controller', function($scope, $timeout, $http) {
-    $scope.currentVideo = '';
-    $scope.startTime = 0;
-
-    $scope.getIframeSrc = function() {
-      return 'https://www.youtube.com/embed/' + $scope.currentVideo + '?autoplay=1&start=' + $scope.startTime;
+    $scope.initTime = new Date().getTime();
+    $scope.videos = [];
+    $scope.currentVideo = function() {
+      var playing = $scope.videos.filter(function(video) { return video.playing; });
+      return playing.length == 1 ? playing[0] : null;
     };
 
-    $scope.videos = [];
+    $scope.startTime = function() {
+      var video = $scope.currentVideo();
+      return video ? Math.max(Math.floor(($scope.initTime - new Date(video.startTime).getTime()) / 1000), 0) : 0;
+    };
+
+    $scope.getIframeSrc = function() {
+      var video = $scope.currentVideo();
+      return video ? 'https://www.youtube.com/embed/' + video.key + '?autoplay=1&start=' + $scope.startTime() : '';
+    };
+
     $scope.getAllVideos = function() {
       io.socket.get('/video/subscribe');
 
-      $http.get('/video/recent').success(function(data) {
-          $scope.videos = data;
-      });
-
-      $http.get('/video/current').success(function(data) {
-        $scope.currentVideo = data.key;
-        $scope.startTime = data.startTime;
+      $http.get('/video/recent').success(function(videos) {
+          $scope.videos = videos;
       });
     };
 

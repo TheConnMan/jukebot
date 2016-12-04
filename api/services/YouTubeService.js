@@ -13,7 +13,6 @@ function getYouTubeVideo(key, user) {
           if (err) {
             throw err;
           }
-          Video.publishCreate(video);
           resolve(video);
         });
       } else {

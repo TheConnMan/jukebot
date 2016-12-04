@@ -11,19 +11,5 @@ module.exports = {
     }).exec(function(err, videos) {
       res.send(videos);
     });
-  },
-  current: function(req, res) {
-    Video.findOne({
-      playing: true
-    }).exec(function(err, video) {
-      if (video) {
-        res.send({
-          key: video.key,
-          startTime: Math.floor((new Date().getTime() - video.startTime.getTime()) / 1000)
-        });
-      } else {
-        res.send({});
-      }
-    });
   }
 };
