@@ -1,7 +1,7 @@
 var app = angular.module('app', []);
-app.controller('controller', function($scope, $timeout, $http, $log) {
-    $scope.currentVideo = 'FhKS3WGxjOg';
-    $scope.startTime = 20;
+app.controller('controller', function($scope, $timeout, $http) {
+    $scope.currentVideo = '';
+    $scope.startTime = 0;
 
     $scope.getIframeSrc = function() {
       return 'https://www.youtube.com/embed/' + $scope.currentVideo + '?autoplay=1&start=' + $scope.startTime;
@@ -13,17 +13,19 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
 
       $http.get('/video/recent').success(function(data) {
           $scope.videos = data;
-          $log.info(data);
+      });
+
+      $http.get('/video/current').success(function(data) {
+        $scope.currentVideo = data.key;
+        $scope.startTime = data.startTime;
       });
     };
 
     $scope.getAllVideos();
 
     io.socket.on('video', function(obj) {
-        $log.info(obj);
         if (obj.verb === 'created') {
             $scope.videos.push(obj.data);
-            $scope.currentVideo = obj.data.key;
             $scope.$digest();
         }
     });

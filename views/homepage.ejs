@@ -1,6 +1,14 @@
 <h2 class="ui dividing header">Viewer</h2>
 <div ng-app="app" ng-controller="controller">
-  <iframe style="display: block; margin: 0 auto;" width="560" height="315" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
+  <div ng-if="currentVideo">
+    <iframe style="display: block; margin: 0 auto;" width="560" height="315" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <div ng-if="!currentVideo">
+    <h2 class="ui center aligned icon header">
+      <i class="sound icon"></i>
+      No Music Playing
+    </h2>
+  </div>
 
   <div class="ui divider"></div>
   <h4 class="ui header">Upcoming</h4>
