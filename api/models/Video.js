@@ -5,6 +5,10 @@ module.exports = {
       type: 'string',
       required: true
     },
+    title: {
+      type: 'string',
+      required: true
+    },
     durationSeconds: {
       type: 'integer',
       required: true
@@ -14,10 +18,18 @@ module.exports = {
       required: true
     },
     startTime: {
-      type: 'dateTime'
+      type: 'datetime'
     },
     thumbnail: {
       type: 'string'
+    },
+    playing: {
+      type: 'boolean',
+      defaultsTo: false
+    },
+    played: {
+      type: 'boolean',
+      defaultsTo: false
     }
   }
 };

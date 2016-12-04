@@ -31,7 +31,8 @@ function parseYouTubeVideo(data, user) {
     key: item.id,
     durationSeconds: parseDuration(item.contentDetails.duration),
     user: user,
-    thumbnail: item.snippet.thumbnails.default.url
+    thumbnail: item.snippet.thumbnails.default.url,
+    title: item.snippet.title
   });
 }
 
