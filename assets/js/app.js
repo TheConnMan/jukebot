@@ -28,10 +28,15 @@ app.controller('controller', function($scope, $timeout, $http) {
     $scope.getAllVideos();
 
     io.socket.on('video', function(obj) {
-        if (obj.verb === 'created') {
-            $scope.videos.push(obj.data);
-            $scope.$digest();
+      if (obj.verb === 'created') {
+          $scope.videos.push(obj.data);
+      } else if (obj.verb === 'updated') {
+        var video = $scope.videos.filter(function(v) { return v.id === obj.data.id; });
+        if (video.length === 1) {
+          $scope.videos[$scope.videos.indexOf(video[0])] = obj.data;
         }
+      }
+      $scope.$digest();
     });
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
