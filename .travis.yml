@@ -1,0 +1,15 @@
+sudo: required
+
+language: javascript
+
+services:
+  - docker
+
+script:
+  - docker build -t theconnman/jukebot .
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+      docker push theconnman/jukebot;
+    fi
