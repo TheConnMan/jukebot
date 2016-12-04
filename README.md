@@ -13,4 +13,5 @@ Slack-Enabled Syncronized Music Listening
 ## Environment Variables
 - **GOOGLE_API_KEY** - Google project API key
 - **SLACK_WEBHOOK** (Optional) - [Slack Incoming Webhook URL](https://my.slack.com/apps/A0F7XDUAZ-incoming-webhooks) for sending song addition and currently now playing notifications
+- **SLASH_TOKEN** - [Slack Slash Token](https://my.slack.com/apps/A0F82E8CA-slash-commands) for verifying a Slash Command request
 - **SERVER_URL** - JukeBot server URL for linking back

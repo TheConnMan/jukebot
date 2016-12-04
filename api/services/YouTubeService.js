@@ -2,8 +2,13 @@ var Promise = require('promise');
 var request = require('request');
 
 module.exports = {
+  parseYouTubeLink: parseYouTubeLink,
   getYouTubeVideo: getYouTubeVideo
 };
+
+function parseYouTubeLink(link) {
+  return link.match(/v=[^?&]+/g)[0].substring(2);
+}
 
 function getYouTubeVideo(key, user) {
   return new Promise(function(resolve, reject) {
