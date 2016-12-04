@@ -20,11 +20,24 @@
           {{video.title}}
         </div>
         <div class="meta">
-          Added by {{video.user}}
+          Added by @{{video.user}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui divider"></div>
+  <h4 class="ui header">Recent</h4>
+  <div class="ui three cards">
+    <div class="card" ng-repeat="video in videos | filter: { played: true, playing: false } track by video.id">
+      <div class="content">
+        <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
+        <div class="header">
+          {{video.title}}
+        </div>
+        <div class="meta">
+          Added by @{{video.user}}
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular.min.js"></script>
