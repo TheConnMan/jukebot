@@ -1,6 +1,22 @@
 <h2 class="ui dividing header">Viewer</h2>
 <div ng-app="app" ng-controller="controller">
   <iframe style="display: block; margin: 0 auto;" width="560" height="315" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
+
+  <div class="ui divider"></div>
+  <h4 class="ui header">Upcoming</h4>
+  <div class="ui three cards">
+    <div class="card" ng-repeat="video in videos | filter: { played: false, playing: false } track by video.id">
+      <div class="content">
+        <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
+        <div class="header">
+          {{video.title}}
+        </div>
+        <div class="meta">
+          Added by {{video.user}}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.9/angular.min.js"></script>
