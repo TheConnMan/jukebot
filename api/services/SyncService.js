@@ -1,7 +1,14 @@
 var Promise = require('promise');
+var SlackWebhook = require('slack-webhook');
+var slack = process.env.SLACK_WEBHOOK ? new SlackWebhook(process.env.SLACK_WEBHOOK, {
+  defaults: {
+    username: 'JukeBot'
+  }
+}) : null;
 
 module.exports = {
-  addVideo: addVideo
+  addVideo: addVideo,
+  sendAddMessages: sendAddMessages
 };
 
 function addVideo(video) {
@@ -15,15 +22,37 @@ function addVideo(video) {
         video.played = true;
         setTimeout(endCurrentVideo, video.durationSeconds * 1000);
         video.save(function() {
-          Video.publishCreate(video);
           resolve(video);
         });
       } else {
-        Video.publishCreate(video);
         resolve(video);
       }
     });
   });
+}
+
+function sendAddMessages(video) {
+  return new Promise(function(resolve, reject) {
+    Video.publishCreate(video);
+    if (slack) {
+      slack.send({
+        text: '@' + video.user + ' added a song to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+        attachments: [formatSlackAttachment(video)]
+      }).then(function() {
+        resolve(video);
+      });
+    } else {
+      resolve(video);
+    }
+  });
+}
+
+function formatSlackAttachment(video) {
+  return {
+    title: video.title,
+    title_link: 'https://www.youtube.com/watch?v=' + video.key,
+    thumb_url: video.thumbnail
+  };
 }
 
 function endCurrentVideo() {
@@ -55,6 +84,15 @@ function startVideo(video) {
   setTimeout(endCurrentVideo, video.durationSeconds * 1000);
   video.save(function() {
     Video.publishUpdate(video.id, video);
-    console.log('Started playing video ' + video.key);
+    if (slack) {
+      slack.send({
+        text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+        'mrkdwn': true
+      }).then(function() {
+        console.log('Started playing video ' + video.key);
+      });
+    } else {
+      console.log('Started playing video ' + video.key);
+    }
   });
 }
