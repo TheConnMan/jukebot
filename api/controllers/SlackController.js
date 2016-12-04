@@ -1,10 +1,11 @@
-module.exports = {
-  add: function(req, res) {
-    YouTubeService.getYouTubeVideo(req.body.key, req.body.user).then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
-      return res.send(200);
-    });
-  },
+var help = [
+  'JukeBot - Slack-Enabled Syncronized Music Listening',
+  'Available Commands:',
+  '    add [youtube-link] - Add a video to the queue',
+  '    help - This help text'
+];
 
+module.exports = {
   slash: function(req, res) {
     var params = req.allParams();
     if (params.token !== process.env.SLASH_TOKEN) {
@@ -21,8 +22,11 @@ module.exports = {
             res.send(err);
           });
           break;
+        case 'help':
+          res.send(help.join('\n'));
+          break;
         default:
-          res.send('The command "' + command + '" is not currently supported');
+          res.send('The command "' + command + '" is not currently supported. Run /jukebot help to see a list of available commands.');
           break;
       }
     }
