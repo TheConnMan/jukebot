@@ -28,7 +28,7 @@
   <div class="ui divider"></div>
   <h4 class="ui header">Recent</h4>
   <div class="ui three cards">
-    <div class="card" ng-repeat="video in videos | filter: { played: true, playing: false } track by video.id">
+    <div class="card" ng-repeat="video in videos | filter: { played: true, playing: false } | orderBy: createdAt : true track by video.id">
       <div class="content">
         <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
         <div class="header">
