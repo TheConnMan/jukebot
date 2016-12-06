@@ -1,9 +1,8 @@
 <div class="ui grid" ng-app="app" ng-controller="controller">
   <div class="ten wide column">
     <div class="ui segment">
-      <h2 class="ui dividing header">Viewer</h2>
       <div ng-if="currentVideo().id">
-        <h3>{{currentVideo().title}}</h3>
+        <h2 class="ui dividing header">{{currentVideo().title}}</h2>
         <iframe style="display: block; margin: 0 auto;" width="853" height="480" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
       </div>
       <div ng-if="!currentVideo().id">
