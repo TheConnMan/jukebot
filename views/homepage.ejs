@@ -16,8 +16,8 @@
   </div>
   <div class="six wide column">
     <h2 class="ui dividing header">Upcoming</h2>
-    <div class="ui one cards">
-      <div class="card" ng-repeat="video in videos | filter: { played: false, playing: false } track by video.id">
+    <div ng-if="upcoming().length > 0" class="ui one cards">
+      <div class="card" ng-repeat="video in upcoming() track by video.id">
         <div class="content">
           <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
           <div class="header">
@@ -29,9 +29,13 @@
         </div>
       </div>
     </div>
+    <h4 ng-if="upcoming().length == 0" class="ui center aligned icon header">
+      <i class="video icon"></i>
+      <div class="content">No Upcoming Videos</div>
+    </h4>
     <h2 class="ui dividing header">Recent</h2>
-    <div class="ui one cards">
-      <div class="card" ng-repeat="video in videos | filter: { played: true, playing: false } | orderBy: createdAt : true track by video.id">
+    <div ng-if="recent().length > 0" class="ui one cards">
+      <div class="card" ng-repeat="video in recent() | orderBy: createdAt : true track by video.id">
         <div class="content">
           <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
           <div class="header">
@@ -43,5 +47,9 @@
         </div>
       </div>
     </div>
+    <h4 ng-if="recent().length == 0" class="ui center aligned icon header">
+      <i class="history icon"></i>
+      <div class="content">No Recent Videos</div>
+    </h4>
   </div>
 </div>

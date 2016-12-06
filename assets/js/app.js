@@ -38,6 +38,14 @@ app.controller('controller', function($scope, $timeout, $http) {
       }
       $scope.$digest();
     });
+
+    $scope.upcoming = function() {
+      return $scope.videos.filter(function(video) { return !video.played && !video.playing; });
+    };
+
+    $scope.recent = function() {
+      return $scope.videos.filter(function(video) { return video.played && !video.playing; });
+    };
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
 });
