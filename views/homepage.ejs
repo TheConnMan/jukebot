@@ -1,42 +1,45 @@
-<h2 class="ui dividing header">Viewer</h2>
-<div ng-app="app" ng-controller="controller">
-  <div ng-if="currentVideo().id">
-    <h3>{{currentVideo().title}}</h3>
-    <iframe style="display: block; margin: 0 auto;" width="853" height="480" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
-  </div>
-  <div ng-if="!currentVideo().id">
-    <h2 class="ui center aligned icon header">
-      <i class="sound icon"></i>
-      No Music Playing
-    </h2>
-  </div>
-
-  <div class="ui divider"></div>
-  <h4 class="ui header">Upcoming</h4>
-  <div class="ui three cards">
-    <div class="card" ng-repeat="video in videos | filter: { played: false, playing: false } track by video.id">
-      <div class="content">
-        <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
-        <div class="header">
-          {{video.title}}
-        </div>
-        <div class="meta">
-          Added by @{{video.user}}
-        </div>
+<div class="ui grid" ng-app="app" ng-controller="controller">
+  <div class="ten wide column">
+    <div class="ui segment">
+      <h2 class="ui dividing header">Viewer</h2>
+      <div ng-if="currentVideo().id">
+        <h3>{{currentVideo().title}}</h3>
+        <iframe style="display: block; margin: 0 auto;" width="853" height="480" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div ng-if="!currentVideo().id">
+        <h2 class="ui center aligned icon header">
+          <i class="sound icon"></i>
+          No Music Playing
+        </h2>
       </div>
     </div>
   </div>
-  <div class="ui divider"></div>
-  <h4 class="ui header">Recent</h4>
-  <div class="ui three cards">
-    <div class="card" ng-repeat="video in videos | filter: { played: true, playing: false } | orderBy: createdAt : true track by video.id">
-      <div class="content">
-        <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
-        <div class="header">
-          {{video.title}}
+  <div class="six wide column">
+    <h2 class="ui dividing header">Upcoming</h2>
+    <div class="ui one cards">
+      <div class="card" ng-repeat="video in videos | filter: { played: false, playing: false } track by video.id">
+        <div class="content">
+          <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
+          <div class="header">
+            {{video.title}}
+          </div>
+          <div class="meta">
+            Added by @{{video.user}}
+          </div>
         </div>
-        <div class="meta">
-          Added by @{{video.user}}
+      </div>
+    </div>
+    <h2 class="ui dividing header">Recent</h2>
+    <div class="ui one cards">
+      <div class="card" ng-repeat="video in videos | filter: { played: true, playing: false } | orderBy: createdAt : true track by video.id">
+        <div class="content">
+          <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
+          <div class="header">
+            {{video.title}}
+          </div>
+          <div class="meta">
+            Added by @{{video.user}}
+          </div>
         </div>
       </div>
     </div>
