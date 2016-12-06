@@ -16,5 +16,6 @@ after_success:
       docker push theconnman/jukebot:latest;
       docker push theconnman/jukebot:$VERSION;
     elif [ "$TRAVIS_BRANCH" == "dev" ]; then
+      docker tag theconnman/jukebot theconnman/jukebot:latest-dev;
       docker push theconnman/jukebot:latest-dev;
     fi
