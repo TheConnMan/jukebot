@@ -1,6 +1,6 @@
 sudo: required
 
-language: javascript
+language: node_js
 
 services:
   - docker
@@ -9,7 +9,12 @@ script:
   - docker build -t theconnman/jukebot .
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-      docker push theconnman/jukebot;
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    if [ "$TRAVIS_BRANCH" == "master" ]; then
+      VERSION=`node -e "console.log(require('./package.json').version);"`;
+      docker tag theconnman/jukebot theconnman/jukebot:$VERSION;
+      docker push theconnman/jukebot:latest;
+      docker push theconnman/jukebot:$VERSION;
+    elif [ "$TRAVIS_BRANCH" == "dev" ]; then
+      docker push theconnman/jukebot:latest-dev;
     fi
