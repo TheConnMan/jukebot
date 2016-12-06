@@ -1,0 +1,24 @@
+jukebot:
+  image: theconnman/jukebot:latest
+  container_name: jukebot
+  ports:
+    - "8000:1337"
+  labels:
+    - "traefik.backend=jukebot"
+  environment:
+    - SERVER_URL=http://jukebot.localhost
+  env_file: .env
+  restart: always
+
+traefik:
+  image: traefik
+  command: --web --docker --docker.domain=localhost --logLevel=DEBUG
+  ports:
+    - "80:80"
+    - "8080:8080"
+    - "443:443"
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /pwd/traefik.toml:/traefik.toml
+    - /pwd/acme.json:/acme.json
+  restart: always
