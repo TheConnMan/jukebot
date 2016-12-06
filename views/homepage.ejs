@@ -15,14 +15,14 @@
   </div>
   <div class="six wide column">
     <h2 class="ui dividing header">Add Video</h2>
-    <div class="ui fluid left corner labeled input" style="padding-bottom: 1em;">
+    <div class="ui fluid left corner labeled input" style="padding-bottom: 1em;" enter-press="addVideo()">
       <input type="text" placeholder="https://www.youtube.com/watch?v=_hZCsgcKa-g" ng-model="link">
       <div class="ui left corner label">
         <i class="video icon"></i>
       </div>
     </div>
     <div class="ui left corner labeled input">
-      <input type="text" placeholder="Added By" ng-model="username">
+      <input type="text" placeholder="Added By" ng-model="username" enter-press="addVideo()">
       <div class="ui left corner label">
         <i class="user icon"></i>
       </div>
