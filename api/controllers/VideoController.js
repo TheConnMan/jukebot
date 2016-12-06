@@ -9,7 +9,7 @@ module.exports = {
   recent: function(req, res) {
     Video.find({
       createdAt: {
-        '>=': new Date(new Date().getTime() - 3600 * 1000)
+        '>=': new Date(Date.now() - 3600 * 1000)
       }
     }).exec(function(err, videos) {
       res.send(videos);
