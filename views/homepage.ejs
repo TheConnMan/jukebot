@@ -1,7 +1,8 @@
 <h2 class="ui dividing header">Viewer</h2>
 <div ng-app="app" ng-controller="controller">
   <div ng-if="currentVideo().id">
-    <iframe style="display: block; margin: 0 auto;" width="560" height="315" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
+    <h3>{{currentVideo().title}}</h3>
+    <iframe style="display: block; margin: 0 auto;" width="853" height="480" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
   </div>
   <div ng-if="!currentVideo().id">
     <h2 class="ui center aligned icon header">
