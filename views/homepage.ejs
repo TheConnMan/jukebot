@@ -15,6 +15,20 @@
     </div>
   </div>
   <div class="six wide column">
+    <h2 class="ui dividing header">Add Video</h2>
+    <div class="ui left corner labeled input">
+      <input type="text" placeholder="Username" ng-model="username">
+      <div class="ui left corner label">
+        <i class="user icon"></i>
+      </div>
+    </div>
+    <div class="ui left corner labeled input">
+      <input type="text" placeholder="https://www.youtube.com/watch?v=_hZCsgcKa-g" ng-model="link">
+      <div class="ui left corner label">
+        <i class="video icon"></i>
+      </div>
+    </div>
+    <button class="ui primary button" ng-click="addVideo()">Add</button>
     <h2 class="ui dividing header">Upcoming</h2>
     <div ng-if="upcoming().length > 0" class="ui one cards">
       <div class="card" ng-repeat="video in upcoming() track by video.id">
@@ -24,7 +38,7 @@
             {{video.title}}
           </div>
           <div class="meta">
-            Added by @{{video.user}}
+            Added by {{video.user}}
           </div>
         </div>
       </div>
@@ -42,7 +56,7 @@
             {{video.title}}
           </div>
           <div class="meta">
-            Added by @{{video.user}}
+            Added by {{video.user}}
           </div>
         </div>
       </div>

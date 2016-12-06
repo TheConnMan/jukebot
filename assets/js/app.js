@@ -46,6 +46,13 @@ app.controller('controller', function($scope, $timeout, $http) {
     $scope.recent = function() {
       return $scope.videos.filter(function(video) { return video.played && !video.playing; });
     };
+
+    $scope.addVideo = function() {
+      $http.post('/api/add', {
+        link: $scope.link,
+        user: $scope.username
+      });
+    };
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
 });
