@@ -39,7 +39,7 @@ function sendAddMessages(video) {
     Video.publishCreate(video);
     if (slack) {
       slack.send({
-        text: '@' + video.user + ' added a song to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+        text: video.user + ' added a song to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
         attachments: [formatSlackAttachment(video)]
       }).then(function() {
         resolve(video);
