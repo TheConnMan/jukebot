@@ -1,9 +1,9 @@
-var Promise = require('promise');
-var request = require('request');
+const Promise = require('promise');
+const request = require('request');
 
 module.exports = {
-  parseYouTubeLink: parseYouTubeLink,
-  getYouTubeVideo: getYouTubeVideo
+  parseYouTubeLink,
+  getYouTubeVideo
 };
 
 function parseYouTubeLink(link) {
@@ -12,9 +12,9 @@ function parseYouTubeLink(link) {
 
 function getYouTubeVideo(key, user) {
   return new Promise(function(resolve, reject) {
-    request('https://www.googleapis.com/youtube/v3/videos?id=' + key + '&part=snippet,contentDetails&key=' + process.env.GOOGLE_API_KEY, function(error, response, body) {
+    request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, function(error, response, body) {
       if (!error && response.statusCode == 200) {
-        parseYouTubeVideo(JSON.parse(body), user).exec(function(err, video) {
+        parseYouTubeVideo(JSON.parse(body), user).exec((err, video) => {
           if (err) {
             throw err;
           }
@@ -46,7 +46,7 @@ function parseDuration(duration) {
   if (duration.substring(2).indexOf('M') == -1) {
     return parseInt(duration.substring(2, duration.length));
   }
-  duration.substring(2).match(/[1-9]+[A-Za-z]/g).forEach(function(item) {
+  duration.substring(2).match(/[1-9]+[A-Za-z]/g).forEach((item) => {
     switch(item.slice(-1)) {
       case 'H':
         seconds += 3600 * parseInt(item.substring(0, item.length));
