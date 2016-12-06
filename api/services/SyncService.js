@@ -88,10 +88,8 @@ function startVideo(video) {
   logger.info('Setting timeout');
   setTimeout(endCurrentVideo, video.durationSeconds * 1000);
   video.save(function() {
-    setTimeout(function() {
-      logger.info('Stopping video ' + video.key);
-      Video.publishUpdate(video.id, video);
-    }, 1000);
+    logger.info('Stopping video ' + video.key);
+    Video.publishUpdate(video.id, video);
     if (slack) {
       slack.send({
         text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',

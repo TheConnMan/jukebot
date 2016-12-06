@@ -1,6 +1,9 @@
 module.exports = {
   subscribe: function(req, res) {
     Video.watch(req.socket);
+    Video.find().exec(function(err, videos) {
+      Video.subscribe(req.socket, videos);
+    });
     console.log('User subscribed to ' + req.socket.id);
   },
   recent: function(req, res) {
