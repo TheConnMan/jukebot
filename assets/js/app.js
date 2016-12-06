@@ -1,5 +1,6 @@
 var app = angular.module('app', []);
 app.controller('controller', function($scope, $timeout, $http, $log) {
+    $scope.username = sessionStorage.username;
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
     $scope.currentVideo = function() {
@@ -52,6 +53,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     };
 
     $scope.addVideo = function() {
+      sessionStorage.username = $scope.username;
       $log.log('Adding video');
       $log.log($scope.link);
       $http.post('/api/add', {
