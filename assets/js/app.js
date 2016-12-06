@@ -57,6 +57,8 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       $http.post('/api/add', {
         link: $scope.link,
         user: $scope.username
+      }).success(function() {
+        $scope.link = '';
       });
     };
 }).config(function($sceProvider) {
