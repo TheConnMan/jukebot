@@ -19,6 +19,7 @@
     "grunt-sync": "0.5.2",
     "include-all": "^1.0.0",
     "log4js": "^1.0.1",
+    "moment": "^2.17.1",
     "rc": "1.0.1",
     "sails": "~0.12.7",
     "sails-disk": "~0.10.9",
