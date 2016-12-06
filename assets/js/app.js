@@ -1,5 +1,5 @@
 var app = angular.module('app', []);
-app.controller('controller', function($scope, $timeout, $http) {
+app.controller('controller', function($scope, $timeout, $http, $log) {
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
     $scope.currentVideo = function() {
@@ -21,13 +21,17 @@ app.controller('controller', function($scope, $timeout, $http) {
       io.socket.get('/video/subscribe');
 
       $http.get('/video/recent').success(function(videos) {
-          $scope.videos = videos;
+        $log.log('Got all videos');
+        $log.log(videos);
+        $scope.videos = videos;
       });
     };
 
     $scope.getAllVideos();
 
     io.socket.on('video', function(obj) {
+      $log.log('Received a video update');
+      $log.log(obj);
       if (obj.verb === 'created') {
           $scope.videos.push(obj.data);
       } else if (obj.verb === 'updated') {
@@ -48,6 +52,8 @@ app.controller('controller', function($scope, $timeout, $http) {
     };
 
     $scope.addVideo = function() {
+      $log.log('Adding video');
+      $log.log($scope.link);
       $http.post('/api/add', {
         link: $scope.link,
         user: $scope.username
