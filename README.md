@@ -1,6 +1,8 @@
 # JukeBot
 Slack-Enabled Syncronized Music Listening
 
+**JukeBot** is for Slack teams who want to listen to music together, add music through Slack, and chat about the music in a Slack channel.
+
 ## Setup
 ### Google API Key for YouTube
 1. Go to https://console.developers.google.com
@@ -24,6 +26,8 @@ To use a Slack Slash Command you'll need to set one up (preferably after the run
 1. Click save!
 
 ## Deployment
+**WARNING:** Data persistence is not currently a priority. Videos are though to be transient and once they are more than an hour old they aren't shown in the UI. Due to this schema migrations are not a high priority and new runs of **JukeBox** will start with a fresh database.
+
 Within this project is a `docker-compose.yml` file for use when deploying this project to your own server. Slack Slash Commands require the slash command endpoint to be HTTPS, so JukeBot uses [Let's Encrypt](https://letsencrypt.org/) to get an SSL cert. You'll need to be hosting JukeBot on a domain you have DNS authority over for this to work as you'll need to create a couple DNS entries.
 
 The first thing to do after cloning this repo (or copying down) onto the deployment box is to replace a few values in `docker-compose.yml` and `traefik.toml`. In `docker-compose.yml` replace the two **localhost** references with your own domain or subdomain which points to the current box (e.g. projects.theconnman.com). In `traefik.toml` replace the email address with your own and the domain from localhost to the same one as before. Also run `touch acme.json` to create an empty credentials file.
