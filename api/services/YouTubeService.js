@@ -34,7 +34,7 @@ function parseYouTubeVideo(data, user) {
   var item = data.items[0];
   return Video.create({
     key: item.id,
-    durationSeconds: parseDuration(item.contentDetails.duration),
+    duration: parseDuration(item.contentDetails.duration),
     user: user,
     thumbnail: item.snippet.thumbnails.default.url,
     title: item.snippet.title
@@ -59,5 +59,5 @@ function parseDuration(duration) {
         break;
     }
   });
-  return seconds;
+  return seconds * 1000;
 }

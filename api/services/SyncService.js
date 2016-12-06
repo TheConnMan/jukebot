@@ -23,7 +23,7 @@ function addVideo(video) {
         video.startTime = new Date();
         video.playing = true;
         video.played = true;
-        setTimeout(endCurrentVideo, video.durationSeconds * 1000);
+        setTimeout(endCurrentVideo, video.duration);
         video.save(function() {
           resolve(video);
         });
@@ -86,7 +86,7 @@ function startVideo(video) {
   video.played = true;
   video.startTime = new Date();
   logger.info('Setting timeout');
-  setTimeout(endCurrentVideo, video.durationSeconds * 1000);
+  setTimeout(endCurrentVideo, video.duration);
   video.save(function() {
     logger.info('Stopping video ' + video.key);
     Video.publishUpdate(video.id, video);
