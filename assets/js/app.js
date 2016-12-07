@@ -3,6 +3,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     $scope.username = sessionStorage.username;
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
+
     $scope.currentVideo = function() {
       var playing = $scope.videos.filter(function(video) { return video.playing; });
       return playing.length == 1 ? playing[0] : null;
@@ -13,10 +14,17 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       return video ? Math.max(Math.floor(($scope.initTime - new Date(video.startTime).getTime()) / 1000), 0) : 0;
     };
 
-    $scope.getIframeSrc = function() {
-      var video = $scope.currentVideo();
-      return video ? 'https://www.youtube.com/embed/' + video.key + '?autoplay=1&start=' + $scope.startTime() : '';
-    };
+    $scope.$watch($scope.currentVideo, function(currentVideo) {
+      setTimeout(function() {
+        $('.ui.embed').embed({
+          url: currentVideo ? '//www.youtube.com/embed/' + currentVideo.key : '',
+          autoplay: true,
+          parameters: {
+            start: $scope.startTime()
+          }
+        });
+      }, 0);
+    }, true);
 
     $scope.getAllVideos = function() {
       io.socket.get('/video/subscribe');

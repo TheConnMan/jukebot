@@ -3,7 +3,7 @@
     <div class="ui segment">
       <div ng-if="currentVideo().id">
         <h2 class="ui dividing header"><a ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}" target="_blank">{{currentVideo().title}}</a></h2>
-        <iframe style="display: block; margin: 0 auto;" width="853" height="480" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
+        <div class="ui embed"></div>
       </div>
       <div ng-if="!currentVideo().id">
         <h2 class="ui center aligned icon header">
