@@ -48,6 +48,11 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
         if (video.length === 1) {
           $scope.videos[$scope.videos.indexOf(video[0])] = obj.data;
         }
+      } else if (obj.verb === 'destroyed') {
+        var removedVideo = $scope.videos.filter(function(v) { return v.id == obj.id; });
+        if (removedVideo.length === 1) {
+          $scope.videos.splice($scope.videos.indexOf(removedVideo[0]), 1);
+        }
       }
       $scope.$digest();
     });
@@ -70,6 +75,10 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       }).success(function() {
         $scope.link = '';
       });
+    };
+
+    $scope.remove = function(id) {
+      $http.delete('/api/remove/' + id);
     };
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);

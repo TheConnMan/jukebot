@@ -31,8 +31,11 @@
     <h2 class="ui dividing header">Upcoming</h2>
     <div ng-if="upcoming().length > 0" class="ui one cards">
       <div class="card" ng-repeat="video in upcoming() track by video.id">
+        <a class="ui red right mini corner label" ng-click="remove(video.id)">
+          <i class="remove icon" style="cursor: pointer;"></i>
+        </a>
         <div class="content">
-          <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
+          <img class="right floated tiny ui image" ng-src="{{video.thumbnail}}">
           <div class="header">
             <a ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
               {{video.title}}

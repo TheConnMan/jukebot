@@ -7,5 +7,15 @@ module.exports = {
     }).catch(function(err) {
       res.send(err);
     });
+  },
+
+  remove: function(req, res) {
+    var params = req.allParams();
+    Video.destroy({
+      id: params.id
+    }).exec(function(err) {
+      Video.publishDestroy(params.id);
+      res.send(204);
+    });
   }
 };
