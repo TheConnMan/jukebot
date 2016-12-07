@@ -1,4 +1,12 @@
 module.exports = {
+  subscribe: function(req, res) {
+    req.socket.join('listeners');
+    req.socket.on('disconnect', function() {
+      emitListenerCount();
+    });
+    emitListenerCount();
+  },
+
   add: function(req, res) {
     var params = req.allParams();
     var key = YouTubeService.parseYouTubeLink(params.link);
@@ -7,5 +15,22 @@ module.exports = {
     }).catch(function(err) {
       res.send(err);
     });
+  },
+
+  remove: function(req, res) {
+    var params = req.allParams();
+    Video.destroy({
+      id: params.id
+    }).exec(function(err) {
+      Video.publishDestroy(params.id);
+      res.send(204);
+    });
   }
 };
+
+function emitListenerCount() {
+  var io = sails.io;
+  io.sockets.in('listeners').emit('listening', {
+    count: io.sockets.adapter.rooms.listeners ? io.sockets.adapter.rooms.listeners.length : 0
+  });
+}

@@ -1,5 +1,6 @@
 var Promise = require('promise');
 var request = require('request');
+var moment = require('moment');
 
 module.exports = {
   parseYouTubeLink: parseYouTubeLink,
@@ -34,30 +35,9 @@ function parseYouTubeVideo(data, user) {
   var item = data.items[0];
   return Video.create({
     key: item.id,
-    durationSeconds: parseDuration(item.contentDetails.duration),
+    duration: moment.duration(item.contentDetails.duration).asMilliseconds(),
     user: user,
     thumbnail: item.snippet.thumbnails.default.url,
     title: item.snippet.title
   });
-}
-
-function parseDuration(duration) {
-  var seconds = 0;
-  if (duration.substring(2).indexOf('M') == -1) {
-    return parseInt(duration.substring(2, duration.length));
-  }
-  duration.substring(2).match(/[1-9]+[A-Za-z]/g).forEach(function(item) {
-    switch(item.slice(-1)) {
-      case 'H':
-        seconds += 3600 * parseInt(item.substring(0, item.length));
-        break;
-      case 'M':
-        seconds += 60 * parseInt(item.substring(0, item.length));
-        break;
-      case 'S':
-        seconds += parseInt(item.substring(0, item.length));
-        break;
-    }
-  });
-  return seconds;
 }

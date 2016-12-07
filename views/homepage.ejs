@@ -2,8 +2,8 @@
   <div class="ten wide column">
     <div class="ui segment">
       <div ng-if="currentVideo().id">
-        <h2 class="ui dividing header">{{currentVideo().title}}</h2>
-        <iframe style="display: block; margin: 0 auto;" width="853" height="480" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
+        <h2 class="ui dividing header"><a ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}" target="_blank">{{currentVideo().title}}</a></h2>
+        <div class="ui embed"></div>
       </div>
       <div ng-if="!currentVideo().id">
         <h2 class="ui center aligned icon header">
@@ -12,29 +12,38 @@
         </h2>
       </div>
     </div>
+    <div class="ui large floated right blue label" style="float: right;">
+      <i class="{{listening > 1 ? 'users' : 'user'}} icon"></i>
+      {{listening}} Listener{{listening > 1 ? 's' : ''}}
+    </div>
   </div>
   <div class="six wide column">
     <h2 class="ui dividing header">Add Video</h2>
-    <div class="ui left corner labeled input">
-      <input type="text" placeholder="Username" ng-model="username">
-      <div class="ui left corner label">
-        <i class="user icon"></i>
-      </div>
-    </div>
-    <div class="ui left corner labeled input">
+    <div class="ui fluid left corner labeled input" style="padding-bottom: 1em;" enter-press="addVideo()">
       <input type="text" placeholder="https://www.youtube.com/watch?v=_hZCsgcKa-g" ng-model="link">
       <div class="ui left corner label">
         <i class="video icon"></i>
+      </div>
+    </div>
+    <div class="ui left corner labeled input">
+      <input type="text" placeholder="Added By" ng-model="username" enter-press="addVideo()">
+      <div class="ui left corner label">
+        <i class="user icon"></i>
       </div>
     </div>
     <button class="ui primary button" ng-click="addVideo()">Add</button>
     <h2 class="ui dividing header">Upcoming</h2>
     <div ng-if="upcoming().length > 0" class="ui one cards">
       <div class="card" ng-repeat="video in upcoming() track by video.id">
+        <a class="ui red right mini corner label" ng-click="remove(video.id)">
+          <i class="remove icon" style="cursor: pointer;"></i>
+        </a>
         <div class="content">
-          <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
+          <img class="right floated tiny ui image" ng-src="{{video.thumbnail}}">
           <div class="header">
-            {{video.title}}
+            <a ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
+              {{video.title}}
+            </a>
           </div>
           <div class="meta">
             Added by {{video.user}}
@@ -49,10 +58,15 @@
     <h2 class="ui dividing header">Recent</h2>
     <div ng-if="recent().length > 0" class="ui one cards">
       <div class="card" ng-repeat="video in recent() | orderBy: createdAt : true track by video.id">
+        <a class="ui green right mini corner label" ng-click="readd(video.key)">
+          <i class="plus icon" style="cursor: pointer;"></i>
+        </a>
         <div class="content">
-          <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
+          <img class="right floated tiny ui image" ng-src="{{video.thumbnail}}">
           <div class="header">
-            {{video.title}}
+            <a ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
+              {{video.title}}
+            </a>
           </div>
           <div class="meta">
             Added by {{video.user}}

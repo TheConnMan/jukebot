@@ -9,7 +9,7 @@ module.exports = {
       type: 'string',
       required: true
     },
-    durationSeconds: {
+    duration: {
       type: 'integer',
       required: true
     },

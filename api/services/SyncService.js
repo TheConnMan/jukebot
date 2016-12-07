@@ -23,7 +23,7 @@ function addVideo(video) {
         video.startTime = new Date();
         video.playing = true;
         video.played = true;
-        setTimeout(endCurrentVideo, video.durationSeconds * 1000);
+        setTimeout(endCurrentVideo, video.duration);
         video.save(function() {
           resolve(video);
         });
@@ -39,7 +39,7 @@ function sendAddMessages(video) {
     Video.publishCreate(video);
     if (slack) {
       slack.send({
-        text: '@' + video.user + ' added a song to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+        text: video.user + ' added a song to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
         attachments: [formatSlackAttachment(video)]
       }).then(function() {
         resolve(video);
@@ -86,7 +86,7 @@ function startVideo(video) {
   video.played = true;
   video.startTime = new Date();
   logger.info('Setting timeout');
-  setTimeout(endCurrentVideo, video.durationSeconds * 1000);
+  setTimeout(endCurrentVideo, video.duration);
   video.save(function() {
     logger.info('Stopping video ' + video.key);
     Video.publishUpdate(video.id, video);
