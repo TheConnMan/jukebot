@@ -81,6 +81,13 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       $http.delete('/api/remove/' + id);
     };
 
+    $scope.readd = function(key) {
+      $http.post('/api/add', {
+        link: 'https://www.youtube.com/watch?v=' + key,
+        user: $scope.username
+      });
+    };
+
     $scope.findVideoById = function(id) {
       var videoMap = $scope.videos.reduce(function(map, video) {
         map[video.id.toString()] = video;

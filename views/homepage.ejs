@@ -54,8 +54,11 @@
     <h2 class="ui dividing header">Recent</h2>
     <div ng-if="recent().length > 0" class="ui one cards">
       <div class="card" ng-repeat="video in recent() | orderBy: createdAt : true track by video.id">
+        <a class="ui green right mini corner label" ng-click="readd(video.key)">
+          <i class="plus icon" style="cursor: pointer;"></i>
+        </a>
         <div class="content">
-          <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
+          <img class="right floated tiny ui image" ng-src="{{video.thumbnail}}">
           <div class="header">
             <a ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
               {{video.title}}
