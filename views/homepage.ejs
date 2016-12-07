@@ -2,7 +2,7 @@
   <div class="ten wide column">
     <div class="ui segment">
       <div ng-if="currentVideo().id">
-        <h2 class="ui dividing header">{{currentVideo().title}}</h2>
+        <h2 class="ui dividing header"><a ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}" target="_blank">{{currentVideo().title}}</a></h2>
         <iframe style="display: block; margin: 0 auto;" width="853" height="480" src="{{getIframeSrc()}}" frameborder="0" allowfullscreen></iframe>
       </div>
       <div ng-if="!currentVideo().id">
@@ -34,7 +34,9 @@
         <div class="content">
           <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
           <div class="header">
-            {{video.title}}
+            <a ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
+              {{video.title}}
+            </a>
           </div>
           <div class="meta">
             Added by {{video.user}}
@@ -52,7 +54,9 @@
         <div class="content">
           <img class="right floated mini ui image" ng-src="{{video.thumbnail}}">
           <div class="header">
-            {{video.title}}
+            <a ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
+              {{video.title}}
+            </a>
           </div>
           <div class="meta">
             Added by {{video.user}}
