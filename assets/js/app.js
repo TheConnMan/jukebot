@@ -3,6 +3,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     $scope.username = sessionStorage.username;
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
+    $scope.listening = 0;
 
     $scope.currentVideo = function() {
       var playing = $scope.videos.filter(function(video) { return video.playing; });
@@ -56,6 +57,13 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       }
       $scope.$digest();
     });
+
+    io.socket.on('listening', function(obj) {
+      $scope.listening = obj.count;
+      $scope.$digest();
+    });
+
+    io.socket.get('/api/subscribe');
 
     $scope.upcoming = function() {
       return $scope.videos.filter(function(video) { return !video.played && !video.playing; });
