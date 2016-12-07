@@ -44,14 +44,14 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       if (obj.verb === 'created') {
           $scope.videos.push(obj.data);
       } else if (obj.verb === 'updated') {
-        var video = $scope.videos.filter(function(v) { return v.id === obj.data.id; });
-        if (video.length === 1) {
-          $scope.videos[$scope.videos.indexOf(video[0])] = obj.data;
+        var video = $scope.findVideoById(obj.data.id);
+        if (video) {
+          $scope.videos[$scope.videos.indexOf(video)] = obj.data;
         }
       } else if (obj.verb === 'destroyed') {
-        var removedVideo = $scope.videos.filter(function(v) { return v.id == obj.id; });
-        if (removedVideo.length === 1) {
-          $scope.videos.splice($scope.videos.indexOf(removedVideo[0]), 1);
+        var removedVideo = $scope.findVideoById(obj.id);
+        if (removedVideo) {
+          $scope.videos.splice($scope.videos.indexOf(removedVideo), 1);
         }
       }
       $scope.$digest();
@@ -79,6 +79,14 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
 
     $scope.remove = function(id) {
       $http.delete('/api/remove/' + id);
+    };
+
+    $scope.findVideoById = function(id) {
+      var videoMap = $scope.videos.reduce(function(map, video) {
+        map[video.id.toString()] = video;
+        return map;
+      }, {});
+      return videoMap[id.toString()];
     };
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
