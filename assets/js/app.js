@@ -1,6 +1,6 @@
 var app = angular.module('app', []);
 app.controller('controller', function($scope, $timeout, $http, $log) {
-    $scope.username = sessionStorage.username;
+    $scope.username = sessionStorage.username || ''; // prevent "undefined" from showing up as the username
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
     $scope.listening = 0;
@@ -77,12 +77,15 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       sessionStorage.username = $scope.username;
       $log.log('Adding video');
       $log.log($scope.link);
-      $http.post('/api/add', {
-        link: $scope.link,
-        user: $scope.username
-      }).success(function() {
-        $scope.link = '';
-      });
+      $log.log($scope.username);
+      if ($scope.link) {
+        $http.post('/api/add', {
+          link: $scope.link,
+          user: $scope.username
+        }).success(function() {
+          $scope.link = '';
+        });
+      }
     };
 
     $scope.remove = function(id) {

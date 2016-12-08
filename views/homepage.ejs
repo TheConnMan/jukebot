@@ -1,21 +1,35 @@
 <div class="ui grid" ng-app="app" ng-controller="controller">
   <div class="ten wide column">
-    <div class="ui segment">
-      <div ng-if="currentVideo().id">
-        <h2 class="ui dividing header"><a ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}" target="_blank">{{currentVideo().title}}</a></h2>
-        <div class="ui embed"></div>
+
+    <div class="ui card" style="width: 100%;" ng-if="currentVideo().id">
+      <div class="ui embed"></div>
+      <div class="content">
+        <a
+          ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}"
+          target="_blank"
+          class="header"
+        >
+          {{currentVideo().title}} <i class="youtube icon"></i>
+        </a>
+        <div class="meta">
+          <span class="date">Added by {{currentVideo().user}}</span>
+          <div class="ui large floated right blue label" style="float: right;">
+            <i class="{{listening > 1 ? 'users' : 'user'}} icon"></i>
+            {{listening}} Listener{{listening > 1 ? 's' : ''}}
+          </div>
+        </div>
       </div>
-      <div ng-if="!currentVideo().id">
+    </div>
+
+    <div ng-if="!currentVideo().id">
+      <div class="ui segment">
         <h2 class="ui center aligned icon header">
           <i class="sound icon"></i>
           No Music Playing
         </h2>
       </div>
     </div>
-    <div class="ui large floated right blue label" style="float: right;">
-      <i class="{{listening > 1 ? 'users' : 'user'}} icon"></i>
-      {{listening}} Listener{{listening > 1 ? 's' : ''}}
-    </div>
+
   </div>
   <div class="six wide column">
     <h2 class="ui dividing header">Add Video</h2>
