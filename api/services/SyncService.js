@@ -86,7 +86,7 @@ function startVideo(video) {
   video.played = true;
   video.startTime = new Date();
   logger.info('Setting timeout');
-  setTimeout(endCurrentVideo, video.durationSeconds * 1000);
+  setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
       logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);
