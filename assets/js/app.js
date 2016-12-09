@@ -1,5 +1,6 @@
 var app = angular.module('app', []);
-app.controller('controller', function($scope, $timeout, $http, $log) {
+app.controller('controller', function($scope, $rootScope, $timeout, $http, $log) {
+    $rootScope.title = 'JukeBot';
     $scope.username = localStorage.username || ''; // prevent "undefined" from showing up as the username
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
@@ -7,7 +8,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
 
     $scope.likeCurrentVideo = function(video) {
       $scope.likeVideo($scope.currentVideo());
-    }
+    };
 
     $scope.likeVideo = function(video) {
       let likes = localStorage.likes;
@@ -41,7 +42,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       } else {
         return false;
       }
-    }
+    };
 
     $scope.currentVideo = function() {
       var playing = $scope.videos.filter(function(video) { return video.playing; });
@@ -54,6 +55,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     };
 
     $scope.$watch($scope.currentVideo, function(currentVideo) {
+      $rootScope.title = currentVideo ? currentVideo.title : 'JukeBot';
       setTimeout(function() {
         $('.ui.embed').embed({
           url: currentVideo ? '//www.youtube.com/embed/' + currentVideo.key : '',
