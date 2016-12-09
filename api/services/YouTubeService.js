@@ -16,8 +16,8 @@ function parseYouTubeLink(link) {
 }
 
 function getYouTubeVideo(key, user) {
-  return new Promise(function(resolve, reject) {
-    request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, function(error, response, body) {
+  return new Promise((resolve, reject) => {
+    request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         try {
           parseYouTubeVideo(JSON.parse(body), user).exec((err, video) => {
