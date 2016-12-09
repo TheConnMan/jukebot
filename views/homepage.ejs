@@ -1,6 +1,11 @@
 <div class="ui grid" ng-controller="controller">
   <div class="ten wide column">
-
+  <div class="ui listeners inverted black left sidebar vertical menu push">
+    <span class="header item">Current Listeners</span>
+    <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
+      {{user}}
+    </span>
+  </div>
     <div class="ui card" style="width: 100%;" ng-if="currentVideo().id">
       <div class="ui embed"></div>
       <div class="content">
@@ -23,8 +28,10 @@
         </div>
       </div>
       <div class="extra content">
-        <i class="{{listening > 1 ? 'users' : 'user'}} icon"></i>
-          {{listening}} Listener{{listening > 1 ? 's' : ''}}
+        <span style="cursor: pointer;" ng-click="toggleListeners()">
+          <i class="{{listenerCount() > 1 ? 'users' : 'user'}} icon"></i>
+          {{listenerCount()}} Listener{{listenerCount() > 1 ? 's' : ''}}
+        </span>
       </div>
     </div>
 

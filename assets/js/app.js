@@ -4,7 +4,7 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
     $scope.username = localStorage.username || ''; // prevent "undefined" from showing up as the username
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
-    $scope.listening = 0;
+    $scope.listeners = {};
 
     $scope.likeCurrentVideo = function(video) {
       $scope.likeVideo($scope.currentVideo());
@@ -103,7 +103,7 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
     });
 
     io.socket.on('listening', function(obj) {
-      $scope.listening = Object.keys(obj.users).length;
+      $scope.listeners = obj.users;
       $scope.$digest();
     });
 
@@ -162,6 +162,18 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
 
     $scope.hideChromeFlag = function() {
       localStorage.chromeFlag = "true";
+    };
+
+    $scope.toggleListeners = function() {
+      $('.listeners.sidebar').sidebar('toggle');
+    };
+
+    $scope.listenerUsernames = function() {
+      return Object.values($scope.listeners);
+    };
+
+    $scope.listenerCount = function() {
+      return Object.keys($scope.listeners).length;
     };
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
