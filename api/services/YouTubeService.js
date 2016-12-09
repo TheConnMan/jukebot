@@ -8,11 +8,12 @@ module.exports = {
 };
 
 function parseYouTubeLink(link) {
-  var match = link.match(/v=[^?&]+|(?:youtu.be\/).+/g);
-  if (!match || match.length === 0) {
+  var matcher = /v=([^?&]+)|youtu.be\/([^?&]+)/g;
+  var match = matcher.exec(link);
+  if (!match || (!match[1] && !match[2])) {
     throw 'Invalid YouTube link';
   }
-  return match[0].substring(2);
+  return match[1] || match[2];
 }
 
 function getYouTubeVideo(key, user) {
