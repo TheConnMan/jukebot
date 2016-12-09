@@ -1,9 +1,41 @@
 var app = angular.module('app', []);
 app.controller('controller', function($scope, $timeout, $http, $log) {
-    $scope.username = sessionStorage.username;
+    $scope.username = sessionStorage.username || ''; // prevent "undefined" from showing up as the username
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
     $scope.listening = 0;
+
+    $scope.likeCurrentVideo = function() {
+      let likes = sessionStorage.likes;
+      let key = $scope.currentVideo().key;
+
+      if (likes) {
+        likes = JSON.parse(likes);
+        let index = likes.indexOf(key);
+
+        if (index > -1) {
+          likes.splice(index, 1);
+        } else {
+          likes.push(key);
+        }
+        sessionStorage.likes = JSON.stringify(likes);
+      } else {
+        sessionStorage.likes = JSON.stringify([key]);
+      }
+    };
+
+    $scope.likesCurrentVideo = function() {
+      let currentKey = $scope.currentVideo().key;
+      let likes = sessionStorage.likes;
+
+      if (likes) {
+        likes = JSON.parse(likes);
+
+        return likes.includes(currentKey);
+      } else {
+        return false;
+      }
+    }
 
     $scope.currentVideo = function() {
       var playing = $scope.videos.filter(function(video) { return video.playing; });
@@ -77,12 +109,15 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       sessionStorage.username = $scope.username;
       $log.log('Adding video');
       $log.log($scope.link);
-      $http.post('/api/add', {
-        link: $scope.link,
-        user: $scope.username
-      }).success(function() {
-        $scope.link = '';
-      });
+      $log.log($scope.username);
+      if ($scope.link) {
+        $http.post('/api/add', {
+          link: $scope.link,
+          user: $scope.username
+        }).success(function() {
+          $scope.link = '';
+        });
+      }
     };
 
     $scope.remove = function(id) {
