@@ -5,22 +5,28 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     $scope.videos = [];
     $scope.listening = 0;
 
-    $scope.likeCurrentVideo = function() {
+    $scope.likeCurrentVideo = function(video) {
+      $scope.likeVideo($scope.currentVideo());
+    }
+
+    $scope.likeVideo = function(video) {
       let likes = localStorage.likes;
-      let key = $scope.currentVideo().key;
+      let key = video.key;
 
       if (likes) {
         likes = JSON.parse(likes);
-        let index = likes.indexOf(key);
+        let found = likes.find((l) => l.key === key);
 
-        if (index > -1) {
+        if (found) {
+          let index = likes.indexOf(found);
+
           likes.splice(index, 1);
         } else {
-          likes.push(key);
+          likes.push(video);
         }
         localStorage.likes = JSON.stringify(likes);
       } else {
-        localStorage.likes = JSON.stringify([key]);
+        localStorage.likes = JSON.stringify([video]);
       }
     };
 
@@ -31,7 +37,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       if (likes) {
         likes = JSON.parse(likes);
 
-        return likes.includes(currentKey);
+        return !!likes.find((l) => l.key === currentKey);
       } else {
         return false;
       }
