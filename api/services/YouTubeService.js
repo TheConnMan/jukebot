@@ -1,10 +1,10 @@
-var Promise = require('promise');
-var request = require('request');
-var moment = require('moment');
+const Promise = require('promise');
+const request = require('request');
+const moment = require('moment');
 
 module.exports = {
-  parseYouTubeLink: parseYouTubeLink,
-  getYouTubeVideo: getYouTubeVideo
+  parseYouTubeLink,
+  getYouTubeVideo
 };
 
 function parseYouTubeLink(link) {
@@ -13,9 +13,9 @@ function parseYouTubeLink(link) {
 
 function getYouTubeVideo(key, user) {
   return new Promise(function(resolve, reject) {
-    request('https://www.googleapis.com/youtube/v3/videos?id=' + key + '&part=snippet,contentDetails&key=' + process.env.GOOGLE_API_KEY, function(error, response, body) {
+    request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, function(error, response, body) {
       if (!error && response.statusCode == 200) {
-        parseYouTubeVideo(JSON.parse(body), user).exec(function(err, video) {
+        parseYouTubeVideo(JSON.parse(body), user).exec((err, video) => {
           if (err) {
             throw err;
           }
