@@ -2,7 +2,7 @@ var Promise = require('promise');
 var log4js = require('log4js');
 var logger = log4js.getLogger();
 var SlackWebhook = require('slack-webhook');
-var slack = process.env.SLACK_WEBHOOK ? new SlackWebhook(process.env.SLACK_WEBHOOK, {
+var slack = sails.config.slackWebhook ? new SlackWebhook(sails.config.slackWebhook, {
   defaults: {
     username: 'JukeBot'
   }
