@@ -8,7 +8,7 @@ module.exports = {
 };
 
 function parseYouTubeLink(link) {
-  var match = link.match(/v=[^?&]+/g);
+  var match = link.match(/v=[^?&]+|(?:youtu.be\/).+/g);
   if (!match || match.length === 0) {
     throw 'Invalid YouTube link';
   }
