@@ -1,12 +1,12 @@
 var app = angular.module('app', []);
 app.controller('controller', function($scope, $timeout, $http, $log) {
-    $scope.username = sessionStorage.username || ''; // prevent "undefined" from showing up as the username
+    $scope.username = localStorage.username || ''; // prevent "undefined" from showing up as the username
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
     $scope.listening = 0;
 
     $scope.likeCurrentVideo = function() {
-      let likes = sessionStorage.likes;
+      let likes = localStorage.likes;
       let key = $scope.currentVideo().key;
 
       if (likes) {
@@ -18,15 +18,15 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
         } else {
           likes.push(key);
         }
-        sessionStorage.likes = JSON.stringify(likes);
+        localStorage.likes = JSON.stringify(likes);
       } else {
-        sessionStorage.likes = JSON.stringify([key]);
+        localStorage.likes = JSON.stringify([key]);
       }
     };
 
     $scope.likesCurrentVideo = function() {
       let currentKey = $scope.currentVideo().key;
-      let likes = sessionStorage.likes;
+      let likes = localStorage.likes;
 
       if (likes) {
         likes = JSON.parse(likes);
@@ -106,7 +106,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     };
 
     $scope.addVideo = function() {
-      sessionStorage.username = $scope.username;
+      localStorage.username = $scope.username;
       $log.log('Adding video');
       $log.log($scope.link);
       $log.log($scope.username);
