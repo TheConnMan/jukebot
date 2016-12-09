@@ -4,6 +4,13 @@
     <div class="ui card" style="width: 100%;" ng-if="currentVideo().id">
       <div class="ui embed"></div>
       <div class="content">
+        <span class="right floated">
+          <i
+            ng-click="likeCurrentVideo()"
+            title=""
+            class="heart {{likesCurrentVideo() ? '' : 'outline'}} like icon">
+          </i>
+        </span>
         <a
           ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}"
           target="_blank"
