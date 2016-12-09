@@ -1,5 +1,7 @@
-var app = angular.module('app', []);
-app.controller('controller', function($scope, $rootScope, $timeout, $http, $log) {
+var app = angular.module('app', ['notification']);
+app.controller('controller', function($scope, $rootScope, $notification, $timeout, $http, $log) {
+    $notification.getPermission();
+
     $rootScope.title = 'JukeBot';
     $scope.username = localStorage.username || ''; // prevent "undefined" from showing up as the username
     $scope.initTime = new Date().getTime();
@@ -56,6 +58,13 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
 
     $scope.$watch($scope.currentVideo, function(currentVideo) {
       $rootScope.title = currentVideo ? currentVideo.title : 'JukeBot';
+      if (currentVideo && $scope.startTime() === 0) {
+        $notification(currentVideo.title, {
+          icon: currentVideo.thumbnail,
+          delay: 4000,
+          focusWindowOnClick: true
+        });
+      }
       setTimeout(function() {
         $('.ui.embed').embed({
           url: currentVideo ? '//www.youtube.com/embed/' + currentVideo.key : '',
@@ -83,7 +92,15 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
       $log.log('Received a video update');
       $log.log(obj);
       if (obj.verb === 'created') {
-          $scope.videos.push(obj.data);
+        if ($scope.currentVideo() && $scope.username !== obj.data.user) {
+          $notification('New Video Added', {
+            body: obj.data.user + ' added ' + obj.data.title,
+            icon: obj.data.thumbnail,
+            delay: 4000,
+            focusWindowOnClick: true
+          });
+        }
+        $scope.videos.push(obj.data);
       } else if (obj.verb === 'updated') {
         var video = $scope.findVideoById(obj.data.id);
         if (video) {
