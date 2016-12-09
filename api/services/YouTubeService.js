@@ -1,26 +1,34 @@
-var Promise = require('promise');
-var request = require('request');
-var moment = require('moment');
+const Promise = require('promise');
+const request = require('request');
+const moment = require('moment');
 
 module.exports = {
-  parseYouTubeLink: parseYouTubeLink,
-  getYouTubeVideo: getYouTubeVideo
+  parseYouTubeLink,
+  getYouTubeVideo
 };
 
 function parseYouTubeLink(link) {
-  return link.match(/v=[^?&]+/g)[0].substring(2);
+  var match = link.match(/v=[^?&]+/g);
+  if (!match || match.length === 0) {
+    throw 'Invalid YouTube link';
+  }
+  return match[0].substring(2);
 }
 
 function getYouTubeVideo(key, user) {
-  return new Promise(function(resolve, reject) {
-    request('https://www.googleapis.com/youtube/v3/videos?id=' + key + '&part=snippet,contentDetails&key=' + process.env.GOOGLE_API_KEY, function(error, response, body) {
+  return new Promise((resolve, reject) => {
+    request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
-        parseYouTubeVideo(JSON.parse(body), user).exec(function(err, video) {
-          if (err) {
-            throw err;
-          }
-          resolve(video);
-        });
+        try {
+          parseYouTubeVideo(JSON.parse(body), user).exec((err, video) => {
+            if (err) {
+              throw err;
+            }
+            resolve(video);
+          });
+        } catch (e) {
+          reject(e);
+        }
       } else {
         reject(error);
       }
@@ -30,7 +38,7 @@ function getYouTubeVideo(key, user) {
 
 function parseYouTubeVideo(data, user) {
   if (data.items.length != 1) {
-    throw 'Unexpected video count';
+    throw 'YouTube link did not match a video';
   }
   var item = data.items[0];
   return Video.create({

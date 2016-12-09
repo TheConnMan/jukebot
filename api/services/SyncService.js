@@ -14,7 +14,7 @@ module.exports = {
 };
 
 function addVideo(video) {
-  logger.info('Adding video ' + video.key)
+  logger.info('Adding video ' + video.key);
   return new Promise(function(resolve, reject) {
     Video.findOne({
       playing: true
@@ -86,19 +86,20 @@ function startVideo(video) {
   video.played = true;
   video.startTime = new Date();
   logger.info('Setting timeout');
-  setTimeout(endCurrentVideo, video.duration);
-  video.save(function() {
-    logger.info('Stopping video ' + video.key);
-    Video.publishUpdate(video.id, video);
-    if (slack) {
-      slack.send({
-        text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
-        'mrkdwn': true
-      }).then(function() {
+  setTimeout(endCurrentVideo, video.durationSeconds * 1000);
+  video.save(() => {
+      logger.info('Stopping video ' + video.key);
+      Video.publishUpdate(video.id, video);
+      if (slack) {
+        slack.send({
+          text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+          'mrkdwn': true
+        }).then(function() {
+          logger.info('Started playing video ' + video.key);
+        });
+      } else {
         logger.info('Started playing video ' + video.key);
-      });
-    } else {
-      logger.info('Started playing video ' + video.key);
-    }
-  });
+      }
+    })
+    .catch((e) => logger.info('Unable to save video ${video.key} - ${e}'));
 }

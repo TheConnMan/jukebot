@@ -1,9 +1,47 @@
 var app = angular.module('app', []);
 app.controller('controller', function($scope, $timeout, $http, $log) {
-    $scope.username = sessionStorage.username;
+    $scope.username = localStorage.username || ''; // prevent "undefined" from showing up as the username
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
     $scope.listening = 0;
+
+    $scope.likeCurrentVideo = function(video) {
+      $scope.likeVideo($scope.currentVideo());
+    }
+
+    $scope.likeVideo = function(video) {
+      let likes = localStorage.likes;
+      let key = video.key;
+
+      if (likes) {
+        likes = JSON.parse(likes);
+        let found = likes.find((l) => l.key === key);
+
+        if (found) {
+          let index = likes.indexOf(found);
+
+          likes.splice(index, 1);
+        } else {
+          likes.push(video);
+        }
+        localStorage.likes = JSON.stringify(likes);
+      } else {
+        localStorage.likes = JSON.stringify([video]);
+      }
+    };
+
+    $scope.likesCurrentVideo = function() {
+      let currentKey = $scope.currentVideo().key;
+      let likes = localStorage.likes;
+
+      if (likes) {
+        likes = JSON.parse(likes);
+
+        return !!likes.find((l) => l.key === currentKey);
+      } else {
+        return false;
+      }
+    }
 
     $scope.currentVideo = function() {
       var playing = $scope.videos.filter(function(video) { return video.playing; });
@@ -74,15 +112,21 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     };
 
     $scope.addVideo = function() {
-      sessionStorage.username = $scope.username;
+      localStorage.username = $scope.username;
       $log.log('Adding video');
       $log.log($scope.link);
-      $http.post('/api/add', {
-        link: $scope.link,
-        user: $scope.username
-      }).success(function() {
-        $scope.link = '';
-      });
+      $log.log($scope.username);
+      if ($scope.link) {
+        $http.post('/api/add', {
+          link: $scope.link,
+          user: $scope.username
+        }).success(function() {
+          $scope.link = '';
+        }).error(function(e) {
+          $scope.link = '';
+          sweetAlert('Error', e, 'error');
+        });
+      }
     };
 
     $scope.remove = function(id) {
@@ -102,6 +146,16 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
         return map;
       }, {});
       return videoMap[id.toString()];
+    };
+
+    $scope.canShowChromeFlag = function() {
+      let hasSeenMessage = localStorage.chromeFlag;
+
+      return !hasSeenMessage;
+    };
+
+    $scope.hideChromeFlag = function() {
+      localStorage.chromeFlag = "true";
     };
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);

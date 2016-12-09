@@ -10,10 +10,9 @@ Slack-Enabled Syncronized Music Listening
 To get started with local development follow these steps:
 
 1. Clone this repo and `cd` into it
-1. Install Sails with `npm install -g sails`
-1. Install **JukeBot** dependencies with `npm install`
+1. Install **JukeBot** dependencies with `npm install` (make sure you're on npm v3+)
 1. Get a Google API key using the setup steps below
-1. Run **JukeBot** with `GOOGLE_API_KEY=<your-API-key> sails lift` and go to http://localhost:1337
+1. Run **JukeBot** with `GOOGLE_API_KEY=<your-API-key> npm start` and go to http://localhost:1337
 
 ## Setup
 ### Google API Key for YouTube
