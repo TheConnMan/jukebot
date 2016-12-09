@@ -116,6 +116,9 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
           user: $scope.username
         }).success(function() {
           $scope.link = '';
+        }).error(function(e) {
+          $scope.link = '';
+          sweetAlert('Error', e, 'error');
         });
       }
     };
