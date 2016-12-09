@@ -147,6 +147,16 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       }, {});
       return videoMap[id.toString()];
     };
+
+    $scope.canShowChromeFlag = function() {
+      let hasSeenMessage = localStorage.chromeFlag;
+
+      return !hasSeenMessage;
+    };
+
+    $scope.hideChromeFlag = function() {
+      localStorage.chromeFlag = "true";
+    };
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
 }).directive('enterPress', function () {

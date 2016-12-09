@@ -37,6 +37,13 @@
       </div>
     </div>
 
+    <div ng-if="canShowChromeFlag()">
+      <div class="ui info ignored message">
+        To let JukeBot auto play the next video, go to chrome://flags/#disable-gesture-requirement-for-media-playback and disable the flag.
+        <i class="close icon" ng-click="hideChromeFlag()"></i>
+      </div>
+    </div>
+
   </div>
   <div class="six wide column">
     <h2 class="ui dividing header">Add Video</h2>
