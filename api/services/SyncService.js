@@ -8,9 +8,12 @@ var slack = process.env.SLACK_WEBHOOK ? new SlackWebhook(process.env.SLACK_WEBHO
   }
 }) : null;
 
+var videoTimeout;
+
 module.exports = {
-  addVideo: addVideo,
-  sendAddMessages: sendAddMessages
+  addVideo,
+  sendAddMessages,
+  skip
 };
 
 function addVideo(video) {
@@ -23,7 +26,7 @@ function addVideo(video) {
         video.startTime = new Date();
         video.playing = true;
         video.played = true;
-        setTimeout(endCurrentVideo, video.duration);
+        videoTimeout = setTimeout(endCurrentVideo, video.duration);
         video.save(function() {
           resolve(video);
         });
@@ -48,6 +51,11 @@ function sendAddMessages(video) {
       resolve(video);
     }
   });
+}
+
+function skip() {
+  clearTimeout(videoTimeout);
+  endCurrentVideo();
 }
 
 function formatSlackAttachment(video) {
@@ -86,7 +94,7 @@ function startVideo(video) {
   video.played = true;
   video.startTime = new Date();
   logger.info('Setting timeout');
-  setTimeout(endCurrentVideo, video.duration);
+  videoTimeout = setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
       logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);

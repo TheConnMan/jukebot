@@ -13,5 +13,10 @@ module.exports = {
     }).exec(function(err, videos) {
       res.send(videos);
     });
+  },
+
+  skip: function(req, res) {
+    SyncService.skip();
+    res.send(200);
   }
 };
