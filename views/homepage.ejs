@@ -13,11 +13,11 @@
         </a>
         <div class="meta">
           <span class="date">Added by {{currentVideo().user}}</span>
-          <div class="ui large floated right blue label" style="float: right;">
-            <i class="{{listening > 1 ? 'users' : 'user'}} icon"></i>
-            {{listening}} Listener{{listening > 1 ? 's' : ''}}
-          </div>
         </div>
+      </div>
+      <div class="extra content">
+        <i class="{{listening > 1 ? 'users' : 'user'}} icon"></i>
+          {{listening}} Listener{{listening > 1 ? 's' : ''}}
       </div>
     </div>
 
