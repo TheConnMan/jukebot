@@ -67,6 +67,10 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
       }, 0);
     }, true);
 
+    $scope.$watch('username', function(newUsername) {
+      io.socket._raw.emit('username', newUsername);
+    });
+
     $scope.getAllVideos = function() {
       io.socket.get('/video/subscribe');
 
@@ -99,7 +103,7 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
     });
 
     io.socket.on('listening', function(obj) {
-      $scope.listening = obj.count;
+      $scope.listening = Object.keys(obj.users).length;
       $scope.$digest();
     });
 
