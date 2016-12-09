@@ -100,6 +100,5 @@ function startVideo(video) {
       } else {
         logger.info('Started playing video ' + video.key);
       }
-    })
-    .catch((e) => logger.info('Unable to save video ${video.key} - ${e}'));
+    });
 }
