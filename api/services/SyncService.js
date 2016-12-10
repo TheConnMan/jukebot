@@ -2,7 +2,7 @@ var Promise = require('promise');
 var log4js = require('log4js');
 var logger = log4js.getLogger();
 var SlackWebhook = require('slack-webhook');
-var slack = process.env.SLACK_WEBHOOK ? new SlackWebhook(process.env.SLACK_WEBHOOK, {
+var slack = sails.config.slackWebhook ? new SlackWebhook(sails.config.slackWebhook, {
   defaults: {
     username: 'JukeBot'
   }
@@ -37,25 +37,22 @@ function addVideo(video) {
 function sendAddMessages(video) {
   return new Promise(function(resolve, reject) {
     Video.publishCreate(video);
-    if (slack) {
-      slack.send({
-        text: video.user + ' added a song to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
-        attachments: [formatSlackAttachment(video)]
-      }).then(function() {
+    if (slack && sails.config.slackSongPlaying && sails.config.slackSongAdded) {
+      sendSlackAddedNotification(video).then(function() {
+        resolve(video);
+      });
+    } else if (video.playing && slack && sails.config.slackSongPlaying ) {
+      sendSlackAddedNotification(video).then(function() {
+        resolve(video);
+      });
+    } else if (slack && sails.config.slackSongAdded) {
+      sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
     } else {
       resolve(video);
     }
   });
-}
-
-function formatSlackAttachment(video) {
-  return {
-    title: video.title,
-    title_link: 'https://www.youtube.com/watch?v=' + video.key,
-    thumb_url: video.thumbnail
-  };
 }
 
 function endCurrentVideo() {
@@ -90,15 +87,30 @@ function startVideo(video) {
   video.save(() => {
       logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);
-      if (slack) {
-        slack.send({
-          text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
-          'mrkdwn': true
-        }).then(function() {
+      if (slack && sails.config.slackSongPlaying) {
+        sendSlackPlayingNotification(video).then(function() {
           logger.info('Started playing video ' + video.key);
         });
       } else {
         logger.info('Started playing video ' + video.key);
       }
     });
+}
+
+function sendSlackAddedNotification(video) {
+  return slack.send({
+    text: video.user + ' added a song to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    attachments: [{
+      title: video.title,
+      title_link: 'https://www.youtube.com/watch?v=' + video.key,
+      thumb_url: video.thumbnail
+    }]
+  });
+}
+
+function sendSlackPlayingNotification(video) {
+  return slack.send({
+    text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    'mrkdwn': true
+  });
 }
