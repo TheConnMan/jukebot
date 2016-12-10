@@ -3,3 +3,12 @@
 .listeners span + span:before {
   content: ', ';
 }
+
+.ui.items > .item {
+  margin: 0;
+  padding: .5em;
+}
+
+.items > .item:hover {
+  background-color: #F0F0F0;
+}
