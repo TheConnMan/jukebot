@@ -44,6 +44,18 @@ module.exports = {
     });
   },
 
+  autoplay: function(req, res) {
+    var id = req.socket.id;
+    req.socket.join('autoplay');
+
+    req.socket.on('autoplay', function(autoplay) {
+      SyncService.setAutoplay(autoplay);
+      sails.io.sockets.in('autoplay').emit('autoplay', {
+        autoplay: autoplay
+      });
+    });
+  },
+
   start: function(req, res) {
     Video.find({
       createdAt: {

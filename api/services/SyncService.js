@@ -9,11 +9,14 @@ var slack = sails.config.slackWebhook ? new SlackWebhook(sails.config.slackWebho
 }) : null;
 
 var videoTimeout;
+var autoplay = false;
 
 module.exports = {
   addVideo,
   sendAddMessages,
-  skip
+  skip,
+  setAutoplay,
+  getAutoplay
 };
 
 function addVideo(video) {
@@ -82,7 +85,7 @@ function findNextVideo(lastVideo) {
   }).sort('createdAt ASC').exec(function(err, upcoming) {
     if (upcoming.length > 0) {
       startVideo(upcoming[0]);
-    } else {
+    } else if (autoplay) {
       YouTubeService.nextRelated(lastVideo.key).then(function(nextKey) {
         return YouTubeService.getYouTubeVideo(nextKey, lastVideo.user);
       }).then(addVideo).then(sendAddMessages);
@@ -125,4 +128,12 @@ function sendSlackPlayingNotification(video) {
     text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
     'mrkdwn': true
   });
+}
+
+function getAutoplay() {
+  return autoplay;
+}
+
+function setAutoplay(val) {
+  autoplay = val;
 }
