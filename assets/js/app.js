@@ -23,7 +23,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $rootScope.title = 'JukeBot';
     $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
-    $scope.videos = $video.getVideos();
     $scope.listeners = {};
 
     $scope.likeCurrentVideo = function() {
@@ -67,6 +66,18 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.readd = function(key) {
       return $video.addByKey($scope.username, key);
+    };
+
+    $scope.remove = function(id) {
+      return $video.removePermanently(id);
+    };
+
+    $scope.skip = function() {
+      return $video.skip();
+    };
+
+    $scope.findVideoById = function(id) {
+      return $video.findById(id);
     };
 
     /******************************
@@ -136,20 +147,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     io.socket.get('/api/subscribe', {
       username: $scope.username
     });
-
-    $scope.remove = function(id) {
-      $http.delete('/api/remove/' + id);
-    };
-
-
-
-    $scope.skip = function() {
-      return $video.skip();
-    };
-
-    $scope.findVideoById = function(id) {
-      return $video.findById(id);
-    };
 
     $scope.canShowChromeFlag = function() {
       return !$storage.get('chromeFlag');

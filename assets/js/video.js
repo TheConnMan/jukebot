@@ -61,14 +61,18 @@ angular
       link: YOUTUBE_URL + key,
       user
     });
-  },
+  }
 
   function remove(id) {
-    let removedVideo = findVideoById(obj.id);
+    let removedVideo = findById(id);
 
     if (removedVideo) {
       videos.splice(videos.indexOf(removedVideo), 1);
     }
+  }
+
+  function removePermanently(id) {
+    return $http.delete(`/api/remove/${id}`);
   }
 
   function upcoming() {
@@ -91,6 +95,7 @@ angular
     getAll,
     skip,
     remove,
+    removePermanently,
     upcoming,
     recent
   };
