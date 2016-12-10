@@ -22,6 +22,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $rootScope.title = 'JukeBot';
     $scope.username = $storage.get('username');
+    io.socket._raw.emit('username', $scope.username);
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
     $scope.listeners = {};
