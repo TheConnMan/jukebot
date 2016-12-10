@@ -42,6 +42,31 @@ module.exports = {
       Video.publishDestroy(params.id);
       res.send(204);
     });
+  },
+
+  autoplay: function(req, res) {
+    var id = req.socket.id;
+    req.socket.join('autoplay');
+
+    req.socket.on('autoplay', function(autoplay) {
+      SyncService.setAutoplay(autoplay);
+      sails.io.sockets.in('autoplay').emit('autoplay', {
+        autoplay: autoplay
+      });
+    });
+  },
+
+  start: function(req, res) {
+    Video.find({
+      createdAt: {
+        '>=': new Date(Date.now() - 3600 * 1000)
+      }
+    }).exec(function(err, videos) {
+      res.send({
+        videos: videos,
+        autoplay: SyncService.getAutoplay()
+      });
+    });
   }
 };
 

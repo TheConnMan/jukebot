@@ -24,6 +24,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
+    $scope.autoplay = false;
     $scope.listeners = {};
 
     $scope.likeCurrentVideo = function() {
@@ -76,10 +77,9 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.getAllVideos = function() {
       io.socket.get('/video/subscribe');
 
-      $http.get('/video/recent').success(function(videos) {
-        $log.log('Got all videos');
-        $log.log(videos);
-        $scope.videos = videos;
+      $http.get('/api/start').success(function(config) {
+        $scope.videos = config.videos;
+        $scope.autoplay = config.autoplay;
       });
     };
 
@@ -120,6 +120,17 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     io.socket.get('/api/subscribe', {
       username: $scope.username
     });
+
+    io.socket.on('autoplay', function(obj) {
+      $scope.autoplay = obj.autoplay;
+      $scope.$digest();
+    });
+
+    io.socket.get('/api/autoplay');
+
+    $scope.toggleAutoplay = function() {
+      io.socket._raw.emit('autoplay', $scope.autoplay);
+    };
 
     $scope.upcoming = function() {
       return $scope.videos.filter(function(video) { return !video.played && !video.playing; });
