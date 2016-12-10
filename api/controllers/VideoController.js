@@ -5,15 +5,6 @@ module.exports = {
       Video.subscribe(req.socket, videos);
     });
   },
-  recent: function(req, res) {
-    Video.find({
-      createdAt: {
-        '>=': new Date(Date.now() - 3600 * 1000)
-      }
-    }).exec(function(err, videos) {
-      res.send(videos);
-    });
-  },
 
   skip: function(req, res) {
     SyncService.skip();

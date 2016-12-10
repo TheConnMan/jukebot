@@ -76,10 +76,8 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.getAllVideos = function() {
       io.socket.get('/video/subscribe');
 
-      $http.get('/video/recent').success(function(videos) {
-        $log.log('Got all videos');
-        $log.log(videos);
-        $scope.videos = videos;
+      $http.get('/api/start').success(function(config) {
+        $scope.videos = config.videos;
       });
     };
 

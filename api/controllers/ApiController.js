@@ -42,6 +42,19 @@ module.exports = {
       Video.publishDestroy(params.id);
       res.send(204);
     });
+  },
+
+  start: function(req, res) {
+    Video.find({
+      createdAt: {
+        '>=': new Date(Date.now() - 3600 * 1000)
+      }
+    }).exec(function(err, videos) {
+      res.send({
+        videos: videos,
+        autoplay: SyncService.getAutoplay()
+      });
+    });
   }
 };
 
