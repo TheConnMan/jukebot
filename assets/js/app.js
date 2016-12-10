@@ -1,5 +1,23 @@
 var app = angular.module('app', ['notification', 'storage']);
 app.controller('controller', function($scope, $rootScope, $notification, $storage, $timeout, $http, $log) {
+  $('.ui.search')
+    .search({
+      minCharacters: 3,
+      onSelect(result, response) {
+        $scope.readd(result.key)
+          .then(() => {
+            $('.ui.search input').val('');
+          });
+      },
+      apiSettings: {
+        onResponse(videos) {
+          return {
+            results: videos
+          };
+        },
+        url: 'video/search?query={query}&maxResults=10'
+      }
+    });
     $notification.getPermission();
 
     $rootScope.title = 'JukeBot';
@@ -131,7 +149,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.readd = function(key) {
-      $http.post('/api/add', {
+      return $http.post('/api/add', {
         link: 'https://www.youtube.com/watch?v=' + key,
         user: $scope.username
       });

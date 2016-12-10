@@ -16,18 +16,8 @@
   </head>
 
   <body>
-    <div class="ui segment">
-      <h1 class="ui header">
-        <img class="ui image" src="/images/jukebot.png" />
-        <div class="content">
-          JukeBot
-          <div class="sub header">Slack-Enabled Syncronized Music Listening</div>
-        </div>
-      </h1>
-    </div>
-
-    <div style="padding: 8px;">
-      <%- body %>
+    <div ng-controller="controller">
+      <%- body -%>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
