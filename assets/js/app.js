@@ -69,6 +69,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     }, true);
 
     $scope.$watch('username', function(newUsername) {
+      $storage.set('username', $scope.username);
       io.socket._raw.emit('username', newUsername);
     });
 
@@ -127,7 +128,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.addVideo = function() {
-      $storage.set('username', $scope.username);
       $log.log('Adding video');
       $log.log($scope.link);
       $log.log($scope.username);
