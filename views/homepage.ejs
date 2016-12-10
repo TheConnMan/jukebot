@@ -67,51 +67,36 @@
       </div>
     </div>
     <button class="ui primary button" ng-click="addVideo()">Add</button>
-    <h2 class="ui dividing header">Upcoming</h2>
-    <div ng-if="upcoming().length > 0" class="ui one cards">
-      <div class="card" ng-repeat="video in upcoming() track by video.id">
-        <a class="ui red right mini corner label" ng-click="remove(video.id)">
-          <i class="remove icon" style="cursor: pointer;"></i>
-        </a>
-        <div class="content">
-          <img class="right floated tiny ui image" ng-src="{{video.thumbnail}}">
-          <div class="header">
-            <a ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
+    <h2 class="ui dividing header">Videos</h2>
+    <div ng-if="videos.length > 0" class="ui items">
+      <div class="item" ng-repeat="video in videos | orderBy: createdAt track by video.id">
+          <div class="ui image">
+            <img ng-src="{{video.thumbnail}}">
+          </div>
+          <div class="content">
+            <a class="header" ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
               {{video.title}}
             </a>
+            <div class="meta">
+              Added by {{video.user}}
+            </div>
+            <div class="extra">
+              <div class="ui mini right floated red basic button" ng-if="!video.played && !video.playing" ng-click="remove(video.id)">
+                Remove
+              </div>
+              <div class="ui mini right floated green basic button" ng-if="video.played && !video.playing" ng-click="readd(video.key)">
+                Add
+              </div>
+              <div class="ui mini right floated yellow basic button" ng-if="video.playing" ng-click="skip()">
+                Skip
+              </div>
+            </div>
           </div>
-          <div class="meta">
-            Added by {{video.user}}
-          </div>
-        </div>
       </div>
     </div>
-    <h4 ng-if="upcoming().length == 0" class="ui center aligned icon header">
+    <h4 ng-if="videos.length == 0" class="ui center aligned icon header">
       <i class="video icon"></i>
-      <div class="content">No Upcoming Videos</div>
-    </h4>
-    <h2 class="ui dividing header">Recent</h2>
-    <div ng-if="recent().length > 0" class="ui one cards">
-      <div class="card" ng-repeat="video in recent() | orderBy: createdAt : true track by video.id">
-        <a class="ui green right mini corner label" ng-click="readd(video.key)">
-          <i class="plus icon" style="cursor: pointer;"></i>
-        </a>
-        <div class="content">
-          <img class="right floated tiny ui image" ng-src="{{video.thumbnail}}">
-          <div class="header">
-            <a ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
-              {{video.title}}
-            </a>
-          </div>
-          <div class="meta">
-            Added by {{video.user}}
-          </div>
-        </div>
-      </div>
-    </div>
-    <h4 ng-if="recent().length == 0" class="ui center aligned icon header">
-      <i class="history icon"></i>
-      <div class="content">No Recent Videos</div>
+      <div class="content">No Videos</div>
     </h4>
   </div>
 </div>
