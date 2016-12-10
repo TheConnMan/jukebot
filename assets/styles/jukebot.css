@@ -1,4 +1,8 @@
-# JukeBot Styles
+/* JukeBot Styles */
+
+.listeners span + span:before {
+  content: ', ';
+}
 
 #main-content {
   padding: 8px;
