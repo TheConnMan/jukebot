@@ -142,6 +142,10 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
       });
     };
 
+    $scope.skip = function() {
+      $http.post('/video/skip');
+    };
+
     $scope.findVideoById = function(id) {
       var videoMap = $scope.videos.reduce(function(map, video) {
         map[video.id.toString()] = video;
