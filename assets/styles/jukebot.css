@@ -1,5 +1,9 @@
 # JukeBot Styles
 
+.listeners span + span:before {
+  content: ', ';
+}
+
 #main-content {
   padding: 8px;
   height: calc(100vh - 55px);

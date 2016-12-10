@@ -182,7 +182,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.listenerUsernames = function() {
-      return Object.values($scope.listeners).sort().join(', ');
+      return Object.values($scope.listeners);
     };
 
     $scope.listenerCount = function() {
