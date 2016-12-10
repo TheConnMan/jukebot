@@ -1,0 +1,31 @@
+<h2 class="ui dividing header">Videos</h2>
+<div ng-if="videos.length > 0" class="ui items">
+  <div class="item" ng-repeat="video in videos | orderBy: createdAt track by video.id">
+      <div class="ui image">
+        <img ng-src="{{video.thumbnail}}">
+      </div>
+      <div class="content">
+        <a class="header" ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
+          {{video.title}}
+        </a>
+        <div class="meta">
+          Added by {{video.user}}
+        </div>
+        <div class="extra">
+          <div class="ui mini right floated red basic button" ng-if="!video.played && !video.playing" ng-click="remove(video.id)">
+            Remove
+          </div>
+          <div class="ui mini right floated green basic button" ng-if="video.played && !video.playing" ng-click="readd(video.key)">
+            Add
+          </div>
+          <div class="ui mini right floated yellow basic button" ng-if="video.playing" ng-click="skip()">
+            Skip
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<h4 ng-if="videos.length == 0" class="ui center aligned icon header">
+  <i class="video icon"></i>
+  <div class="content">No Videos</div>
+</h4>
