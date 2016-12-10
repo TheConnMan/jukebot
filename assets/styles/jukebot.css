@@ -1,4 +1,4 @@
-# JukeBot Styles
+/* JukeBot Styles */
 
 .listeners span + span:before {
   content: ', ';
