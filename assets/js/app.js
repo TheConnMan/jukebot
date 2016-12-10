@@ -165,7 +165,7 @@ app.controller('controller', function($scope, $rootScope, $timeout, $http, $log)
     };
 
     $scope.toggleListeners = function() {
-      $('.listeners.sidebar').sidebar('toggle');
+      $('.listeners').toggle();
     };
 
     $scope.listenerUsernames = function() {
