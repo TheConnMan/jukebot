@@ -4,15 +4,17 @@ const moment = require('moment');
 
 module.exports = {
   parseYouTubeLink,
-  getYouTubeVideo
+  getYouTubeVideo,
+  search
 };
 
 function parseYouTubeLink(link) {
-  var match = link.match(/v=[^?&]+/g);
-  if (!match || match.length === 0) {
+  var matcher = /v=([^?&]+)|youtu.be\/([^?&]+)/g;
+  var match = matcher.exec(link);
+  if (!match || (!match[1] && !match[2])) {
     throw 'Invalid YouTube link';
   }
-  return match[0].substring(2);
+  return match[1] || match[2];
 }
 
 function getYouTubeVideo(key, user) {
@@ -47,5 +49,24 @@ function parseYouTubeVideo(data, user) {
     user: user,
     thumbnail: item.snippet.thumbnails.default.url,
     title: item.snippet.title
+  });
+}
+
+function search(query, maxResults) {
+  return new Promise((resolve, reject) => {
+    request(`https://www.googleapis.com/youtube/v3/search?q=${query}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=${maxResults || 15}&type=video`, (error, response, body) => {
+      if (!error && response.statusCode == 200) {
+        var results = JSON.parse(body).items.map(function(video) {
+          return {
+            key: video.id.videoId,
+            thumbnail: video.snippet.thumbnails.default.url,
+            title: video.snippet.title
+          };
+        });
+        resolve(results);
+      } else {
+        reject(error);
+      }
+    });
   });
 }

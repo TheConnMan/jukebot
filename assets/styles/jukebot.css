@@ -1,0 +1,19 @@
+# JukeBot Styles
+
+.listeners span + span:before {
+  content: ', ';
+}
+
+#main-content {
+  padding: 8px;
+  height: calc(100vh - 55px);
+}
+
+.ui.items > .item {
+  margin: 0;
+  padding: .5em;
+}
+
+.items > .item:hover {
+  background-color: #F0F0F0;
+}

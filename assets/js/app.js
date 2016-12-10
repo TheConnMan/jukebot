@@ -1,47 +1,42 @@
-var app = angular.module('app', []);
-app.controller('controller', function($scope, $timeout, $http, $log) {
-    $scope.username = localStorage.username || ''; // prevent "undefined" from showing up as the username
+var app = angular.module('app', ['notification', 'storage']);
+app.controller('controller', function($scope, $rootScope, $notification, $storage, $timeout, $http, $log) {
+  $('.ui.search')
+    .search({
+      minCharacters: 3,
+      onSelect(result, response) {
+        $scope.readd(result.key)
+          .then(() => {
+            $('.ui.search input').val('');
+          });
+      },
+      apiSettings: {
+        onResponse(videos) {
+          return {
+            results: videos
+          };
+        },
+        url: 'video/search?query={query}&maxResults=10'
+      }
+    });
+    $notification.getPermission();
+
+    $rootScope.title = 'JukeBot';
+    $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
-    $scope.listening = 0;
+    $scope.listeners = {};
 
-    $scope.likeCurrentVideo = function(video) {
-      $scope.likeVideo($scope.currentVideo());
-    }
+    $scope.likeCurrentVideo = function() {
+      $storage.likeVideo($scope.currentVideo());
+    };
 
     $scope.likeVideo = function(video) {
-      let likes = localStorage.likes;
-      let key = video.key;
-
-      if (likes) {
-        likes = JSON.parse(likes);
-        let found = likes.find((l) => l.key === key);
-
-        if (found) {
-          let index = likes.indexOf(found);
-
-          likes.splice(index, 1);
-        } else {
-          likes.push(video);
-        }
-        localStorage.likes = JSON.stringify(likes);
-      } else {
-        localStorage.likes = JSON.stringify([video]);
-      }
+      $storage.likeVideo(video);
     };
 
     $scope.likesCurrentVideo = function() {
-      let currentKey = $scope.currentVideo().key;
-      let likes = localStorage.likes;
-
-      if (likes) {
-        likes = JSON.parse(likes);
-
-        return !!likes.find((l) => l.key === currentKey);
-      } else {
-        return false;
-      }
-    }
+      return $storage.likesVideo($scope.currentVideo().key);
+    };
 
     $scope.currentVideo = function() {
       var playing = $scope.videos.filter(function(video) { return video.playing; });
@@ -54,6 +49,14 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     };
 
     $scope.$watch($scope.currentVideo, function(currentVideo) {
+      $rootScope.title = currentVideo ? currentVideo.title : 'JukeBot';
+      if (currentVideo && $scope.startTime() === 0) {
+        $notification(currentVideo.title, {
+          icon: currentVideo.thumbnail,
+          delay: 4000,
+          focusWindowOnClick: true
+        });
+      }
       setTimeout(function() {
         $('.ui.embed').embed({
           url: currentVideo ? '//www.youtube.com/embed/' + currentVideo.key : '',
@@ -64,6 +67,10 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
         });
       }, 0);
     }, true);
+
+    $scope.$watch('username', function(newUsername) {
+      io.socket._raw.emit('username', newUsername);
+    });
 
     $scope.getAllVideos = function() {
       io.socket.get('/video/subscribe');
@@ -81,7 +88,15 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
       $log.log('Received a video update');
       $log.log(obj);
       if (obj.verb === 'created') {
-          $scope.videos.push(obj.data);
+        if ($scope.currentVideo() && $scope.username !== obj.data.user) {
+          $notification('New Video Added', {
+            body: obj.data.user + ' added ' + obj.data.title,
+            icon: obj.data.thumbnail,
+            delay: 4000,
+            focusWindowOnClick: true
+          });
+        }
+        $scope.videos.push(obj.data);
       } else if (obj.verb === 'updated') {
         var video = $scope.findVideoById(obj.data.id);
         if (video) {
@@ -97,7 +112,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     });
 
     io.socket.on('listening', function(obj) {
-      $scope.listening = obj.count;
+      $scope.listeners = obj.users;
       $scope.$digest();
     });
 
@@ -112,7 +127,7 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     };
 
     $scope.addVideo = function() {
-      localStorage.username = $scope.username;
+      $storage.set('username', $scope.username);
       $log.log('Adding video');
       $log.log($scope.link);
       $log.log($scope.username);
@@ -134,10 +149,14 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     };
 
     $scope.readd = function(key) {
-      $http.post('/api/add', {
+      return $http.post('/api/add', {
         link: 'https://www.youtube.com/watch?v=' + key,
         user: $scope.username
       });
+    };
+
+    $scope.skip = function() {
+      $http.post('/video/skip');
     };
 
     $scope.findVideoById = function(id) {
@@ -149,13 +168,23 @@ app.controller('controller', function($scope, $timeout, $http, $log) {
     };
 
     $scope.canShowChromeFlag = function() {
-      let hasSeenMessage = localStorage.chromeFlag;
-
-      return !hasSeenMessage;
+      return !$storage.get('chromeFlag');
     };
 
     $scope.hideChromeFlag = function() {
-      localStorage.chromeFlag = "true";
+      $storage.set('chromeFlag', 'true');
+    };
+
+    $scope.toggleListeners = function() {
+      $('.listeners').toggle();
+    };
+
+    $scope.listenerUsernames = function() {
+      return Object.values($scope.listeners);
+    };
+
+    $scope.listenerCount = function() {
+      return Object.keys($scope.listeners).length;
     };
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
