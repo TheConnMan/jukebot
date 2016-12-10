@@ -1,8 +1,8 @@
 <div class="ui grid" ng-controller="controller">
   <div class="ten wide column">
-    <div class="ui card" style="width: 100%;" ng-if="currentVideo().id">
-      <div class="ui embed"></div>
-      <div class="content">
+    <div class="ui card" style="width: 100%;">
+      <div class="ui embed" ng-if="currentVideo().id"></div>
+      <div class="content" ng-if="currentVideo().id">
         <span class="right floated">
           <i
             ng-click="likeCurrentVideo()"
@@ -21,28 +21,25 @@
           <span class="date">Added by {{currentVideo().user}}</span>
         </div>
       </div>
+      <div class="content" ng-if="!currentVideo().id">
+        <h2 class="ui center aligned icon header">
+          <i class="sound icon"></i>
+          No Music Playing
+        </h2>
+      </div>
       <div class="extra content">
         <span style="cursor: pointer;" ng-click="toggleListeners()">
           <i class="{{listenerCount() > 1 ? 'users' : 'user'}} icon"></i>
           {{listenerCount()}} Listener{{listenerCount() > 1 ? 's' : ''}}
           <i class="blue listeners caret right icon"></i>
           <i class="blue listeners caret down icon" style="display: none;"></i>
-          <i style="float: right;" class="large floated right forward link icon" ng-click="skip()"></i>
+          <i style="float: right;" class="large floated right forward link icon" ng-if="currentVideo().id" ng-click="skip()"></i>
         </span>
       </div>
       <div class="listeners extra content" style="display: none;">
         <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
           {{user}}
         </span>
-      </div>
-    </div>
-
-    <div ng-if="!currentVideo().id">
-      <div class="ui segment">
-        <h2 class="ui center aligned icon header">
-          <i class="sound icon"></i>
-          No Music Playing
-        </h2>
       </div>
     </div>
 
