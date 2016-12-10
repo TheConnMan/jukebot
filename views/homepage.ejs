@@ -62,9 +62,7 @@
           </span>
         </div>
         <div class="listeners extra content" style="display: none;">
-          <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
-            {{user}}
-          </span>
+          {{listenerUsernames()}}
         </div>
       </div>
 
