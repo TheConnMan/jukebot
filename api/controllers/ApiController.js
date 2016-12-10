@@ -1,10 +1,17 @@
+var users = {};
+
 module.exports = {
   subscribe: function(req, res) {
+    var id = req.socket.id;
     req.socket.join('listeners');
     req.socket.on('disconnect', function() {
-      emitListenerCount();
+      delete users[id];
+      emitListeners();
     });
-    emitListenerCount();
+    req.socket.on('username', function(d) {
+      users[id] = d || 'Anonymous';
+      emitListeners();
+    });
   },
 
   add: function(req, res) {
@@ -32,9 +39,9 @@ module.exports = {
   }
 };
 
-function emitListenerCount() {
+function emitListeners() {
   var io = sails.io;
   io.sockets.in('listeners').emit('listening', {
-    count: io.sockets.adapter.rooms.listeners ? io.sockets.adapter.rooms.listeners.length : 0
+    users: users
   });
 }
