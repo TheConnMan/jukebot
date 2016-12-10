@@ -71,17 +71,21 @@ function endCurrentVideo() {
     current.save(function() {
       logger.info('Publishing end song ' + current.key);
       Video.publishUpdate(current.id, current);
-      findNextVideo();
+      findNextVideo(current);
     });
   });
 }
 
-function findNextVideo() {
+function findNextVideo(lastVideo) {
   Video.find({
     played: false
   }).sort('createdAt ASC').exec(function(err, upcoming) {
     if (upcoming.length > 0) {
       startVideo(upcoming[0]);
+    } else {
+      YouTubeService.nextRelated(lastVideo.key).then(function(nextKey) {
+        return YouTubeService.getYouTubeVideo(nextKey, lastVideo.user);
+      }).then(addVideo).then(sendAddMessages);
     }
   });
 }
