@@ -1,49 +1,23 @@
-var app = angular.module('app', ['notification']);
-app.controller('controller', function($scope, $rootScope, $notification, $timeout, $http, $log) {
+var app = angular.module('app', ['notification', 'storage']);
+app.controller('controller', function($scope, $rootScope, $notification, $storage, $timeout, $http, $log) {
     $notification.getPermission();
 
     $rootScope.title = 'JukeBot';
-    $scope.username = localStorage.username || ''; // prevent "undefined" from showing up as the username
+    $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
     $scope.videos = [];
     $scope.listeners = {};
 
-    $scope.likeCurrentVideo = function(video) {
-      $scope.likeVideo($scope.currentVideo());
+    $scope.likeCurrentVideo = function() {
+      $storage.likeVideo($scope.currentVideo());
     };
 
     $scope.likeVideo = function(video) {
-      let likes = localStorage.likes;
-      let key = video.key;
-
-      if (likes) {
-        likes = JSON.parse(likes);
-        let found = likes.find((l) => l.key === key);
-
-        if (found) {
-          let index = likes.indexOf(found);
-
-          likes.splice(index, 1);
-        } else {
-          likes.push(video);
-        }
-        localStorage.likes = JSON.stringify(likes);
-      } else {
-        localStorage.likes = JSON.stringify([video]);
-      }
+      $storage.likeVideo(video);
     };
 
     $scope.likesCurrentVideo = function() {
-      let currentKey = $scope.currentVideo().key;
-      let likes = localStorage.likes;
-
-      if (likes) {
-        likes = JSON.parse(likes);
-
-        return !!likes.find((l) => l.key === currentKey);
-      } else {
-        return false;
-      }
+      return $storage.likesVideo($scope.currentVideo().key);
     };
 
     $scope.currentVideo = function() {
@@ -135,7 +109,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $timeou
     };
 
     $scope.addVideo = function() {
-      localStorage.username = $scope.username;
+      $storage.set('username', $scope.username);
       $log.log('Adding video');
       $log.log($scope.link);
       $log.log($scope.username);
@@ -176,13 +150,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $timeou
     };
 
     $scope.canShowChromeFlag = function() {
-      let hasSeenMessage = localStorage.chromeFlag;
-
-      return !hasSeenMessage;
+      return !$storage.get('chromeFlag');
     };
 
     $scope.hideChromeFlag = function() {
-      localStorage.chromeFlag = "true";
+      $storage.set('chromeFlag', 'true');
     };
 
     $scope.toggleListeners = function() {
