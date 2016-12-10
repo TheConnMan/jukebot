@@ -4,6 +4,11 @@
   content: ', ';
 }
 
+#video-list {
+  height: calc(100vh - 130px);
+  overflow-y: auto;
+}
+
 #main-content {
   padding: 8px;
   height: calc(100vh - 55px);

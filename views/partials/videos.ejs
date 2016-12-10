@@ -1,5 +1,5 @@
 <h2 class="ui dividing header">Videos</h2>
-<div ng-if="videos.length > 0" class="ui items">
+<div id="video-list" ng-if="videos.length > 0" class="ui items">
   <div class="item" ng-repeat="video in videos | orderBy: createdAt track by video.id">
       <div class="ui image">
         <img ng-src="{{video.thumbnail}}">
