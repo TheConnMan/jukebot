@@ -2,12 +2,18 @@ var users = {};
 
 module.exports = {
   subscribe: function(req, res) {
+    var params = req.allParams();
     var id = req.socket.id;
     req.socket.join('listeners');
+
+    users[id] = params.username || 'Anonymous';
+    emitListeners();
+
     req.socket.on('disconnect', function() {
       delete users[id];
       emitListeners();
     });
+
     req.socket.on('username', function(d) {
       users[id] = d || 'Anonymous';
       emitListeners();
