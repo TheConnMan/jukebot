@@ -1,72 +1,10 @@
-<div class="ui top attached menu">
-  <div class="left menu">
-    <div class="item">
-      <img src="/images/jukebot.png" />
-    </div>
-    <div class="item">
-      <div class="ui left corner labeled input">
-        <input type="text" placeholder="Added By" ng-model="username" enter-press="addVideo()">
-        <div class="ui left corner label">
-          <i class="user icon"></i>
-        </div>
-      </div>
-    </div>
-    <div class="ui search item">
-      <div class="ui transparent icon input">
-        <input class="prompt" type="text" placeholder="Search youtube...">
-        <i class="search link icon"></i>
-      </div>
-      <div class="results"></div>
-    </div>
-  </div>
-</div>
+<%- partial('./partials/header.ejs') %>
 
 <div id="main-content">
 
   <div class="ui grid" style="width: 100%;">
     <div class="ten wide column">
-      <div class="ui card" style="width: 100%;">
-        <div class="ui embed" ng-if="currentVideo().id"></div>
-        <div class="content" ng-if="currentVideo().id">
-          <span class="right floated">
-            <i
-              ng-click="likeCurrentVideo()"
-              title=""
-              class="big heart {{likesCurrentVideo() ? 'red' : 'outline'}} like icon">
-            </i>
-          </span>
-          <a
-            ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}"
-            target="_blank"
-            class="header"
-          >
-            {{currentVideo().title}} <i class="youtube icon"></i>
-          </a>
-          <div class="meta">
-            <span class="date">Added by {{currentVideo().user}}</span>
-          </div>
-        </div>
-        <div class="content" ng-if="!currentVideo().id">
-          <h2 class="ui center aligned icon header">
-            <i class="sound icon"></i>
-            No Music Playing
-          </h2>
-        </div>
-        <div class="extra content">
-          <span style="cursor: pointer;" ng-click="toggleListeners()">
-            <i class="{{listenerCount() > 1 ? 'users' : 'user'}} icon"></i>
-            {{listenerCount()}} Listener{{listenerCount() > 1 ? 's' : ''}}
-            <i class="blue listeners caret right icon"></i>
-            <i class="blue listeners caret down icon" style="display: none;"></i>
-            <i style="float: right;" class="large floated right forward link icon" ng-if="currentVideo().id" ng-click="skip()"></i>
-          </span>
-        </div>
-        <div class="listeners extra content" style="display: none;">
-          <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
-            {{user}}
-          </span>
-        </div>
-      </div>
+      <%- partial('./partials/currently-playing.ejs') %>
 
       <div ng-if="canShowChromeFlag()">
         <div class="ui divider"></div>
@@ -78,37 +16,7 @@
 
     </div>
     <div class="six wide column">
-      <h2 class="ui dividing header">Videos</h2>
-      <div ng-if="videos.length > 0" class="ui items">
-        <div class="item" ng-repeat="video in videos | orderBy: createdAt track by video.id">
-            <div class="ui image">
-              <img ng-src="{{video.thumbnail}}">
-            </div>
-            <div class="content">
-              <a class="header" ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
-                {{video.title}}
-              </a>
-              <div class="meta">
-                Added by {{video.user}}
-              </div>
-              <div class="extra">
-                <div class="ui mini right floated red basic button" ng-if="!video.played && !video.playing" ng-click="remove(video.id)">
-                  Remove
-                </div>
-                <div class="ui mini right floated green basic button" ng-if="video.played && !video.playing" ng-click="readd(video.key)">
-                  Add
-                </div>
-                <div class="ui mini right floated yellow basic button" ng-if="video.playing" ng-click="skip()">
-                  Skip
-                </div>
-              </div>
-            </div>
-        </div>
-      </div>
-      <h4 ng-if="videos.length == 0" class="ui center aligned icon header">
-        <i class="video icon"></i>
-        <div class="content">No Videos</div>
-      </h4>
+      <%- partial('./partials/videos.ejs') %>
     </div>
 
   </div>
