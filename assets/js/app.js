@@ -132,8 +132,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       io.socket._raw.emit('username', newUsername);
     });
 
-    $video.getAll()
-      .then((config) => $scope.autoplay = config.autoplay);
+    $video.getAll();
     $video.subscribe();
 
     /********
