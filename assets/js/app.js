@@ -38,6 +38,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       return $storage.likesVideo($video.current().key);
     };
 
+    $scope.likesVideo = function(key) {
+      return $storage.likesVideo(key);
+    };
+
     /**************************
      * Video Service Passthru *
      **************************/

@@ -12,6 +12,7 @@
           Added by {{video.user}}
         </div>
         <div class="extra">
+          <i class="large {{likesVideo(video.key) ? 'red' : 'outline'}} link heart icon" ng-click="likeVideo(video)"></i>
           <div class="ui mini right floated red basic button" ng-if="!video.played && !video.playing" ng-click="remove(video.id)">
             Remove
           </div>
