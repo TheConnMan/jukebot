@@ -42,6 +42,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       return $storage.likesVideo(key);
     };
 
+    $scope.likes = function() {
+      return $storage.getLikedVideos();
+    };
+
     /**************************
      * Video Service Passthru *
      **************************/
@@ -52,7 +56,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.getVideos = function() {
       return $video.getVideos();
-    }
+    };
 
     $scope.addVideo = function() {
       $log.log('Adding video');
@@ -83,6 +87,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.findVideoById = function(id) {
       return $video.findById(id);
+    };
+
+    $scope.videoInUpcoming = function(key) {
+      return $video.videoInUpcoming(key);
     };
 
     /******************************
