@@ -74,13 +74,13 @@ function search(query, maxResults) {
 
 function nextRelated(key) {
   return new Promise((resolve, reject) => {
-    request(`https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${key}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=1&type=video`, (error, response, body) => {
+    request(`https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${key}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=3&type=video`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         var items = JSON.parse(body).items;
-        if (items.length !== 1) {
+        if (items.length === 0) {
           reject('No related video found');
         }
-        resolve(items[0].id.videoId);
+        resolve(items[Math.floor(Math.random() * items.length)].id.videoId);
       } else {
         reject(error);
       }
