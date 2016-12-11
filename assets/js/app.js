@@ -18,7 +18,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
         url: 'video/search?query={query}&maxResults=10'
       }
     });
-    $notification.getPermission();
 
     $rootScope.title = 'JukeBot';
     $scope.username = $storage.get('username');
@@ -105,7 +104,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.$watch($video.current, function(currentVideo) {
       $rootScope.title = currentVideo ? currentVideo.title : 'JukeBot';
-      if (currentVideo && $scope.startTime() === 0) {
+      if (currentVideo && $scope.startTime() === 0 && $scope.notifications) {
         $notification(currentVideo.title, {
           icon: currentVideo.thumbnail,
           delay: 4000,
@@ -136,7 +135,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       $log.log('Received a video update');
       $log.log(obj);
       if (obj.verb === 'created') {
-        if ($video.current() && $scope.username !== obj.data.user) {
+        if ($video.current() && $scope.username !== obj.data.user && $scope.notifications) {
           $notification('New Video Added', {
             body: obj.data.user + ' added ' + obj.data.title,
             icon: obj.data.thumbnail,
@@ -192,6 +191,16 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.listenerCount = function() {
       return Object.keys($scope.listeners).length;
     };
+
+    /******************************
+     * Desktop Notifications *
+     ******************************/
+
+    $scope.notifications = $storage.get('notifications') === 'true' ||  !$storage.get('notifications');
+
+    $scope.$watch('notifications', function(newVal) {
+      $storage.set('notifications', newVal);
+    });
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
 }).directive('enterPress', function () {
