@@ -1,6 +1,8 @@
 angular
 .module('storage', [])
 .factory('$storage', function() {
+  var likedVideos = getObj('likes');
+
   function getObj(key) {
     try {
       return JSON.parse(localStorage[key]);
@@ -23,7 +25,7 @@ angular
     },
 
     likeVideo(video) {
-      let likes = getObj('likes');
+      let likes = likedVideos;
       let key = video.key;
 
       if (likes) {
@@ -37,19 +39,25 @@ angular
           likes.push(video);
         }
         setObj('likes', likes);
+        likedVideos = likes;
       } else {
         setObj('likes', [video]);
+        likedVideos = likes;
       }
     },
 
     likesVideo(videoKey) {
-      let likes = getObj('likes');
+      let likes = likedVideos;
 
       if (likes) {
         return !!likes.find((l) => l.key === videoKey);
       } else {
         return false;
       }
+    },
+
+    getLikedVideos() {
+      return likedVideos;
     }
   };
 });

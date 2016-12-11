@@ -78,6 +78,10 @@ angular
     return videos.filter((video) => video.played && !video.playing);
   }
 
+  function videoInUpcoming(key) {
+    return upcoming().filter((video) => video.key === key).length === 1;
+  }
+
   return {
     push,
     add,
@@ -92,6 +96,7 @@ angular
     remove,
     removePermanently,
     upcoming,
-    recent
+    recent,
+    videoInUpcoming
   };
 }]);
