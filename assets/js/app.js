@@ -1,5 +1,5 @@
-var app = angular.module('app', ['notification', 'storage']);
-app.controller('controller', function($scope, $rootScope, $notification, $storage, $timeout, $http, $log) {
+var app = angular.module('app', ['notification', 'storage', 'video']);
+app.controller('controller', function($scope, $rootScope, $notification, $storage, $video, $timeout, $http, $log) {
   $('.ui.search')
     .search({
       minCharacters: 3,
@@ -23,12 +23,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $rootScope.title = 'JukeBot';
     $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
-    $scope.videos = [];
     $scope.autoplay = false;
     $scope.listeners = {};
 
     $scope.likeCurrentVideo = function() {
-      $storage.likeVideo($scope.currentVideo());
+      $storage.likeVideo($video.current());
     };
 
     $scope.likeVideo = function(video) {
@@ -36,20 +35,63 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.likesCurrentVideo = function() {
-      return $storage.likesVideo($scope.currentVideo().key);
+      return $storage.likesVideo($video.current().key);
     };
+
+    /**************************
+     * Video Service Passthru *
+     **************************/
 
     $scope.currentVideo = function() {
-      var playing = $scope.videos.filter(function(video) { return video.playing; });
-      return playing.length == 1 ? playing[0] : null;
+      return $video.current();
     };
 
+    $scope.getVideos = function() {
+      return $video.getVideos();
+    }
+
+    $scope.addVideo = function() {
+      $log.log('Adding video');
+      $log.log($scope.link);
+      $log.log($scope.username);
+      if ($scope.link) {
+        $video
+          .add(link, user)
+          .success(() => $scope.link = '')
+          .error((e) => {
+            $scope.link = '';
+            sweetAlert('Error', e, 'error');
+          });
+      }
+    };
+
+    $scope.readd = function(key) {
+      return $video.addByKey($scope.username, key);
+    };
+
+    $scope.remove = function(id) {
+      return $video.removePermanently(id);
+    };
+
+    $scope.skip = function() {
+      return $video.skip();
+    };
+
+    $scope.findVideoById = function(id) {
+      return $video.findById(id);
+    };
+
+    /******************************
+     * End Video Service Passthru *
+     ******************************/
+
     $scope.startTime = function() {
-      var video = $scope.currentVideo();
+      let video = $video.current();
+
       return video ? Math.max(Math.floor(($scope.initTime - new Date(video.startTime).getTime()) / 1000), 0) : 0;
     };
 
-    $scope.$watch($scope.currentVideo, function(currentVideo) {
+    $scope.$watch($video.current, function(currentVideo) {
       $rootScope.title = currentVideo ? currentVideo.title : 'JukeBot';
       if (currentVideo && $scope.startTime() === 0) {
         $notification(currentVideo.title, {
@@ -60,7 +102,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       }
       setTimeout(function() {
         $('.ui.embed').embed({
-          url: currentVideo ? '//www.youtube.com/embed/' + currentVideo.key : '',
+          url: currentVideo ? `//www.youtube.com/embed/${currentVideo.key}` : '',
           autoplay: true,
           parameters: {
             start: $scope.startTime()
@@ -74,22 +116,15 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       io.socket._raw.emit('username', newUsername);
     });
 
-    $scope.getAllVideos = function() {
-      io.socket.get('/video/subscribe');
-
-      $http.get('/api/start').success(function(config) {
-        $scope.videos = config.videos;
-        $scope.autoplay = config.autoplay;
-      });
-    };
-
-    $scope.getAllVideos();
+    $video.getAll()
+      .then((config) => $scope.autoplay = config.autoplay);
+    $video.subscribe();
 
     io.socket.on('video', function(obj) {
       $log.log('Received a video update');
       $log.log(obj);
       if (obj.verb === 'created') {
-        if ($scope.currentVideo() && $scope.username !== obj.data.user) {
+        if ($video.current() && $scope.username !== obj.data.user) {
           $notification('New Video Added', {
             body: obj.data.user + ' added ' + obj.data.title,
             icon: obj.data.thumbnail,
@@ -97,17 +132,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
             focusWindowOnClick: true
           });
         }
-        $scope.videos.push(obj.data);
+        $video.push(obj.data);
       } else if (obj.verb === 'updated') {
-        var video = $scope.findVideoById(obj.data.id);
-        if (video) {
-          $scope.videos[$scope.videos.indexOf(video)] = obj.data;
-        }
+        $video.update(obj.data);
       } else if (obj.verb === 'destroyed') {
-        var removedVideo = $scope.findVideoById(obj.id);
-        if (removedVideo) {
-          $scope.videos.splice($scope.videos.indexOf(removedVideo), 1);
-        }
+        $video.remove(obj.id);
       }
       $scope.$digest();
     });
@@ -130,54 +159,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.toggleAutoplay = function() {
       io.socket._raw.emit('autoplay', $scope.autoplay);
-    };
-
-    $scope.upcoming = function() {
-      return $scope.videos.filter(function(video) { return !video.played && !video.playing; });
-    };
-
-    $scope.recent = function() {
-      return $scope.videos.filter(function(video) { return video.played && !video.playing; });
-    };
-
-    $scope.addVideo = function() {
-      $log.log('Adding video');
-      $log.log($scope.link);
-      $log.log($scope.username);
-      if ($scope.link) {
-        $http.post('/api/add', {
-          link: $scope.link,
-          user: $scope.username
-        }).success(function() {
-          $scope.link = '';
-        }).error(function(e) {
-          $scope.link = '';
-          sweetAlert('Error', e, 'error');
-        });
-      }
-    };
-
-    $scope.remove = function(id) {
-      $http.delete('/api/remove/' + id);
-    };
-
-    $scope.readd = function(key) {
-      return $http.post('/api/add', {
-        link: 'https://www.youtube.com/watch?v=' + key,
-        user: $scope.username
-      });
-    };
-
-    $scope.skip = function() {
-      $http.post('/video/skip');
-    };
-
-    $scope.findVideoById = function(id) {
-      var videoMap = $scope.videos.reduce(function(map, video) {
-        map[video.id.toString()] = video;
-        return map;
-      }, {});
-      return videoMap[id.toString()];
     };
 
     $scope.canShowChromeFlag = function() {

@@ -1,6 +1,6 @@
 <h2 class="ui dividing header">Videos</h2>
-<div id="video-list" ng-if="videos.length > 0" class="ui items">
-  <div class="item" ng-repeat="video in videos | orderBy: createdAt track by video.id">
+<div id="video-list" ng-if="getVideos().length > 0" class="ui items">
+  <div class="item" ng-repeat="video in getVideos() | orderBy: createdAt track by video.id">
       <div class="ui image">
         <img ng-src="{{video.thumbnail}}">
       </div>
@@ -25,7 +25,7 @@
       </div>
   </div>
 </div>
-<h4 ng-if="videos.length == 0" class="ui center aligned icon header">
+<h4 ng-if="getVideos().length == 0" class="ui center aligned icon header">
   <i class="video icon"></i>
   <div class="content">No Videos</div>
 </h4>
