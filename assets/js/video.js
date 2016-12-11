@@ -17,7 +17,7 @@ angular
   }
 
   function getVideos() {
-    return videos;
+    return videos.filter(function(video) { return !video.played || new Date(video.startTime) >= new Date(Date.now() - 3600 * 1000); });
   }
 
   function findById(id) {

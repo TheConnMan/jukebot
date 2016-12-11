@@ -59,7 +59,7 @@ module.exports = {
   start: function(req, res) {
     Video.find({
       createdAt: {
-        '>=': new Date(Date.now() - 3600 * 1000)
+        '>=': new Date(Date.now() - 24 * 3600 * 1000)
       }
     }).exec(function(err, videos) {
       res.send({
