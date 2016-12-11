@@ -22,11 +22,6 @@ angular
 
   function findById(id) {
     return videos.find((v) => v.id.toString() == id);
-    // var videoMap = videos.reduce((map, video) => {
-    //   map[video.id.toString()] = video;
-    //   return map;
-    // }, {});
-    // return videoMap[id.toString()];
   }
 
   function current() {
