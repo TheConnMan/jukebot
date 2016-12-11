@@ -12,6 +12,9 @@ module.exports = {
     req.socket.on('disconnect', function() {
       delete users[id];
       emitListeners();
+      if (Object.keys(users).length === 0) {
+        SyncService.setAutoplay(false);
+      }
     });
 
     req.socket.on('username', function(d) {
