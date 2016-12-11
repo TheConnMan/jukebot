@@ -35,5 +35,8 @@
     "url": "git://github.com/TheConnMan/jukebot.git"
   },
   "author": "TheConnMan",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
 }

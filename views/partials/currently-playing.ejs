@@ -55,9 +55,12 @@
       <i class="blue listeners caret down icon" style="display: none;"></i>
     </span>
   </div>
-  <div class="chat extra content" style="display: none;">
-    <span class="item" ng-repeat="message in chatMessages() | orderBy: user track by $index">
-      {{message}}
+  <div class="chat extra content">
+    <span class="item" ng-repeat="chat in chats | orderBy: user track by $index">
+      {{chat.message}}
     </span>
+    <div class="ui input">
+      <input type="text" placeholder="Chat..." ng-model="newChat" enter-press="sendChat()">
+    </div>
   </div>
 </div>
