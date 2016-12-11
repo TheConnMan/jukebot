@@ -25,6 +25,8 @@
       No Music Playing
     </h2>
   </div>
+
+  <!-- LISTENERS -->
   <div class="extra content">
     <span style="cursor: pointer;" ng-click="toggleListeners()">
       <i class="{{listenerCount() > 1 ? 'users' : 'user'}} icon"></i>
@@ -41,6 +43,21 @@
   <div class="listeners extra content" style="display: none;">
     <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
       {{user}}
+    </span>
+  </div>
+
+  <!-- CHAT -->
+  <div class="extra content">
+    <span style="cursor: pointer;" ng-click="toggleChat()">
+      <i class="{{listenerCount() > 1 ? 'users' : 'user'}} icon"></i>
+      {{listenerCount()}} Listener{{listenerCount() > 1 ? 's' : ''}}
+      <i class="blue listeners caret right icon"></i>
+      <i class="blue listeners caret down icon" style="display: none;"></i>
+    </span>
+  </div>
+  <div class="chat extra content" style="display: none;">
+    <span class="item" ng-repeat="message in chatMessages() | orderBy: user track by $index">
+      {{message}}
     </span>
   </div>
 </div>
