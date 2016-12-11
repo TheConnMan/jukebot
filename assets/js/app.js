@@ -23,6 +23,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $rootScope.title = 'JukeBot';
     $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
+    $scope.autoplay = false;
     $scope.listeners = {};
 
     $scope.likeCurrentVideo = function() {
@@ -115,7 +116,8 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       io.socket._raw.emit('username', newUsername);
     });
 
-    $video.getAll();
+    $video.getAll()
+      .then((config) => $scope.autoplay = config.autoplay);
     $video.subscribe();
 
     io.socket.on('video', function(obj) {
@@ -147,6 +149,17 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     io.socket.get('/api/subscribe', {
       username: $scope.username
     });
+
+    io.socket.on('autoplay', function(obj) {
+      $scope.autoplay = obj.autoplay;
+      $scope.$digest();
+    });
+
+    io.socket.get('/api/autoplay');
+
+    $scope.toggleAutoplay = function() {
+      io.socket._raw.emit('autoplay', $scope.autoplay);
+    };
 
     $scope.canShowChromeFlag = function() {
       return !$storage.get('chromeFlag');

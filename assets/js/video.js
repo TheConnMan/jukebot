@@ -38,10 +38,10 @@ angular
   }
 
   function getAll() {
-    $http.get('/video/recent').success((v) => {
-      $log.log('Got all videos');
-      $log.log(v);
-      videos = v;
+    return $http.get('/api/start').then(({ data }) => {
+      videos = data.videos;
+
+      return data;
     });
   }
 
