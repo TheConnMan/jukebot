@@ -144,21 +144,36 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
      $scope.chats = [];
 
      $scope.toggleChat = function() {
-       $('.chat').toggle();
+       let $chat = $('.chat');
+
+       $chat.toggle();
+       $scope.scrollChatToBottom();
      };
 
      $scope.sendChat = function(chat) {
        let newChat = $scope.newChat;
 
-       $http.post('/chat/new', {
-         message: $scope.newChat
-       });
+       $http
+        .post('/chat/new', {
+           message: $scope.newChat,
+           username: $scope.username,
+           time: Date.now()
+         })
+         .then(() => $('#chat-input input').val(''));
      };
 
     io.socket.on('chats', function(chats) {
       $scope.chats = chats;
       $scope.$digest();
+      $scope.scrollChatToBottom();
     });
+
+    $scope.scrollChatToBottom = function() {
+      let $list = $('#chat-list');
+      $list.animate({
+        scrollTop: $list.prop('scrollHeight')
+      }, 1000);
+    };
     /************
      * End Chat *
      ************/
