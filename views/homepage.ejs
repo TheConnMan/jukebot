@@ -4,15 +4,15 @@
 
   <div class="ui grid" style="width: 100%;">
     <div class="ten wide column">
-      <%- partial('./partials/currently-playing.ejs') %>
-
       <div ng-if="canShowChromeFlag()">
         <div class="ui divider"></div>
-        <div class="ui info ignored message">
-          To let JukeBot auto play the next video on Chrome, go to chrome://flags/#disable-gesture-requirement-for-media-playback and disable the flag.
+        <div class="ui warning ignored message">
+          To let JukeBot auto play the next video on Chrome, go to <a href="chrome://flags/#disable-gesture-requirement-for-media-playback">chrome://flags/#disable-gesture-requirement-for-media-playback</a> and disable the flag.
           <i class="close icon" ng-click="hideChromeFlag()"></i>
         </div>
       </div>
+
+      <%- partial('./partials/currently-playing.ejs') %>
 
     </div>
     <div class="six wide column">
