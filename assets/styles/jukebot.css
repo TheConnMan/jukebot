@@ -22,3 +22,8 @@
 .items > .item:hover {
   background-color: #F0F0F0;
 }
+
+.chat {
+  display: flex;
+  flex-direction: column;
+}

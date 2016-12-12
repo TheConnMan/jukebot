@@ -1,4 +1,4 @@
-var app = angular.module('app', ['notification', 'storage', 'video']);
+var app = angular.module('app', ['notification', 'storage', 'video', 'angularMoment']);
 app.controller('controller', function($scope, $rootScope, $notification, $storage, $video, $timeout, $http, $log) {
   $('.ui.search')
     .search({
@@ -24,7 +24,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.initTime = new Date().getTime();
     $scope.autoplay = false;
     $scope.listeners = {};
+    $scope.newChat = '';
 
+    /*************
+     * Favorites *
+     *************/
     $scope.likeCurrentVideo = function() {
       $storage.likeVideo($video.current());
     };
@@ -44,11 +48,13 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.likes = function() {
       return $storage.getLikedVideos();
     };
+    /*****************
+     * End Favorites *
+     *****************/
 
     /**************************
      * Video Service Passthru *
      **************************/
-
     $scope.currentVideo = function() {
       return $video.current();
     };
@@ -91,7 +97,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.videoInUpcoming = function(key) {
       return $video.videoInUpcoming(key);
     };
-
     /******************************
      * End Video Service Passthru *
      ******************************/
@@ -131,6 +136,48 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       .then((config) => $scope.autoplay = config.autoplay);
     $video.subscribe();
 
+    /********
+     * Chat *
+     ********/
+     io.socket.get('/chat/subscribe', {});
+
+     $scope.chats = [];
+
+     $scope.toggleChat = function() {
+       let $chat = $('.chat');
+
+       $chat.toggle();
+       $scope.scrollChatToBottom();
+     };
+
+     $scope.sendChat = function(chat) {
+       let newChat = $scope.newChat;
+
+       $http
+        .post('/chat/new', {
+           message: $scope.newChat,
+           username: $scope.username,
+           time: Date.now()
+         })
+         .then(() => $('#chat-input input').val(''));
+     };
+
+    io.socket.on('chats', function(chats) {
+      $scope.chats = chats;
+      $scope.$digest();
+      $scope.scrollChatToBottom();
+    });
+
+    $scope.scrollChatToBottom = function() {
+      let $list = $('#chat-list');
+      $list.animate({
+        scrollTop: $list.prop('scrollHeight')
+      }, 1000);
+    };
+    /************
+     * End Chat *
+     ************/
+
     io.socket.on('video', function(obj) {
       $log.log('Received a video update');
       $log.log(obj);
@@ -152,15 +199,13 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       $scope.$digest();
     });
 
-    io.socket.on('listening', function(obj) {
-      $scope.listeners = obj.users;
-      $scope.$digest();
-    });
-
     io.socket.get('/api/subscribe', {
       username: $scope.username
     });
 
+    /************
+     * Autoplay *
+     ************/
     io.socket.on('autoplay', function(obj) {
       $scope.autoplay = obj.autoplay;
       $scope.$digest();
@@ -171,7 +216,13 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.toggleAutoplay = function() {
       io.socket._raw.emit('autoplay', $scope.autoplay);
     };
+    /****************
+     * End Autoplay *
+     ****************/
 
+    /***************
+     * Chrome Flag *
+     ***************/
     $scope.canShowChromeFlag = function() {
       return !$storage.get('chromeFlag');
     };
@@ -179,6 +230,17 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.hideChromeFlag = function() {
       $storage.set('chromeFlag', 'true');
     };
+    /*******************
+     * End Chrome Flag *
+     *******************/
+
+    /*************
+     * Listeners *
+     *************/
+     io.socket.on('listening', function(obj) {
+       $scope.listeners = obj.users;
+       $scope.$digest();
+     });
 
     $scope.toggleListeners = function() {
       $('.listeners').toggle();
@@ -191,16 +253,21 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.listenerCount = function() {
       return Object.keys($scope.listeners).length;
     };
+    /*****************
+     * End Listeners *
+     *****************/
 
     /******************************
      * Desktop Notifications *
      ******************************/
-
     $scope.notifications = $storage.get('notifications') === 'true' ||  !$storage.get('notifications');
 
     $scope.$watch('notifications', function(newVal) {
       $storage.set('notifications', newVal);
     });
+    /*****************************
+     * End Desktop Notifications *
+     *****************************/
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
 }).directive('enterPress', function () {
