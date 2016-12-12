@@ -15,7 +15,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
             results: videos
           };
         },
-        url: 'video/search?query={query}&maxResults=10'
+        url: 'api/search?query={query}&maxResults=10'
       }
     });
 
@@ -203,7 +203,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       $scope.$digest();
     });
 
-    io.socket.get('/api/subscribe', {
+    io.socket.get('/api/subscribeUsers', {
       username: $scope.username
     });
 

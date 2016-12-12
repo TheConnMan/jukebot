@@ -29,7 +29,7 @@ angular
   }
 
   function subscribe() {
-    io.socket.get('/video/subscribe');
+    io.socket.get('/api/subscribeVideos');
   }
 
   function getAll() {
@@ -41,7 +41,7 @@ angular
   }
 
   function skip() {
-    return $http.post('/video/skip');
+    return $http.post('/api/skip');
   }
 
   function add(link, user) {
