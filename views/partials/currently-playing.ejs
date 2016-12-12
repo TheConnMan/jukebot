@@ -57,7 +57,7 @@
   <div class="chat extra content" style="display: none;">
     <div id="chat-list" class="ui feed" style="overflow-y: auto;">
       <div class="event" ng-repeat="chat in chats | orderBy: time track by $index">
-        <div class="content">
+        <div class="content" ng-if="differentUser($index)">
           <div class="summary">
             <div class="user">
               {{chat.username}}
@@ -67,6 +67,9 @@
           <div class="extra text">
             {{chat.message}}
           </div>
+        </div>
+        <div class="content color-black" ng-if="!differentUser($index)">
+          {{ chat.message }}
         </div>
       </div>
     </div>

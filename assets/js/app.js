@@ -174,6 +174,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
         scrollTop: $list.prop('scrollHeight')
       }, 1000);
     };
+
+    $scope.differentUser = function(index) {
+      return index === 0 || $scope.chats[index].username != $scope.chats[index - 1].username;
+    };
     /************
      * End Chat *
      ************/
