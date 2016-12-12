@@ -1,8 +1,8 @@
 <div class="d-f fd-c h-100">
   <h2 class="ui dividing header">Chat</h2>
   <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto;">
-    <div class="event" ng-repeat="chat in chats | orderBy: time track by $index">
-      <div class="content" ng-if="differentUser($index)">
+    <div class="event" ng-repeat="chat in $ctrl.chats | orderBy: time track by $index">
+      <div class="content" ng-if="$ctrl.differentUser($index)">
         <div class="summary">
           <div class="user">
             {{chat.username}}
@@ -13,12 +13,16 @@
           {{chat.message}}
         </div>
       </div>
-      <div class="content color-black" ng-if="!differentUser($index)">
+      <div class="content color-black" ng-if="!$ctrl.differentUser($index)">
         {{ chat.message }}
       </div>
     </div>
   </div>
   <div id="chat-input" class="ui fluid input">
-    <input type="text" placeholder="Say something..." ng-model="newChat" enter-press="sendChat()">
+    <input
+      type="text"
+      placeholder="Say something..."
+      ng-model="$ctrl.newChat"
+      enter-press="$ctrl.sendChat()">
   </div>
 </div>
