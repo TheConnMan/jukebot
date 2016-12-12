@@ -1,7 +1,12 @@
-# JukeBot Styles
+/* JukeBot Styles */
 
 .listeners span + span:before {
   content: ', ';
+}
+
+#video-list {
+  height: calc(100vh - 130px);
+  overflow-y: auto;
 }
 
 #main-content {
@@ -16,4 +21,13 @@
 
 .items > .item:hover {
   background-color: #F0F0F0;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+}
+
+.color-black {
+  color: rgba(0, 0, 0, .87);
 }

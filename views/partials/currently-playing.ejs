@@ -1,0 +1,80 @@
+<div class="ui card" style="width: 100%; max-height: calc(100vh - 77px);">
+  <div class="ui embed" ng-if="currentVideo().id"></div>
+  <div class="content" ng-if="currentVideo().id">
+    <span class="right floated">
+      <i
+        ng-click="likeCurrentVideo()"
+        title=""
+        class="big heart {{likesCurrentVideo() ? 'red' : 'outline'}} like icon">
+      </i>
+    </span>
+    <a
+      ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}"
+      target="_blank"
+      class="header"
+    >
+      {{currentVideo().title}} <i class="youtube icon"></i>
+    </a>
+    <div class="meta">
+      <span class="date">Added by {{currentVideo().user}}</span>
+    </div>
+  </div>
+  <div class="content" ng-if="!currentVideo().id">
+    <h2 class="ui center aligned icon header">
+      <i class="sound icon"></i>
+      No Music Playing
+    </h2>
+  </div>
+
+  <!-- LISTENERS -->
+  <div class="extra content">
+    <span style="cursor: pointer;" ng-click="toggleListeners()">
+      <i class="{{listenerCount() > 1 ? 'users' : 'user'}} icon"></i>
+      {{listenerCount()}} Listener{{listenerCount() > 1 ? 's' : ''}}
+      <i class="blue listeners caret right icon"></i>
+      <i class="blue listeners caret down icon" style="display: none;"></i>
+    </span>
+    <div style="float: right;" class="ui toggle checkbox" ng-click="toggleAutoplay()">
+      <input type="checkbox" ng-model="autoplay" ng-click="toggleAutoplay()" name="public">
+      <label>Autoplay</label>
+    </div>
+    <i style="float: right;" class="large floated right forward link icon" ng-if="currentVideo().id" ng-click="skip()"></i>
+  </div>
+  <div class="listeners extra content" style="display: none;">
+    <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
+      {{user}}
+    </span>
+  </div>
+
+  <!-- CHAT -->
+  <div class="extra content">
+    <span style="cursor: pointer;" ng-click="toggleChat()">
+      {{chats.length}} message{{chats.length != 1 ? 's' : ''}}
+      <i class="blue chat caret right icon"></i>
+      <i class="blue chat caret down icon" style="display: none;"></i>
+    </span>
+  </div>
+  <div class="chat extra content" style="display: none;">
+    <div id="chat-list" class="ui feed" style="overflow-y: auto;">
+      <div class="event" ng-repeat="chat in chats | orderBy: time track by $index">
+        <div class="content" ng-if="differentUser($index)">
+          <div class="summary">
+            <div class="user">
+              {{chat.username}}
+            </div>
+            <div am-time-ago="{{chat.time}}" class="date"></div>
+          </div>
+          <div class="extra text">
+            {{chat.message}}
+          </div>
+        </div>
+        <div class="content color-black" ng-if="!differentUser($index)">
+          {{ chat.message }}
+        </div>
+      </div>
+    </div>
+    <div id="chat-input" class="ui input">
+      <input type="text" placeholder="Say something..." ng-model="newChat" enter-press="sendChat()">
+    </div>
+  </div>
+</div>

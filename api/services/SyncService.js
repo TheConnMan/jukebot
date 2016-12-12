@@ -9,11 +9,14 @@ var slack = sails.config.slackWebhook ? new SlackWebhook(sails.config.slackWebho
 }) : null;
 
 var videoTimeout;
+var autoplay = false;
 
 module.exports = {
   addVideo,
   sendAddMessages,
-  skip
+  skip,
+  setAutoplay,
+  getAutoplay
 };
 
 function addVideo(video) {
@@ -71,17 +74,21 @@ function endCurrentVideo() {
     current.save(function() {
       logger.info('Publishing end song ' + current.key);
       Video.publishUpdate(current.id, current);
-      findNextVideo();
+      findNextVideo(current);
     });
   });
 }
 
-function findNextVideo() {
+function findNextVideo(lastVideo) {
   Video.find({
     played: false
   }).sort('createdAt ASC').exec(function(err, upcoming) {
     if (upcoming.length > 0) {
       startVideo(upcoming[0]);
+    } else if (autoplay) {
+      YouTubeService.nextRelated(lastVideo.key).then(function(nextKey) {
+        return YouTubeService.getYouTubeVideo(nextKey, 'Autoplay');
+      }).then(addVideo).then(sendAddMessages);
     }
   });
 }
@@ -121,4 +128,12 @@ function sendSlackPlayingNotification(video) {
     text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
     'mrkdwn': true
   });
+}
+
+function getAutoplay() {
+  return autoplay;
+}
+
+function setAutoplay(val) {
+  autoplay = val;
 }

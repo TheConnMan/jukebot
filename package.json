@@ -1,6 +1,6 @@
 {
   "name": "JukeBot",
-  "version": "0.4.1",
+  "version": "1.0.0",
   "description": "Slack-Enabled Syncronized Music Listening",
   "keywords": [],
   "dependencies": {
@@ -35,5 +35,8 @@
     "url": "git://github.com/TheConnMan/jukebot.git"
   },
   "author": "TheConnMan",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
 }

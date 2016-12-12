@@ -5,7 +5,8 @@ const moment = require('moment');
 module.exports = {
   parseYouTubeLink,
   getYouTubeVideo,
-  search
+  search,
+  nextRelated
 };
 
 function parseYouTubeLink(link) {
@@ -64,6 +65,22 @@ function search(query, maxResults) {
           };
         });
         resolve(results);
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
+function nextRelated(key) {
+  return new Promise((resolve, reject) => {
+    request(`https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${key}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=3&type=video`, (error, response, body) => {
+      if (!error && response.statusCode == 200) {
+        var items = JSON.parse(body).items;
+        if (items.length === 0) {
+          reject('No related video found');
+        }
+        resolve(items[Math.floor(Math.random() * items.length)].id.videoId);
       } else {
         reject(error);
       }
