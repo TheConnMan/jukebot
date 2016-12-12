@@ -45,36 +45,4 @@
       {{user}}
     </span>
   </div>
-
-  <!-- CHAT -->
-  <div class="extra content">
-    <span style="cursor: pointer;" ng-click="toggleChat()">
-      {{chats.length}} message{{chats.length != 1 ? 's' : ''}}
-      <i class="blue chat caret right icon"></i>
-      <i class="blue chat caret down icon" style="display: none;"></i>
-    </span>
-  </div>
-  <div class="chat extra content" style="display: none;">
-    <div id="chat-list" class="ui feed" style="overflow-y: auto;">
-      <div class="event" ng-repeat="chat in chats | orderBy: time track by $index">
-        <div class="content" ng-if="differentUser($index)">
-          <div class="summary">
-            <div class="user">
-              {{chat.username}}
-            </div>
-            <div am-time-ago="{{chat.time}}" class="date"></div>
-          </div>
-          <div class="extra text">
-            {{chat.message}}
-          </div>
-        </div>
-        <div class="content color-black" ng-if="!differentUser($index)">
-          {{ chat.message }}
-        </div>
-      </div>
-    </div>
-    <div id="chat-input" class="ui input">
-      <input type="text" placeholder="Say something..." ng-model="newChat" enter-press="sendChat()">
-    </div>
-  </div>
 </div>

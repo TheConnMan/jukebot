@@ -23,11 +23,6 @@
   background-color: #F0F0F0;
 }
 
-.chat {
-  display: flex;
-  flex-direction: column;
-}
-
 .color-black {
   color: rgba(0, 0, 0, .87);
 }
