@@ -55,11 +55,18 @@
     </span>
   </div>
   <div class="chat extra content" style="display: none;">
-    <div id="chat-list" class="ui relaxed list" style="overflow-y: auto;">
-      <div class="item" ng-repeat="chat in chats | orderBy: time track by $index">
+    <div id="chat-list" class="ui feed" style="overflow-y: auto;">
+      <div class="event" ng-repeat="chat in chats | orderBy: time track by $index">
         <div class="content">
-          <div class="header">{{chat.message}}</div>
-          <div class="description">{{chat.username}}</div>
+          <div class="summary">
+            <div class="user">
+              {{chat.username}}
+            </div>
+            <div am-time-ago="{{chat.time}}" class="date"></div>
+          </div>
+          <div class="extra text">
+            {{chat.message}}
+          </div>
         </div>
       </div>
     </div>
