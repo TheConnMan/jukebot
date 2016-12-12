@@ -13,6 +13,12 @@
   padding: 8px;
   height: calc(100vh - 55px);
 }
+#main-content .ui.grid {
+  width: 100%;
+  height: calc(100% + 16px);
+  position: relative;
+  top: 6px;
+}
 
 .ui.items > .item {
   margin: 0;
@@ -25,4 +31,20 @@
 
 .color-black {
   color: rgba(0, 0, 0, .87);
+}
+
+.d-f {
+  display: flex;
+}
+
+.fd-c {
+  flex-direction: column;
+}
+
+.fg-1 {
+  flex-grow: 1;
+}
+
+.h-100 {
+  height: 100%;
 }
