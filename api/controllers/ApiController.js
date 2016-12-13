@@ -7,9 +7,11 @@ module.exports = {
     req.socket.join('listeners');
 
     users[id] = params.username || 'Anonymous';
+    ChatService.addMachineMessage(users[id] + ' entered the room');
     emitListeners();
 
     req.socket.on('disconnect', function() {
+      ChatService.addMachineMessage(users[id] + ' left the room');
       delete users[id];
       emitListeners();
       if (Object.keys(users).length === 0) {
