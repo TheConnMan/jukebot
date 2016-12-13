@@ -57,6 +57,10 @@ module.exports = {
         autoplay: autoplay
       });
     });
+
+    sails.io.sockets.in(id).emit('autoplay', {
+      autoplay: SyncService.getAutoplay()
+    });
   },
 
   start: function(req, res) {
@@ -66,8 +70,7 @@ module.exports = {
       }
     }).exec(function(err, videos) {
       res.send({
-        videos: videos,
-        autoplay: SyncService.getAutoplay()
+        videos: videos
       });
     });
   },
