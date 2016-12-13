@@ -3,8 +3,7 @@ var chats = [];
 module.exports = {
   getChats,
   addUserMessage,
-  addVideoMessage,
-  playingVideoMessage
+  addMachineMessage
 };
 
 function getChats() {
@@ -19,18 +18,9 @@ function addUserMessage(chat) {
   addMessage(chat);
 }
 
-function addVideoMessage(video) {
+function addMachineMessage(message) {
   var chat = {
-    message: video.title + ' was added to the playlist by ' + video.user,
-    type: 'machine',
-    time: Date.now()
-  };
-  addMessage(chat);
-}
-
-function playingVideoMessage(video) {
-  var chat = {
-    message: video.title + ' is now playing',
+    message: message,
     type: 'machine',
     time: Date.now()
   };
