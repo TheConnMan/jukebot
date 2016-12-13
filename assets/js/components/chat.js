@@ -5,7 +5,7 @@ function ChatController($scope, $http) {
   this.newChat = '';
 
   this.differentUser = function(index) {
-    return index === 0 || this.chats[index].username != this.chats[index - 1].username && this.chats[index].type !== 'machine';
+    return index === 0 || this.chats[index - 1].type === 'machine' || this.chats[index].username != this.chats[index - 1].username;
   };
 
   this.sendChat = function() {
