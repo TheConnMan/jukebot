@@ -1,15 +1,17 @@
 var users = {};
 
 module.exports = {
-  subscribe: function(req, res) {
+  subscribeUsers: function(req, res) {
     var params = req.allParams();
     var id = req.socket.id;
     req.socket.join('listeners');
 
     users[id] = params.username || 'Anonymous';
+    ChatService.addMachineMessage(users[id] + ' entered the room');
     emitListeners();
 
     req.socket.on('disconnect', function() {
+      ChatService.addMachineMessage(users[id] + ' left the room');
       delete users[id];
       emitListeners();
       if (Object.keys(users).length === 0) {
@@ -57,6 +59,10 @@ module.exports = {
         autoplay: autoplay
       });
     });
+
+    sails.io.sockets.in(id).emit('autoplay', {
+      autoplay: SyncService.getAutoplay()
+    });
   },
 
   start: function(req, res) {
@@ -66,9 +72,29 @@ module.exports = {
       }
     }).exec(function(err, videos) {
       res.send({
-        videos: videos,
-        autoplay: SyncService.getAutoplay()
+        videos: videos
       });
+    });
+  },
+
+  subscribeVideos: function(req, res) {
+    Video.watch(req.socket);
+    Video.find().exec(function(err, videos) {
+      Video.subscribe(req.socket, videos);
+    });
+  },
+
+  skip: function(req, res) {
+    SyncService.skip();
+    res.send(200);
+  },
+
+  search: function(req, res) {
+    var params = req.allParams();
+    YouTubeService.search(params.query, params.maxResults).then(function(videos) {
+      res.send(videos);
+    }).catch(function(err) {
+      res.send(500, err);
     });
   }
 };
