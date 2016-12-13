@@ -1,6 +1,6 @@
 {
   "name": "JukeBot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Slack-Enabled Syncronized Music Listening",
   "keywords": [],
   "dependencies": {
