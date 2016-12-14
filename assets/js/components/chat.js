@@ -30,7 +30,7 @@ function ChatController($scope, $http, $notification, $storage) {
 
   io.socket.on('chat', (c) => {
     this.chats.push(c);
-    if (c.username !== this.username && this.notifications) {
+    if (c.username !== this.username && this.notifications && c.type !== 'video') {
       $notification(c.username || 'JukeBot', {
         body: c.message,
         delay: 4000,

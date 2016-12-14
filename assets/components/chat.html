@@ -12,7 +12,7 @@
   </h2>
   <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto;">
     <div class="event" ng-repeat="chat in $ctrl.chats | orderBy: time track by $index">
-      <div class="content minimal" ng-if="chat.type == 'machine'">
+      <div class="content minimal" ng-if="chat.type !== 'user'">
         {{ chat.message }}
       </div>
       <div class="content" ng-if="chat.type == 'user' && $ctrl.differentUser($index)">

@@ -3,7 +3,8 @@ var chats = [];
 module.exports = {
   getChats,
   addUserMessage,
-  addMachineMessage
+  addMachineMessage,
+  addVideoMessage
 };
 
 function getChats() {
@@ -22,6 +23,15 @@ function addMachineMessage(message) {
   var chat = {
     message: message,
     type: 'machine',
+    time: Date.now()
+  };
+  addMessage(chat);
+}
+
+function addVideoMessage(message) {
+  var chat = {
+    message: message,
+    type: 'video',
     time: Date.now()
   };
   addMessage(chat);
