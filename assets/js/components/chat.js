@@ -9,13 +9,12 @@ function ChatController($scope, $http, $notification) {
   };
 
   this.sendChat = function() {
-    $http
-     .post('/chat/new', {
-        message: this.newChat,
-        username: this.username,
-        time: Date.now()
-      })
-      .then(() => $('#chat-input input').val(''));
+    io.socket._raw.emit('chat', {
+       message: this.newChat,
+       username: this.username,
+       time: Date.now()
+     });
+     $('#chat-input input').val('');
   };
 
   io.socket.on('chats', (c) => {
