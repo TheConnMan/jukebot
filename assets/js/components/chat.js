@@ -1,4 +1,4 @@
-function ChatController($scope, $http) {
+function ChatController($scope, $http, $notification) {
   io.socket.get('/chat/subscribe', {});
 
   this.chats = [];
@@ -26,6 +26,14 @@ function ChatController($scope, $http) {
 
   io.socket.on('chat', (c) => {
     this.chats.push(c);
+    if (c.username !== this.username && this.notifications) {
+      $notification(c.username || 'JukeBot', {
+        body: c.message,
+        delay: 4000,
+        icon: '/images/jukebot-72.png',
+        focusWindowOnClick: true
+      });
+    }
     $scope.$digest();
     scrollChatToBottom();
   });
@@ -44,6 +52,7 @@ angular
   templateUrl: 'components/chat.html',
   controller: ChatController,
   bindings: {
-    username: '='
+    username: '=',
+    notifications: '='
   }
 });
