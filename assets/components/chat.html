@@ -1,8 +1,18 @@
 <div class="d-f fd-c h-100">
-  <h2 class="ui dividing header">Chat</h2>
+  <h2 class="ui dividing header">Chat
+    <div class="ui toggle checkbox">
+      <input
+        type="checkbox"
+        ng-model="$ctrl.notifications"
+        ng-change="$ctrl.toggleChat($ctrl.notifications)"
+        name="public-chat"
+      >
+      <label>Notifications</label>
+    </div>
+  </h2>
   <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto;">
     <div class="event" ng-repeat="chat in $ctrl.chats | orderBy: time track by $index">
-      <div class="content minimal" ng-if="chat.type == 'machine'">
+      <div class="content minimal" ng-if="chat.type !== 'user'">
         {{ chat.message }}
       </div>
       <div class="content" ng-if="chat.type == 'user' && $ctrl.differentUser($index)">

@@ -43,7 +43,7 @@ function addVideo(video) {
 function sendAddMessages(video) {
   return new Promise(function(resolve, reject) {
     Video.publishCreate(video);
-    ChatService.addMachineMessage(video.title + ' was added to the playlist by ' + video.user);
+    ChatService.addVideoMessage(video.title + ' was added to the playlist by ' + video.user);
     if (slack && sails.config.slackSongPlaying && sails.config.slackSongAdded) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
@@ -103,7 +103,7 @@ function startVideo(video) {
   video.save(() => {
       logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);
-      ChatService.addMachineMessage(video.title + ' is now playing');
+      ChatService.addVideoMessage(video.title + ' is now playing');
       if (slack && sails.config.slackSongPlaying) {
         sendSlackPlayingNotification(video).then(function() {
           logger.info('Started playing video ' + video.key);
