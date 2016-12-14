@@ -1,4 +1,9 @@
-<h2 class="ui dividing header">Videos</h2>
+<h2 class="ui dividing header">Videos
+  <div class="ui toggle checkbox">
+    <input type="checkbox" ng-model="notifications" name="public">
+    <label>Notifications</label>
+  </div>
+</h2>
 <div id="video-list" ng-if="getVideos().length > 0" class="ui items">
   <div class="item" ng-repeat="video in getVideos() | orderBy: createdAt track by video.id">
       <div class="ui image">
