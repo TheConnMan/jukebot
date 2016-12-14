@@ -97,6 +97,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.videoInUpcoming = function(key) {
       return $video.videoInUpcoming(key);
     };
+
+    $scope.formatDuration = function(duration) {
+      return $video.formatDuration(duration);
+    };
     /******************************
      * End Video Service Passthru *
      ******************************/

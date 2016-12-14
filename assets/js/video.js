@@ -82,6 +82,10 @@ angular
     return upcoming().filter((video) => video.key === key).length === 1;
   }
 
+  function formatDuration(duration) {
+    return moment.duration(duration).humanize();
+  }
+
   return {
     push,
     add,
@@ -97,6 +101,7 @@ angular
     removePermanently,
     upcoming,
     recent,
-    videoInUpcoming
+    videoInUpcoming,
+    formatDuration
   };
 }]);
