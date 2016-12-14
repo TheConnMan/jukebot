@@ -29,5 +29,5 @@ function addMachineMessage(message) {
 
 function addMessage(chat) {
   chats.push(chat);
-  sails.io.sockets.in('chatting').emit('chats', chats);
+  sails.io.sockets.in('chatting').emit('chat', chat);
 }

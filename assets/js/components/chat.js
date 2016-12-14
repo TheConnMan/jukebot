@@ -24,6 +24,12 @@ function ChatController($scope, $http) {
     scrollChatToBottom();
   });
 
+  io.socket.on('chat', (c) => {
+    this.chats.push(c);
+    $scope.$digest();
+    scrollChatToBottom();
+  });
+
   function scrollChatToBottom() {
     let $list = $('#chat-list');
     $list.animate({
