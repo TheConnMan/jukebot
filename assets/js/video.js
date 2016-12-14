@@ -83,7 +83,7 @@ angular
   }
 
   function formatDuration(duration) {
-    return moment.duration(duration).humanize();
+    return moment.duration(duration).format('H:mm:ss');
   }
 
   return {
