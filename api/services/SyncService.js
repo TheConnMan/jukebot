@@ -116,12 +116,9 @@ function startVideo(video) {
 
 function sendSlackAddedNotification(video) {
   return slack.send({
-    text: video.user + ' added a song to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
-    attachments: [{
-      title: video.title,
-      title_link: 'https://www.youtube.com/watch?v=' + video.key,
-      thumb_url: video.thumbnail
-    }]
+    text: video.user + ' added <https://www.youtube.com/watch?v=' + video.key + '|' + video.title + '> to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    'mrkdwn': true,
+    'unfurl_links': false
   });
 }
 
