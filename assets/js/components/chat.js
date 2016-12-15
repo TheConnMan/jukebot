@@ -22,6 +22,11 @@ function ChatController($scope, $http, $notification, $storage) {
     $('#chat-input input').val('');
   };
 
+  this.formatMessage = function(message) {
+    let regex = new RegExp(`(^|\\b)([@]?${this.username})|(@here)|(@channel)(?=\\b|$)`, 'ig');
+    return message.replace(regex, '<span class="highlight">$&</span>');
+  };
+
   io.socket.on('chats', (c) => {
     this.chats = c;
     $scope.$digest();
@@ -31,11 +36,14 @@ function ChatController($scope, $http, $notification, $storage) {
   io.socket.on('chat', (c) => {
     this.chats.push(c);
     if (c.username !== this.username && this.notifications && c.type !== 'video') {
-      $notification(c.username || 'JukeBot', {
+      let notification = $notification(c.username || 'JukeBot', {
         body: c.message,
         delay: 4000,
         icon: '/images/jukebot-72.png',
         focusWindowOnClick: true
+      });
+      notification.$on('click', function () {
+        $('#chat-input > input').focus();
       });
     }
     $scope.$digest();

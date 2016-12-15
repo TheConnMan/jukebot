@@ -31,8 +31,8 @@
     <span style="cursor: pointer;" ng-click="toggleListeners()">
       <i class="{{listenerCount() > 1 ? 'users' : 'user'}} icon"></i>
       {{listenerCount()}} Listener{{listenerCount() > 1 ? 's' : ''}}
-      <i class="blue listeners caret right icon"></i>
-      <i class="blue listeners caret down icon" style="display: none;"></i>
+      <i class="blue listeners caret right icon" style="display: none;"></i>
+      <i class="blue listeners caret down icon"></i>
     </span>
     <div style="float: right;" class="ui toggle checkbox" ng-click="toggleAutoplay()">
       <input type="checkbox" ng-model="autoplay" ng-click="toggleAutoplay()" name="public">
@@ -40,7 +40,7 @@
     </div>
     <i style="float: right;" class="large floated right forward link icon" ng-if="currentVideo().id" ng-click="skip()"></i>
   </div>
-  <div class="listeners extra content" style="display: none;">
+  <div class="listeners extra content">
     <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
       {{user}}
     </span>

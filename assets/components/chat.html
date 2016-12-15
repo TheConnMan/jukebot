@@ -22,16 +22,12 @@
           </div>
           <div am-time-ago="{{chat.time}}" class="date"></div>
         </div>
-        <div class="extra text">
-          {{chat.message}}
-        </div>
+        <div class="extra text" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
       </div>
-      <div class="content color-black" ng-if="chat.type == 'user' && !$ctrl.differentUser($index)">
-        {{ chat.message }}
-      </div>
+      <div class="content color-black" ng-if="chat.type == 'user' && !$ctrl.differentUser($index)" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
     </div>
   </div>
-  <div id="chat-input" class="ui fluid input">
+  <div id="chat-input" class="ui fluid input" style="min-height: 30px;">
     <input
       type="text"
       placeholder="Say something..."
