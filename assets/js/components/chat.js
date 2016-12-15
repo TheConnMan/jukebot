@@ -6,6 +6,7 @@ function ChatController($scope, $http, $notification, $storage) {
 
   $scope.chats = [];
   $scope.newChat = '';
+  $scope.typers = '';
   $scope.notifications = $storage.get('chat-notifications') === 'true' ||  !$storage.get('chat-notifications');
 
   $scope.differentUser = function(index) {
@@ -54,12 +55,30 @@ function ChatController($scope, $http, $notification, $storage) {
     scrollChatToBottom();
   });
 
-  $scope.$watch('newChat', function(val) {
-    typing(true);
-    clearTimeout(timer);
-    timer = setTimeout(function() {
-      typing(false);
-    }, 3000);
+    io.socket.on('typers', (typers) => {
+      if (typers.indexOf(self.username) !== -1) {
+        typers.splice(typers.indexOf(self.username), 1);
+      }
+      if (typers.length === 0) {
+        $scope.typers = '';
+      } else if (typers.length === 1) {
+        $scope.typers = typers[0] + ' is typing';
+      } else if (typers.length === 2) {
+        $scope.typers = typers.join(' and ') + ' are typing';
+      } else {
+        $scope.typers = 'Several people are typing';
+      }
+      $scope.$digest();
+    });
+
+  $scope.$watch('newChat', function(val, val2) {
+    if (val) {
+      typing(true);
+      clearTimeout(timer);
+      timer = setTimeout(function() {
+        typing(false);
+      }, 1000);
+    }
   });
 
   function typing(isTyping) {
