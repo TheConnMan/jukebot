@@ -6,5 +6,11 @@ module.exports = {
     req.socket.on('chat', function(chat) {
       ChatService.addUserMessage(chat);
     });
+
+    req.socket.join('typers');
+
+    req.socket.on('typers', function(data) {
+      console.log(data.username + ' is ' + (data.typing ? '' : 'not ') + 'typing');
+    });
   }
 };

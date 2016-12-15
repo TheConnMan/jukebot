@@ -1,5 +1,7 @@
 function ChatController($scope, $http, $notification, $storage) {
   let self = this;
+  let timer = null;
+
   io.socket.get('/chat/subscribe', {});
 
   $scope.chats = [];
@@ -21,6 +23,7 @@ function ChatController($scope, $http, $notification, $storage) {
       time: Date.now()
     });
     $('#chat-input input').val('');
+    typing(false);
   };
 
   $scope.formatMessage = function(message) {
@@ -50,6 +53,21 @@ function ChatController($scope, $http, $notification, $storage) {
     $scope.$digest();
     scrollChatToBottom();
   });
+
+  $scope.$watch('newChat', function(val) {
+    typing(true);
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      typing(false);
+    }, 3000);
+  });
+
+  function typing(isTyping) {
+    io.socket._raw.emit('typers', {
+      typing: isTyping,
+      username: self.username
+    });
+  }
 
   function scrollChatToBottom() {
     let $list = $('#chat-list');
