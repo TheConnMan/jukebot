@@ -10,7 +10,7 @@
       <label>Notifications</label>
     </div>
   </h2>
-  <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto;">
+  <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto; word-break: break-all;">
     <div class="event" ng-repeat="chat in $ctrl.chats | orderBy: time track by $index">
       <div class="content minimal" ng-if="chat.type !== 'user'">
         {{ chat.message }}
