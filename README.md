@@ -27,7 +27,7 @@ To get started with local development follow these steps:
 To use a Slack Slash Command you'll need to set one up (preferably after the running the deployment steps below) and follow these instructions:
 
 1. Go to the [Slack Slash Command setup page](https://my.slack.com/apps/A0F82E8CA-slash-commands), add a configuration, and name it **JukeBot**
-1. Input the URL you configure during the deployment step and add a trailing `/slack/slash` (e.g. jukebox.my.domain.com/slack/slash)
+1. Input the URL you configure during the deployment step and add a trailing `/slack/slash` (e.g. jukebot.my.domain.com/slack/slash)
 1. Change the request method to GET
 1. Copy the **Token** and use it as the **SLASH_TOKEN** environment variable
 1. Customize the name to **JukeBot**
@@ -37,13 +37,13 @@ To use a Slack Slash Command you'll need to set one up (preferably after the run
 1. Click save!
 
 ## Deployment
-**WARNING:** Data persistence is not currently a priority. Videos are though to be transient and once they are more than an hour old they aren't shown in the UI. Due to this schema migrations are not a high priority and new runs of **JukeBox** will start with a fresh database.
+**WARNING:** Data persistence is not currently a priority. Videos are though to be transient and once they are more than an hour old they aren't shown in the UI. Due to this schema migrations are not a high priority and new runs of **JukeBot** will start with a fresh database.
 
 ### Deployment without HTTPS
 **JukeBot** can easily be run with Docker using the following command:
 
 ```bash
-docker run -d -p 80:1337 -e GOOGLE_API_KEY=<your-API-key> theconnman/jukebox:latest
+docker run -d -p 80:1337 -e GOOGLE_API_KEY=<your-API-key> theconnman/jukebot:latest
 ```
 
 Make sure to add any additional environment variables as well to the above command. Then go to the URL of your server and listen to some music!
