@@ -20,6 +20,10 @@
   top: 6px;
 }
 
+.highlight {
+  background-color: #fff3b8;
+}
+
 .content.minimal {
   font-style: italic;
   opacity: 0.5;

@@ -22,6 +22,11 @@ function ChatController($scope, $http, $notification, $storage) {
     $('#chat-input input').val('');
   };
 
+  this.formatMessage = function(message) {
+    let regex = new RegExp(`(^|\\b)([@]?${this.username})(?=\\b|$)`, 'ig');
+    return message.replace(regex, '<span class="highlight">$&</span>');
+  };
+
   io.socket.on('chats', (c) => {
     this.chats = c;
     $scope.$digest();
