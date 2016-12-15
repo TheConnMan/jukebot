@@ -1,41 +1,42 @@
 function ChatController($scope, $http, $notification, $storage) {
+  let self = this;
   io.socket.get('/chat/subscribe', {});
 
-  this.chats = [];
-  this.newChat = '';
-  this.notifications = $storage.get('chat-notifications') === 'true' ||  !$storage.get('chat-notifications');
+  $scope.chats = [];
+  $scope.newChat = '';
+  $scope.notifications = $storage.get('chat-notifications') === 'true' ||  !$storage.get('chat-notifications');
 
-  this.differentUser = function(index) {
-    return index === 0 || this.chats[index].time - this.chats[index - 1].time > 3 * 60 * 1000 || this.chats[index - 1].type === 'machine' || this.chats[index].username != this.chats[index - 1].username;
+  $scope.differentUser = function(index) {
+    return index === 0 || $scope.chats[index].time - $scope.chats[index - 1].time > 3 * 60 * 1000 || $scope.chats[index - 1].type === 'machine' || $scope.chats[index].username != $scope.chats[index - 1].username;
   };
 
-  this.toggleChat = function(newVal) {
+  $scope.toggleChat = function(newVal) {
     $storage.set('chat-notifications', newVal);
   };
 
-  this.sendChat = function() {
+  $scope.sendChat = function() {
     io.socket._raw.emit('chat', {
-      message: this.newChat,
-      username: this.username,
+      message: $scope.newChat,
+      username: self.username,
       time: Date.now()
     });
     $('#chat-input input').val('');
   };
 
-  this.formatMessage = function(message) {
-    let regex = new RegExp(`(^|\\b)([@]?${this.username})|(@here)|(@channel)(?=\\b|$)`, 'ig');
+  $scope.formatMessage = function(message) {
+    let regex = new RegExp(`(^|\\b)([@]?${self.username})|(@here)|(@channel)(?=\\b|$)`, 'ig');
     return message.replace(regex, '<span class="highlight">$&</span>');
   };
 
   io.socket.on('chats', (c) => {
-    this.chats = c;
+    $scope.chats = c;
     $scope.$digest();
     scrollChatToBottom();
   });
 
   io.socket.on('chat', (c) => {
-    this.chats.push(c);
-    if (c.username !== this.username && this.notifications && c.type !== 'video') {
+    $scope.chats.push(c);
+    if (c.username !== self.username && $scope.notifications && c.type !== 'video') {
       let notification = $notification(c.username || 'JukeBot', {
         body: c.message,
         delay: 4000,

@@ -3,35 +3,35 @@
     <div class="ui toggle checkbox">
       <input
         type="checkbox"
-        ng-model="$ctrl.notifications"
-        ng-change="$ctrl.toggleChat($ctrl.notifications)"
+        ng-model="notifications"
+        ng-change="toggleChat(notifications)"
         name="public-chat"
       >
       <label>Notifications</label>
     </div>
   </h2>
   <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto;">
-    <div class="event" ng-repeat="chat in $ctrl.chats | orderBy: time track by $index">
+    <div class="event" ng-repeat="chat in chats | orderBy: time track by $index">
       <div class="content minimal" ng-if="chat.type !== 'user'">
         {{ chat.message }}
       </div>
-      <div class="content" ng-if="chat.type == 'user' && $ctrl.differentUser($index)">
+      <div class="content" ng-if="chat.type == 'user' && differentUser($index)">
         <div class="summary">
           <div class="user">
             {{chat.username}}
           </div>
           <div am-time-ago="{{chat.time}}" class="date"></div>
         </div>
-        <div class="extra text" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
+        <div class="extra text" ng-bind-html="formatMessage(chat.message)"></div>
       </div>
-      <div class="content color-black" ng-if="chat.type == 'user' && !$ctrl.differentUser($index)" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
+      <div class="content color-black" ng-if="chat.type == 'user' && !differentUser($index)" ng-bind-html="formatMessage(chat.message)"></div>
     </div>
   </div>
   <div id="chat-input" class="ui fluid input" style="min-height: 30px;">
     <input
       type="text"
       placeholder="Say something..."
-      ng-model="$ctrl.newChat"
-      enter-press="$ctrl.sendChat()">
+      ng-model="newChat"
+      enter-press="sendChat()">
   </div>
 </div>
