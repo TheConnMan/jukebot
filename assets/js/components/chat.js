@@ -9,6 +9,10 @@ function ChatController($scope, $http, $notification, $storage) {
   this.typers = '';
   this.notifications = $storage.get('chat-notifications') === 'true' ||  !$storage.get('chat-notifications');
 
+  this.getUsername = function() {
+    return self.username || 'Anonymous';
+  };
+
   this.differentUser = function(index) {
     return index === 0 || this.chats[index].time - this.chats[index - 1].time > 3 * 60 * 1000 || this.chats[index - 1].type === 'machine' || this.chats[index].username != this.chats[index - 1].username;
   };
@@ -20,7 +24,7 @@ function ChatController($scope, $http, $notification, $storage) {
   this.sendChat = function() {
     io.socket._raw.emit('chat', {
       message: this.newChat,
-      username: this.username,
+      username: this.getUsername(),
       time: Date.now()
     });
     $('#chat-input input').val('');
@@ -28,7 +32,7 @@ function ChatController($scope, $http, $notification, $storage) {
   };
 
   this.formatMessage = function(message) {
-    let regex = new RegExp(`(^|\\b)([@]?${this.username})|(@here)|(@channel)(?=\\b|$)`, 'ig');
+    let regex = new RegExp(`(^|\\b)([@]?${this.getUsername()})|(@here)|(@channel)(?=\\b|$)`, 'ig');
     return message.replace(regex, '<span class="highlight">$&</span>');
   };
 
@@ -40,8 +44,8 @@ function ChatController($scope, $http, $notification, $storage) {
 
   io.socket.on('chat', (c) => {
     this.chats.push(c);
-    if (c.username !== this.username && this.notifications && c.type !== 'video') {
-      let notification = $notification(c.username || 'JukeBot', {
+    if (c.username !== this.getUsername() && this.notifications && c.type !== 'video') {
+      let notification = $notification(c.getUsername() || 'JukeBot', {
         body: c.message,
         delay: 4000,
         icon: '/images/jukebot-72.png',
@@ -56,8 +60,8 @@ function ChatController($scope, $http, $notification, $storage) {
   });
 
     io.socket.on('typers', (typers) => {
-      if (typers.indexOf(self.username) !== -1) {
-        typers.splice(typers.indexOf(self.username), 1);
+      if (typers.indexOf(self.getUsername()) !== -1) {
+        typers.splice(typers.indexOf(self.getUsername()), 1);
       }
       if (typers.length === 0) {
         self.typers = '';
@@ -82,7 +86,7 @@ function ChatController($scope, $http, $notification, $storage) {
   function typing(isTyping) {
     io.socket._raw.emit('typers', {
       typing: isTyping,
-      username: self.username
+      username: self.getUsername()
     });
   }
 
