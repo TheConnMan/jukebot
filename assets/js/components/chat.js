@@ -23,7 +23,7 @@ function ChatController($scope, $http, $notification, $storage) {
   };
 
   this.formatMessage = function(message) {
-    let regex = new RegExp(`(^|\\b)([@]?${this.username})(?=\\b|$)`, 'ig');
+    let regex = new RegExp(`(^|\\b)([@]?${this.username})|(@here)|(@channel)(?=\\b|$)`, 'ig');
     return message.replace(regex, '<span class="highlight">$&</span>');
   };
 
