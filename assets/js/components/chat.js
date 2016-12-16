@@ -36,6 +36,14 @@ function ChatController($scope, $http, $notification, $storage) {
     return message.replace(regex, '<span class="highlight">$&</span>');
   };
 
+  this.typingDebounce = function() {
+    typing(true);
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      typing(false);
+    }, 1000);
+  };
+
   io.socket.on('chats', (c) => {
     this.chats = c;
     $scope.$digest();
@@ -74,14 +82,6 @@ function ChatController($scope, $http, $notification, $storage) {
       }
       $scope.$digest();
     });
-
-  $('#chat-input > input').keyup(function() {
-    typing(true);
-    clearTimeout(timer);
-    timer = setTimeout(function() {
-      typing(false);
-    }, 1000);
-  });
 
   function typing(isTyping) {
     io.socket._raw.emit('typers', {

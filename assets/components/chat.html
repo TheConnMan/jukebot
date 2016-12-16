@@ -35,6 +35,7 @@
       type="text"
       placeholder="Say something..."
       ng-model="$ctrl.newChat"
-      enter-press="$ctrl.sendChat()">
+      enter-press="$ctrl.sendChat()"
+      ng-change="$ctrl.typingDebounce()">
   </div>
 </div>
