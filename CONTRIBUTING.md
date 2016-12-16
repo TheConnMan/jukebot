@@ -65,7 +65,7 @@ prepare for it to be merged.
 1. If you didn't open a pull request already, do so now.
 
 1. After reviewing your commits for documentation, passed continuous integration (CI) tests,
-version bumps (see Makefile), changelogs, and good, descriptive commit messages, a project maintainer can merge your request.
+version bumps, changelogs, and good, descriptive commit messages, a project maintainer can merge your request.
 
 1. Create/update the changelog if necessary.
 
@@ -75,12 +75,10 @@ Releasing
 
 
 ### Future considerations
-1. Ensure that version has been bumped with semantic versioning (see Makefile)
+1. Ensure that version has been bumped with semantic versioning
 
 1. Ensure that the CHANGELOG has been updated
 
-1. Create a git tag for the version (see Makefile)
+1. Create a git tag for the version
 
-1. Create/update the changelog if necessary. We should consider using the github_changelog_generator gem.
-
-1. We Should consider using the stove project, which pushes cookbooks to Supermarket and tags to Github once we are ready.
+1. Create/update the changelog if necessary. We should consider using the [github-changelog-generator](https://github.com/skywinder/github-changelog-generator) project.
