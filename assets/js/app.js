@@ -26,6 +26,13 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.listeners = {};
     $scope.newChat = '';
 
+    $scope.showVideo = $storage.get('showVideo') === 'true';
+
+    $scope.toggleVideo = function() {
+      $scope.showVideo = !$scope.showVideo;
+      $storage.set('showVideo', $scope.showVideo);
+    };
+
     /*************
      * Favorites *
      *************/
