@@ -39,8 +39,8 @@
 }
 
 .ui.dividing.header .ui.toggle.checkbox {
-  position: relative;
-  top: -3px;
+  top: 7px;
+  float: right;
 }
 
 .color-black {

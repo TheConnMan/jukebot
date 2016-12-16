@@ -1,5 +1,5 @@
 <div class="ui card" style="width: 100%; max-height: calc(100vh - 77px);">
-  <div class="ui embed" ng-if="currentVideo().id"></div>
+  <div class="ui embed" ng-if="currentVideo().id" ng-show="showVideo"></div>
   <div class="content" ng-if="currentVideo().id">
     <span class="right floated">
       <i
@@ -7,6 +7,10 @@
         title=""
         class="big heart {{likesCurrentVideo() ? 'red' : 'outline'}} like icon">
       </i>
+      <div class="ui toggle checkbox">
+        <input type="checkbox" ng-click="toggleVideo()" ng-model="showVideo">
+        <label>Show Video</label>
+      </div>
     </span>
     <a
       ng-href="https://www.youtube.com/watch?v={{currentVideo().key}}"

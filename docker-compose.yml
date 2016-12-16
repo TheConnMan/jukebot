@@ -5,6 +5,7 @@ jukebot:
     - "8000:1337"
   labels:
     - "traefik.backend=jukebot"
+    - "traefik.frontend.rule=Host:jukebot.localhost"
   environment:
     - SERVER_URL=http://jukebot.localhost
   env_file: .env
@@ -19,6 +20,6 @@ traefik:
     - "443:443"
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-    - /pwd/traefik.toml:/traefik.toml
-    - /pwd/acme.json:/acme.json
+    - /path/to/jukebot/traefik.toml:/traefik.toml
+    - /path/to/jukebot/acme.json:/acme.json
   restart: always
