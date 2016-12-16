@@ -2,7 +2,7 @@ var Promise = require('promise');
 var log4js = require('log4js');
 var logger = log4js.getLogger();
 var SlackWebhook = require('slack-webhook');
-var slack = sails.config.slackWebhook ? new SlackWebhook(sails.config.slackWebhook, {
+var slack = sails.config.globals.slackWebhook ? new SlackWebhook(sails.config.globals.slackWebhook, {
   defaults: {
     username: 'JukeBot'
   }
@@ -44,15 +44,15 @@ function sendAddMessages(video) {
   return new Promise(function(resolve, reject) {
     Video.publishCreate(video);
     ChatService.addVideoMessage(video.title + ' was added to the playlist by ' + video.user);
-    if (slack && sails.config.slackSongPlaying && sails.config.slackSongAdded) {
+    if (slack && sails.config.globals.slackSongPlaying && sails.config.globals.slackSongAdded) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
-    } else if (video.playing && slack && sails.config.slackSongPlaying ) {
+    } else if (video.playing && slack && sails.config.globals.slackSongPlaying ) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
-    } else if (slack && sails.config.slackSongAdded) {
+    } else if (slack && sails.config.globals.slackSongAdded) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
@@ -104,7 +104,7 @@ function startVideo(video) {
       logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);
       ChatService.addVideoMessage(video.title + ' is now playing');
-      if (slack && sails.config.slackSongPlaying) {
+      if (slack && sails.config.globals.slackSongPlaying) {
         sendSlackPlayingNotification(video).then(function() {
           logger.info('Started playing video ' + video.key);
         });
