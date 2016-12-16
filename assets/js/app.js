@@ -108,6 +108,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.formatDuration = function(duration) {
       return $video.formatDuration(duration);
     };
+
+    $scope.expectedPlayTime = function(video) {
+      return $video.expectedPlayTime(video);
+    };
     /******************************
      * End Video Service Passthru *
      ******************************/
