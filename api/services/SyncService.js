@@ -116,16 +116,20 @@ function startVideo(video) {
 
 function sendSlackAddedNotification(video) {
   return slack.send({
-    text: video.user + ' added *' + video.title + '* to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    text: video.user + ' added ' + formatVideoTitle(video) + ' to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
     'mrkdwn': true
   });
 }
 
 function sendSlackPlayingNotification(video) {
   return slack.send({
-    text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    text: formatVideoTitle(video) + ' is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
     'mrkdwn': true
   });
+}
+
+function formatVideoTitle(video) {
+  return sails.config.globals.slackSongLinks ? '<https://www.youtube.com/watch?v=' + video.key + '|' + video.title + '>' : '*' + video.title + '*';
 }
 
 function getAutoplay() {
