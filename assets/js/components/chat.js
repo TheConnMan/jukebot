@@ -1,9 +1,17 @@
 function ChatController($scope, $http, $notification, $storage) {
+  let self = this;
+  let timer = null;
+
   io.socket.get('/chat/subscribe', {});
 
   this.chats = [];
   this.newChat = '';
+  this.typers = '';
   this.notifications = $storage.get('chat-notifications') === 'true' ||  !$storage.get('chat-notifications');
+
+  this.getUsername = function() {
+    return self.username || 'Anonymous';
+  };
 
   this.differentUser = function(index) {
     return index === 0 || this.chats[index].time - this.chats[index - 1].time > 3 * 60 * 1000 || this.chats[index - 1].type === 'machine' || this.chats[index].username != this.chats[index - 1].username;
@@ -16,15 +24,24 @@ function ChatController($scope, $http, $notification, $storage) {
   this.sendChat = function() {
     io.socket._raw.emit('chat', {
       message: this.newChat,
-      username: this.username,
+      username: this.getUsername(),
       time: Date.now()
     });
     $('#chat-input input').val('');
+    typing(false);
   };
 
   this.formatMessage = function(message) {
-    let regex = new RegExp(`(^|\\b)([@]?${this.username})|(@here)|(@channel)(?=\\b|$)`, 'ig');
+    let regex = new RegExp(`(^|\\b)([@]?${this.getUsername()})|(@here)|(@channel)(?=\\b|$)`, 'ig');
     return message.replace(regex, '<span class="highlight">$&</span>');
+  };
+
+  this.typingDebounce = function() {
+    typing(true);
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      typing(false);
+    }, 1000);
   };
 
   io.socket.on('chats', (c) => {
@@ -35,8 +52,8 @@ function ChatController($scope, $http, $notification, $storage) {
 
   io.socket.on('chat', (c) => {
     this.chats.push(c);
-    if (c.username !== this.username && this.notifications && c.type !== 'video') {
-      let notification = $notification(c.username || 'JukeBot', {
+    if (c.username !== this.getUsername() && this.notifications && c.type !== 'video') {
+      let notification = $notification(c.getUsername() || 'JukeBot', {
         body: c.message,
         delay: 4000,
         icon: '/images/jukebot-72.png',
@@ -49,6 +66,29 @@ function ChatController($scope, $http, $notification, $storage) {
     $scope.$digest();
     scrollChatToBottom();
   });
+
+    io.socket.on('typers', (typers) => {
+      if (typers.indexOf(self.getUsername()) !== -1) {
+        typers.splice(typers.indexOf(self.getUsername()), 1);
+      }
+      if (typers.length === 0) {
+        self.typers = '';
+      } else if (typers.length === 1) {
+        self.typers = typers[0] + ' is typing';
+      } else if (typers.length === 2) {
+        self.typers = typers.join(' and ') + ' are typing';
+      } else {
+        self.typers = 'Several people are typing';
+      }
+      $scope.$digest();
+    });
+
+  function typing(isTyping) {
+    io.socket._raw.emit('typers', {
+      typing: isTyping,
+      username: self.getUsername()
+    });
+  }
 
   function scrollChatToBottom() {
     let $list = $('#chat-list');
