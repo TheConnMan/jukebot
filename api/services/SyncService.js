@@ -62,15 +62,18 @@ function sendAddMessages(video) {
   });
 }
 
-function skip() {
+function skip(username) {
   clearTimeout(videoTimeout);
-  endCurrentVideo();
+  endCurrentVideo(username);
 }
 
-function endCurrentVideo() {
+function endCurrentVideo(username) {
   Video.findOne({
     playing: true
   }).exec(function(err, current) {
+    if (username) {
+      ChatService.addMachineMessage(username + ' skipped ' + current.title);
+    }
     current.playing = false;
     current.save(function() {
       logger.info('Publishing end song ' + current.key);

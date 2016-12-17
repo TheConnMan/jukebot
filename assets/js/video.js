@@ -40,8 +40,10 @@ angular
     });
   }
 
-  function skip() {
-    return $http.post('/api/skip');
+  function skip(username) {
+    return $http.post('/api/skip', {
+      username
+    });
   }
 
   function add(link, user) {

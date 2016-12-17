@@ -10,7 +10,7 @@ function PlaylistController($video, $storage) {
   };
 
   this.skip = function() {
-    return $video.skip()
+    return $video.skip(this.username)
       .then(() => scrollToBottom());
   };
 
