@@ -13,10 +13,10 @@ module.exports = {
     var index = recentlyLeft.indexOf(username);
     if (index === -1) {
       ChatService.addMachineMessage(users[id] + ' entered the room');
-      emitListeners();
     } else {
       recentlyLeft.splice(index, 1);
     }
+    emitListeners();
 
     req.socket.on('disconnect', function() {
       var username = users[id];
