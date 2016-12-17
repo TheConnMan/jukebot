@@ -13,11 +13,7 @@ function getChats() {
 }
 
 function addUserMessage(chat) {
-  if (!chat.username) {
-    chat.username = 'Anonymous';
-  }
-  chat.type = 'user';
-  chat.time = new Date(chat.time).toISOString()
+  chat.time = new Date().toISOString();
   addMessage(chat);
 }
 

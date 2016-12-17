@@ -25,7 +25,7 @@ function ChatController($scope, $http, $notification, $storage) {
     io.socket._raw.emit('chat', {
       message: this.newChat,
       username: this.getUsername(),
-      time: Date.now()
+      type: 'user'
     });
     $('#chat-input input').val('');
     typing(false);
