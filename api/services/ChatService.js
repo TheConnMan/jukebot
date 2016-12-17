@@ -1,5 +1,3 @@
-var chats = [];
-
 module.exports = {
   getChats,
   addUserMessage,
@@ -8,7 +6,7 @@ module.exports = {
 };
 
 function getChats() {
-  return chats;
+  return Chat.find();
 }
 
 function addUserMessage(chat) {
@@ -38,6 +36,9 @@ function addVideoMessage(message) {
 }
 
 function addMessage(chat) {
-  chats.push(chat);
-  sails.io.sockets.in('chatting').emit('chat', chat);
+  Chat.create(chat)
+    .then((c) => {
+      sails.io.sockets.in('chatting').emit('chat', c);
+    })
+    .catch((e) => console.log(e));
 }
