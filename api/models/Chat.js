@@ -14,7 +14,7 @@ module.exports = {
       required: true
     },
     time: {
-      type: 'integer',
+      type: 'datetime',
       required: true
     },
     // room: {
