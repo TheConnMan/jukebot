@@ -20,7 +20,7 @@
           <div class="user">
             {{chat.username}}
           </div>
-          <div am-time-ago="{{chat.time}}" class="date"></div>
+          <div am-time-ago="{{$ctrl.getTime(chat)}}" class="date"></div>
         </div>
         <div class="extra text" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
       </div>

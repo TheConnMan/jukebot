@@ -44,6 +44,10 @@ function ChatController($scope, $http, $notification, $storage) {
     }, 1000);
   };
 
+  this.getTime = function(chat) {
+    return new Date(chat.time).getTime();
+  };
+
   io.socket.on('chats', (c) => {
     this.chats = c;
     $scope.$digest();
