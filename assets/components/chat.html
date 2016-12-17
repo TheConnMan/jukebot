@@ -22,9 +22,13 @@
           </div>
           <div am-time-ago="{{$ctrl.getTime(chat)}}" class="date"></div>
         </div>
-        <div class="extra text" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
+        <div class="extra text chat">
+          {{chat.message}}
+        </div>
       </div>
-      <div class="content color-black" ng-if="chat.type == 'user' && !$ctrl.differentUser($index)" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
+      <div class="content color-black chat" ng-if="chat.type == 'user' && !$ctrl.differentUser($index)">
+        {{chat.message}}
+      </div>
     </div>
   </div>
   <i class="content minimal" style="min-height: 1.5em;">

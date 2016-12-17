@@ -31,11 +31,6 @@ function ChatController($scope, $http, $notification, $storage) {
     typing(false);
   };
 
-  this.formatMessage = function(message) {
-    let regex = new RegExp(`(^|\\b)([@]?${this.getUsername()})|(@here)|(@channel)(?=\\b|$)`, 'ig');
-    return message.replace(regex, '<span class="highlight">$&</span>');
-  };
-
   this.typingDebounce = function() {
     typing(true);
     clearTimeout(timer);
@@ -51,6 +46,7 @@ function ChatController($scope, $http, $notification, $storage) {
   io.socket.on('chats', (c) => {
     this.chats = c;
     $scope.$digest();
+    highlightChats();
     scrollChatToBottom();
   });
 
@@ -68,8 +64,20 @@ function ChatController($scope, $http, $notification, $storage) {
       });
     }
     $scope.$digest();
+    highlightChats();
     scrollChatToBottom();
   });
+
+  function highlightChats() {
+    let markOptions = {
+      accuracy: 'exactly',
+      className: 'highlight'
+    };
+    $('.chat').mark(self.getUsername(), markOptions);
+    $('.chat').mark('@' + self.getUsername(), markOptions);
+    $('.chat').mark('@here', markOptions);
+    $('.chat').mark('@channel', markOptions);
+  }
 
     io.socket.on('typers', (typers) => {
       if (typers.indexOf(self.getUsername()) !== -1) {
