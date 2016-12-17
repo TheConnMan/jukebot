@@ -12,7 +12,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       apiSettings: {
         onResponse(videos) {
           return {
-            results: videos
+            results: $.map(videos, (v) => {
+              v.image = v.thumbnail;
+              return v
+            })
           };
         },
         url: 'api/search?query={query}&maxResults=10'
