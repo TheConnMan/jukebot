@@ -78,4 +78,4 @@ After that run `docker-compose up -d` and you should be able to access the UI at
 - **SLACK_SONG_LINKS** (default: false) - Toggle for Slack notifications to contain unfurled YouTube video links, only applicable if **SLACK_WEBHOOK** is provided
 - **SLASH_TOKEN** (Optional) - [Slack Slash Token](https://my.slack.com/apps/A0F82E8CA-slash-commands) for verifying a Slash Command request, only required if a Slash Command is set up
 - **SERVER_URL** (Optional) - JukeBot server URL for linking back, only needed if **SLACK_WEBHOOK** is provided
-- **GOOGLE_ANALYTICS_ID** (Optional) - Google Analytics ID for site analytics
+- **GOOGLE_ANALYTICS_ID** (Optional) - [Google Analytics](https://analytics.google.com/) Tracking ID for site analytics
