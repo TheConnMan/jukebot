@@ -21,6 +21,9 @@
         <div class="meta">
           Added by {{video.user}} ({{$ctrl.formatDuration(video.duration)}})
         </div>
+        <div class="meta" ng-if="!video.played && !video.playing">
+          <i class="calendar icon"></i> {{$ctrl.expectedPlayTime(video)}}
+        </div>
         <div class="extra">
           <i class="large {{$ctrl.likesVideo(video.key) ? 'red' : 'outline'}} link heart icon" ng-click="$ctrl.likeVideo(video)"></i>
           <div class="ui mini right floated red basic button" ng-if="!video.played && !video.playing" ng-click="$ctrl.remove(video.id)">

@@ -86,6 +86,22 @@ angular
     return moment.duration(duration).format('H:mm:ss');
   }
 
+  function expectedPlayTime(video) {
+    if (video.played || video.playing) {
+      return '';
+    }
+    let currentVideo = current();
+    let currentStartTime = moment(currentVideo.startTime);
+    let upcomingVideos = upcoming();
+    upcomingVideos.unshift(currentVideo);
+    let betweenVideos = upcomingVideos.slice(0, upcomingVideos.indexOf(video));
+    let expectedTime = betweenVideos.reduce(function(time, video) {
+      time.add(moment.duration(video.duration));
+      return time;
+    }, currentStartTime);
+    return expectedTime.format('LT');
+  }
+
   return {
     push,
     add,
@@ -102,6 +118,7 @@ angular
     upcoming,
     recent,
     videoInUpcoming,
-    formatDuration
+    formatDuration,
+    expectedPlayTime
   };
 }]);

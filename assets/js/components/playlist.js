@@ -36,6 +36,10 @@ function PlaylistController($video, $storage) {
     return $video.formatDuration(duration);
   };
 
+  this.expectedPlayTime = function(video) {
+    return $video.expectedPlayTime(video);
+  };
+
   function scrollToBottom() {
     let $list = $('#video-list');
     $list.animate({
