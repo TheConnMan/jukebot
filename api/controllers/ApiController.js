@@ -93,7 +93,8 @@ module.exports = {
   },
 
   skip: function(req, res) {
-    SyncService.skip();
+    var params = req.allParams();
+    SyncService.skip(params.username || 'Anonymous');
     res.send(200);
   },
 

@@ -1,8 +1,16 @@
-function ChatController($scope, $http, $notification, $storage) {
+function ChatController($rootScope, $scope, $http, $notification, $storage) {
   let self = this;
   let timer = null;
 
   io.socket.get('/chat/subscribe', {});
+
+  $rootScope.$on('likeVideo', function(e, args) {
+    io.socket._raw.emit('chat', {
+      message: self.getUsername() + ' favorited ' + args.video.title,
+      type: 'machine',
+      time: Date.now()
+    });
+  });
 
   this.chats = [];
   this.newChat = '';
@@ -25,6 +33,7 @@ function ChatController($scope, $http, $notification, $storage) {
     io.socket._raw.emit('chat', {
       message: this.newChat,
       username: this.getUsername(),
+      type: 'user',
       time: Date.now()
     });
     $('#chat-input input').val('');

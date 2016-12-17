@@ -1,4 +1,4 @@
-function PlaylistController($video, $storage) {
+function PlaylistController($scope, $video, $storage) {
   this.notifications = $storage.get('notifications') === 'true' ||  !$storage.get('notifications');
 
   this.getVideos = function() {
@@ -10,7 +10,7 @@ function PlaylistController($video, $storage) {
   };
 
   this.skip = function() {
-    return $video.skip()
+    return $video.skip(this.username)
       .then(() => scrollToBottom());
   };
 
@@ -26,6 +26,11 @@ function PlaylistController($video, $storage) {
 
   this.likeVideo = function(video) {
     $storage.likeVideo(video);
+    if (this.likesVideo(video.key)) {
+      $scope.$emit('likeVideo', {
+        video
+      });
+    }
   };
 
   this.likesVideo = function(key) {
