@@ -1,4 +1,5 @@
-var chats = [];
+var log4js = require('log4js');
+var logger = log4js.getLogger();
 
 module.exports = {
   getChats,
@@ -8,7 +9,7 @@ module.exports = {
 };
 
 function getChats() {
-  return chats;
+  return Chat.find();
 }
 
 function addUserMessage(chat) {
@@ -16,6 +17,7 @@ function addUserMessage(chat) {
     chat.username = 'Anonymous';
   }
   chat.type = 'user';
+  chat.time = new Date(chat.time).toISOString()
   addMessage(chat);
 }
 
@@ -23,7 +25,7 @@ function addMachineMessage(message) {
   var chat = {
     message: message,
     type: 'machine',
-    time: Date.now()
+    time: new Date().toISOString()
   };
   addMessage(chat);
 }
@@ -32,12 +34,15 @@ function addVideoMessage(message) {
   var chat = {
     message: message,
     type: 'video',
-    time: Date.now()
+    time: new Date().toISOString()
   };
   addMessage(chat);
 }
 
 function addMessage(chat) {
-  chats.push(chat);
-  sails.io.sockets.in('chatting').emit('chat', chat);
+  Chat.create(chat)
+    .then((c) => {
+      sails.io.sockets.in('chatting').emit('chat', c);
+    })
+    .catch((e) => logger.warning(e));
 }
