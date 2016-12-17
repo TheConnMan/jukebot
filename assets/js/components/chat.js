@@ -7,7 +7,8 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
   $rootScope.$on('likeVideo', function(e, args) {
     io.socket._raw.emit('chat', {
       message: self.getUsername() + ' favorited ' + args.video.title,
-      type: 'machine'
+      type: 'machine',
+      time: Date.now()
     });
   });
 
@@ -32,7 +33,8 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
     io.socket._raw.emit('chat', {
       message: this.newChat,
       username: this.getUsername(),
-      type: 'user'
+      type: 'user',
+      time: Date.now()
     });
     $('#chat-input input').val('');
     typing(false);

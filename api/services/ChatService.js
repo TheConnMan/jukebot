@@ -13,7 +13,7 @@ function getChats() {
 }
 
 function addUserMessage(chat) {
-  chat.time = new Date().toISOString();
+  chat.time = new Date(chat.time).toISOString();
   addMessage(chat);
 }
 
