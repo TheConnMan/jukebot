@@ -10,21 +10,22 @@
       <label>Notifications</label>
     </div>
   </h2>
-  <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto; word-break: break-all;">
+  <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto; word-break: break-word;">
     <div class="event" ng-repeat="chat in $ctrl.chats | orderBy: time track by $index">
-      <div class="content minimal" ng-if="chat.type !== 'user'">
-        {{ chat.message }}
-      </div>
-      <div class="content" ng-if="chat.type == 'user' && $ctrl.differentUser($index)">
+      <div class="content" ng-if="$ctrl.differentUser($index)">
         <div class="summary">
           <div class="user">
-            {{chat.username}}
+            {{chat.type == 'user' ? chat.username : 'JukeBot'}}
           </div>
-          <div am-time-ago="{{chat.time}}" class="date"></div>
+          <div am-time-ago="{{$ctrl.getTime(chat)}}" class="date"></div>
         </div>
-        <div class="extra text" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
+        <div class="extra text chat {{chat.type === 'user' ? '' : 'content minimal'}}">
+          {{chat.message}}
+        </div>
       </div>
-      <div class="content color-black" ng-if="chat.type == 'user' && !$ctrl.differentUser($index)" ng-bind-html="$ctrl.formatMessage(chat.message)"></div>
+      <div class="content color-black chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.differentUser($index)">
+        {{chat.message}}
+      </div>
     </div>
   </div>
   <i class="content minimal" style="min-height: 1.5em;">

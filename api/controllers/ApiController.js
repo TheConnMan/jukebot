@@ -1,4 +1,5 @@
 var users = {};
+var recentlyLeft = [];
 
 module.exports = {
   subscribeUsers: function(req, res) {
@@ -6,17 +7,24 @@ module.exports = {
     var id = req.socket.id;
     req.socket.join('listeners');
 
-    users[id] = params.username || 'Anonymous';
-    ChatService.addMachineMessage(users[id] + ' entered the room');
+    var username = params.username || 'Anonymous';
+    users[id] = username;
+
+    var index = recentlyLeft.indexOf(username);
+    if (index === -1) {
+      ChatService.addMachineMessage(users[id] + ' entered the room');
+    } else {
+      recentlyLeft.splice(index, 1);
+    }
     emitListeners();
 
     req.socket.on('disconnect', function() {
-      ChatService.addMachineMessage(users[id] + ' left the room');
+      var username = users[id];
+      recentlyLeft.push(username);
       delete users[id];
-      emitListeners();
-      if (Object.keys(users).length === 0) {
-        SyncService.setAutoplay(false);
-      }
+      setTimeout(function() {
+        userDisconnected(username);
+      }, 1000);
     });
 
     req.socket.on('username', function(d) {
@@ -85,7 +93,8 @@ module.exports = {
   },
 
   skip: function(req, res) {
-    SyncService.skip();
+    var params = req.allParams();
+    SyncService.skip(params.username || 'Anonymous');
     res.send(200);
   },
 
@@ -98,6 +107,18 @@ module.exports = {
     });
   }
 };
+
+function userDisconnected(username) {
+  var index = recentlyLeft.indexOf(username);
+  if (index !== -1) {
+    recentlyLeft.splice(index, 1);
+    ChatService.addMachineMessage(username + ' left the room');
+    emitListeners();
+    if (Object.keys(users).length === 0) {
+      SyncService.setAutoplay(false);
+    }
+  }
+}
 
 function emitListeners() {
   var io = sails.io;

@@ -2,7 +2,7 @@ var Promise = require('promise');
 var log4js = require('log4js');
 var logger = log4js.getLogger();
 var SlackWebhook = require('slack-webhook');
-var slack = sails.config.slackWebhook ? new SlackWebhook(sails.config.slackWebhook, {
+var slack = sails.config.globals.slackWebhook ? new SlackWebhook(sails.config.globals.slackWebhook, {
   defaults: {
     username: 'JukeBot'
   }
@@ -44,15 +44,15 @@ function sendAddMessages(video) {
   return new Promise(function(resolve, reject) {
     Video.publishCreate(video);
     ChatService.addVideoMessage(video.title + ' was added to the playlist by ' + video.user);
-    if (slack && sails.config.slackSongPlaying && sails.config.slackSongAdded) {
+    if (slack && sails.config.globals.slackSongPlaying && sails.config.globals.slackSongAdded) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
-    } else if (video.playing && slack && sails.config.slackSongPlaying ) {
+    } else if (video.playing && slack && sails.config.globals.slackSongPlaying ) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
-    } else if (slack && sails.config.slackSongAdded) {
+    } else if (slack && sails.config.globals.slackSongAdded) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
@@ -62,15 +62,18 @@ function sendAddMessages(video) {
   });
 }
 
-function skip() {
+function skip(username) {
   clearTimeout(videoTimeout);
-  endCurrentVideo();
+  endCurrentVideo(username);
 }
 
-function endCurrentVideo() {
+function endCurrentVideo(username) {
   Video.findOne({
     playing: true
   }).exec(function(err, current) {
+    if (username) {
+      ChatService.addMachineMessage(username + ' skipped ' + current.title);
+    }
     current.playing = false;
     current.save(function() {
       logger.info('Publishing end song ' + current.key);
@@ -104,7 +107,7 @@ function startVideo(video) {
       logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);
       ChatService.addVideoMessage(video.title + ' is now playing');
-      if (slack && sails.config.slackSongPlaying) {
+      if (slack && sails.config.globals.slackSongPlaying) {
         sendSlackPlayingNotification(video).then(function() {
           logger.info('Started playing video ' + video.key);
         });
@@ -116,16 +119,20 @@ function startVideo(video) {
 
 function sendSlackAddedNotification(video) {
   return slack.send({
-    text: video.user + ' added *' + video.title + '* to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    text: video.user + ' added ' + formatVideoTitle(video) + ' to the playlist' + (video.playing ? ' and it\'s playing now' : '') + '! <' + sails.config.serverUrl + '|Listen to JukeBot>',
     'mrkdwn': true
   });
 }
 
 function sendSlackPlayingNotification(video) {
   return slack.send({
-    text: '*' + video.title + '* is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    text: formatVideoTitle(video) + ' is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
     'mrkdwn': true
   });
+}
+
+function formatVideoTitle(video) {
+  return sails.config.globals.slackSongLinks ? '<https://www.youtube.com/watch?v=' + video.key + '|' + video.title + '>' : '*' + video.title + '*';
 }
 
 function getAutoplay() {

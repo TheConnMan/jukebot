@@ -37,7 +37,7 @@ To use a Slack Slash Command you'll need to set one up (preferably after the run
 1. Click save!
 
 ## Deployment
-**WARNING:** Data persistence is not currently a priority. Videos are though to be transient and once they are more than an hour old they aren't shown in the UI. Due to this schema migrations are not a high priority and new runs of **JukeBot** will start with a fresh database.
+**WARNING:** Data persistence is not currently a priority. Videos are considered to be transient and once they are more than an hour old they aren't shown in the UI. Due to this, schema migrations are not a high priority and new runs of **JukeBot** will start with a fresh database.
 
 ### Deployment without HTTPS
 **JukeBot** can easily be run with Docker using the following command:
@@ -73,8 +73,9 @@ After that run `docker-compose up -d` and you should be able to access the UI at
 ## Environment Variables
 - **GOOGLE_API_KEY** - Google project API key
 - **SLACK_WEBHOOK** (Optional) - [Slack Incoming Webhook URL](https://my.slack.com/apps/A0F7XDUAZ-incoming-webhooks) for sending song addition and currently now playing notifications
-- **SLACK_SONG_ADDED** (default: false) - Toggle for "Song Added" Slack notifications, only applicable if **SLACK_WEBHOOK** is provided
+- **SLACK_SONG_ADDED** (default: true) - Toggle for "Song Added" Slack notifications, only applicable if **SLACK_WEBHOOK** is provided
 - **SLACK_SONG_PLAYING** (default: true) - Toggle for "New Song Playing" Slack notifications, only applicable if **SLACK_WEBHOOK** is provided
+- **SLACK_SONG_LINKS** (default: false) - Toggle for Slack notifications to contain unfurled YouTube video links, only applicable if **SLACK_WEBHOOK** is provided
 - **SLASH_TOKEN** (Optional) - [Slack Slash Token](https://my.slack.com/apps/A0F82E8CA-slash-commands) for verifying a Slash Command request, only required if a Slash Command is set up
 - **SERVER_URL** (Optional) - JukeBot server URL for linking back, only needed if **SLACK_WEBHOOK** is provided
-- **GOOGLE_ANALYTICS_ID** (Optional) - Google Analytics ID for site analytics
+- **GOOGLE_ANALYTICS_ID** (Optional) - [Google Analytics](https://analytics.google.com/) Tracking ID for site analytics

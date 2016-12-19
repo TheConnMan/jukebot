@@ -1,0 +1,45 @@
+<h2 class="ui dividing header">Videos
+  <div class="ui toggle checkbox">
+    <input
+      type="checkbox"
+      ng-model="$ctrl.notifications"
+      ng-change="$ctrl.toggleNotifications($ctrl.notifications)"
+      name="public-chat"
+    >
+    <label>Notifications</label>
+  </div>
+</h2>
+<div id="video-list" ng-if="$ctrl.getVideos().length > 0" class="ui items">
+  <div class="item" ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
+      <div class="ui image">
+        <img ng-src="{{video.thumbnail}}">
+      </div>
+      <div class="content">
+        <a class="header" ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
+          {{video.title}}
+        </a>
+        <div class="meta">
+          Added by {{video.user}} ({{$ctrl.formatDuration(video.duration)}})
+        </div>
+        <div class="meta" ng-if="!video.played && !video.playing">
+          <i class="calendar icon"></i> {{$ctrl.expectedPlayTime(video)}}
+        </div>
+        <div class="extra">
+          <i class="large {{$ctrl.likesVideo(video.key) ? 'red' : 'outline'}} link heart icon" ng-click="$ctrl.likeVideo(video)"></i>
+          <div class="ui mini right floated red basic button" ng-if="!video.played && !video.playing" ng-click="$ctrl.remove(video.id)">
+            Remove
+          </div>
+          <div class="ui mini right floated green basic button" ng-if="video.played && !video.playing" ng-click="$ctrl.readd(video.key)">
+            Add
+          </div>
+          <div class="ui mini right floated yellow basic button" ng-if="video.playing" ng-click="$ctrl.skip()">
+            Skip
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<h4 ng-if="$ctrl.getVideos().length == 0" class="ui center aligned icon header">
+  <i class="video icon"></i>
+  <div class="content">No Videos</div>
+</h4>

@@ -1,8 +1,16 @@
-function ChatController($scope, $http, $notification, $storage) {
+function ChatController($rootScope, $scope, $http, $notification, $storage) {
   let self = this;
   let timer = null;
 
   io.socket.get('/chat/subscribe', {});
+
+  $rootScope.$on('likeVideo', function(e, args) {
+    io.socket._raw.emit('chat', {
+      message: self.getUsername() + ' favorited ' + args.video.title,
+      type: 'machine',
+      time: Date.now()
+    });
+  });
 
   this.chats = [];
   this.newChat = '';
@@ -14,7 +22,7 @@ function ChatController($scope, $http, $notification, $storage) {
   };
 
   this.differentUser = function(index) {
-    return index === 0 || this.chats[index].time - this.chats[index - 1].time > 3 * 60 * 1000 || this.chats[index - 1].type === 'machine' || this.chats[index].username != this.chats[index - 1].username;
+    return index === 0 || this.chats[index].time - this.chats[index - 1].time > 3 * 60 * 1000 || this.chats[index].username != this.chats[index - 1].username;
   };
 
   this.toggleChat = function(newVal) {
@@ -25,15 +33,11 @@ function ChatController($scope, $http, $notification, $storage) {
     io.socket._raw.emit('chat', {
       message: this.newChat,
       username: this.getUsername(),
+      type: 'user',
       time: Date.now()
     });
     $('#chat-input input').val('');
     typing(false);
-  };
-
-  this.formatMessage = function(message) {
-    let regex = new RegExp(`(^|\\b)([@]?${this.getUsername()})|(@here)|(@channel)(?=\\b|$)`, 'ig');
-    return message.replace(regex, '<span class="highlight">$&</span>');
   };
 
   this.typingDebounce = function() {
@@ -44,9 +48,14 @@ function ChatController($scope, $http, $notification, $storage) {
     }, 1000);
   };
 
+  this.getTime = function(chat) {
+    return new Date(chat.time).getTime();
+  };
+
   io.socket.on('chats', (c) => {
     this.chats = c;
     $scope.$digest();
+    highlightChats();
     scrollChatToBottom();
   });
 
@@ -64,8 +73,20 @@ function ChatController($scope, $http, $notification, $storage) {
       });
     }
     $scope.$digest();
+    highlightChats();
     scrollChatToBottom();
   });
+
+  function highlightChats() {
+    let markOptions = {
+      accuracy: 'exactly',
+      className: 'highlight'
+    };
+    $('.chat').mark(self.getUsername(), markOptions);
+    $('.chat').mark('@' + self.getUsername(), markOptions);
+    $('.chat').mark('@here', markOptions);
+    $('.chat').mark('@channel', markOptions);
+  }
 
     io.socket.on('typers', (typers) => {
       if (typers.indexOf(self.getUsername()) !== -1) {

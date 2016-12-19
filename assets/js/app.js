@@ -12,7 +12,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       apiSettings: {
         onResponse(videos) {
           return {
-            results: videos
+            results: $.map(videos, (v) => {
+              v.image = v.thumbnail;
+              return v
+            })
           };
         },
         url: 'api/search?query={query}&maxResults=10'
@@ -40,16 +43,8 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       $storage.likeVideo($video.current());
     };
 
-    $scope.likeVideo = function(video) {
-      $storage.likeVideo(video);
-    };
-
     $scope.likesCurrentVideo = function() {
       return $storage.likesVideo($video.current().key);
-    };
-
-    $scope.likesVideo = function(key) {
-      return $storage.likesVideo(key);
     };
 
     $scope.likes = function() {
@@ -64,10 +59,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
      **************************/
     $scope.currentVideo = function() {
       return $video.current();
-    };
-
-    $scope.getVideos = function() {
-      return $video.getVideos();
     };
 
     $scope.addVideo = function() {
@@ -89,10 +80,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       return $video.addByKey($scope.username, key);
     };
 
-    $scope.remove = function(id) {
-      return $video.removePermanently(id);
-    };
-
     $scope.skip = function() {
       return $video.skip();
     };
@@ -103,10 +90,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.videoInUpcoming = function(key) {
       return $video.videoInUpcoming(key);
-    };
-
-    $scope.formatDuration = function(duration) {
-      return $video.formatDuration(duration);
     };
     /******************************
      * End Video Service Passthru *
@@ -224,18 +207,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     /*****************
      * End Listeners *
      *****************/
-
-    /******************************
-     * Desktop Notifications *
-     ******************************/
-    $scope.notifications = $storage.get('notifications') === 'true' ||  !$storage.get('notifications');
-
-    $scope.$watch('notifications', function(newVal) {
-      $storage.set('notifications', newVal);
-    });
-    /*****************************
-     * End Desktop Notifications *
-     *****************************/
 }).config(function($sceProvider) {
     $sceProvider.enabled(false);
 }).directive('enterPress', function () {
