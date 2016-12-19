@@ -72,7 +72,7 @@ function endCurrentVideo(username) {
     playing: true
   }).exec(function(err, current) {
     if (username) {
-      ChatService.addMachineMessage(username + ' skipped ' + current.title);
+      ChatService.addMachineMessage(username + ' skipped ' + current.title, username);
     }
     current.playing = false;
     current.save(function() {
