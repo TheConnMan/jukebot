@@ -12,7 +12,7 @@ module.exports = {
 
     var index = recentlyLeft.indexOf(username);
     if (index === -1) {
-      ChatService.addMachineMessage(users[id] + ' entered the room');
+      ChatService.addMachineMessage(users[id] + ' entered the room', username);
     } else {
       recentlyLeft.splice(index, 1);
     }

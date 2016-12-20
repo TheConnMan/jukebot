@@ -22,7 +22,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
   };
 
   this.differentUser = function(index) {
-    return index === 0 || this.chats[index].time - this.chats[index - 1].time > 3 * 60 * 1000 || this.chats[index].username != this.chats[index - 1].username;
+    return index === 0 || new Date(this.chats[index].time) - new Date(this.chats[index - 1].time) > 3 * 60 * 1000 || this.chats[index].username != this.chats[index - 1].username;
   };
 
   this.toggleChat = function(newVal) {

@@ -17,10 +17,11 @@ function addUserMessage(chat) {
   addMessage(chat);
 }
 
-function addMachineMessage(message) {
+function addMachineMessage(message, username) {
   var chat = {
     message: message,
     type: 'machine',
+    username: username,
     time: new Date().toISOString()
   };
   addMessage(chat);
