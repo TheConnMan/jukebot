@@ -37,7 +37,7 @@ To use a Slack Slash Command you'll need to set one up (preferably after the run
 1. Click save!
 
 ## Deployment
-**WARNING:** Data persistence is not currently a priority. Videos are considered to be transient and once they are more than an hour old they aren't shown in the UI. Due to this, schema migrations are not a high priority and new runs of **JukeBot** will start with a fresh database.
+**WARNING:** Data persistence is not currently a priority. Videos are considered to be transient and once they are more than an hour old they aren't shown in the UI. Due to this, schema migrations are not a high priority.
 
 ### Deployment without HTTPS
 **JukeBot** can easily be run with Docker using the following command:
@@ -51,21 +51,21 @@ Make sure to add any additional environment variables as well to the above comma
 ### Deployment with HTTPS (Required when using a Slash Command)
 Slack Slash Commands require the slash command endpoint to be HTTPS, so JukeBot uses [Let's Encrypt](https://letsencrypt.org/) to get an SSL cert. You'll need to be hosting JukeBot on a domain you have DNS authority over for this to work as you'll need to create a couple DNS entries. Make sure you have entries pointing to the current box for the domain or subdomain to be used in the deployment as well as the wildcard subdomains of the given domain (e.g. \*.projects.theconnman.com). This is not only so Slack can locate your deployment, but also so Let's Encrypt can negotiate for your SSL cert.
 
-Within this project are three files needing to be modified when deploying this project to your own server: `docker-compose.yml`, `traefik.toml`, and `.env`. 
+Within this project are three files needing to be modified when deploying this project to your own server: `docker-compose.yml`, `traefik.toml`, and `.env`.
 
 ####`docker-compose.yml`
 
-1. Replace the two **localhost** references with your own domain or subdomain which points to the current box (e.g. projects.theconnman.com). 
+1. Replace the two **localhost** references with your own domain or subdomain which points to the current box (e.g. projects.theconnman.com).
 1. Update the volume paths so they point to the correct location in your host.
 
 ####`traefik.toml`
 
-1. Replace the email address with your own and the domain from localhost to the same one as before. 
+1. Replace the email address with your own and the domain from localhost to the same one as before.
 1. After saving that file, issue a `touch acme.json` to create an empty credentials file.
 
-####`example.env` 
+####`example.env`
 
-1. Copy the provided example.env file to `.env`. 
+1. Copy the provided example.env file to `.env`.
 1. Modify the example environment variables (described below) before running JukeBot.
 
 After that run `docker-compose up -d` and you should be able to access the UI at jukebox.my.domain.com (after replacing with your domain or subdomain of course).
