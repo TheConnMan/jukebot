@@ -16,7 +16,8 @@ module.exports = {
   sendAddMessages,
   skip,
   setAutoplay,
-  getAutoplay
+  getAutoplay,
+  startVideo
 };
 
 function addVideo(video) {
@@ -104,7 +105,6 @@ function startVideo(video) {
   logger.info('Setting timeout');
   videoTimeout = setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
-      logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);
       ChatService.addVideoMessage(video.title + ' is now playing');
       if (slack && sails.config.globals.slackSongPlaying) {
