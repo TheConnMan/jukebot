@@ -2,6 +2,7 @@ var help = [
   'JukeBot - Slack-Enabled Syncronized Music Listening',
   'Available Commands:',
   '    add [youtube-link] - Add a video to the queue',
+  '    skip - skip the currently playing music video',
   '    help - This help text'
 ];
 
@@ -21,6 +22,11 @@ module.exports = {
           }).catch(function(err) {
             res.send(err);
           });
+          break;
+        case 'skip':
+          var params = req.allParams();
+          SyncService.skip(params.user_name);
+          res.send('Successfully skipped.');
           break;
         case 'help':
           res.send(help.join('\n'));
