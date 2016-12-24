@@ -23,11 +23,11 @@ module.exports = {
             res.send(err);
           });
           break;
-	case 'skip':
-	  var params = req.allParams();
-	  SyncService.skip(params.user_name);
-	  res.send('Successfully skipped.');
-	  break;
+        case 'skip':
+          var params = req.allParams();
+          SyncService.skip(params.user_name);
+          res.send('Successfully skipped.');
+          break;
         case 'help':
           res.send(help.join('\n'));
           break;
