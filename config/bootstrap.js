@@ -13,7 +13,7 @@ module.exports.bootstrap = function(cb) {
 
   Video.findOne({
     playing: true
-  }).then(function(err, current) {
+  }).then(function(current, err) {
     if (current) {
       SyncService.startVideo(current);
     }
