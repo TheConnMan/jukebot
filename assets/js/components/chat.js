@@ -45,6 +45,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
       time: Date.now()
     });
     $('#chat-input input').val('');
+    this.newChat = '';
     typing(false);
   };
 
