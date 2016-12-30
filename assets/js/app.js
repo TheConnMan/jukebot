@@ -40,7 +40,13 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
      * Favorites *
      *************/
     $scope.likeCurrentVideo = function() {
-      $storage.likeVideo($video.current());
+      let video = $video.current();
+      $storage.likeVideo(video);
+      if ($scope.likesCurrentVideo()) {
+        $scope.$emit('likeVideo', {
+          video
+        });
+      }
     };
 
     $scope.likesCurrentVideo = function() {
