@@ -55,10 +55,11 @@ function parseYouTubeVideo(data, user) {
 
 function search(query, maxResults) {
   return new Promise((resolve, reject) => {
-    request(`https://www.googleapis.com/youtube/v3/search?q=${query}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=${maxResults || 15}&type=video`, (error, response, body) => {
+    request(`https://www.googleapis.com/youtube/v3/search?q=${query}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=${maxResults || 15}&type=video,playlist`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         var results = JSON.parse(body).items.map(function(video) {
           return {
+            playlistId: video.id.playlistId,
             key: video.id.videoId,
             thumbnail: video.snippet.thumbnails.default.url,
             title: video.snippet.title

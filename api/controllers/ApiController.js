@@ -47,6 +47,10 @@ module.exports = {
     }
   },
 
+  addPlaylist: function(req, res) {
+    res.send(200);
+  },
+
   remove: function(req, res) {
     var params = req.allParams();
     Video.destroy({

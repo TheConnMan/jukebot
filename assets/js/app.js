@@ -4,17 +4,24 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     .search({
       minCharacters: 3,
       onSelect(result, response) {
-        $scope.readd(result.key)
-          .then(() => {
-            $('.ui.search input').val('');
-          });
+        if (result.playlistId) {
+          $scope.addPlaylist(result.playlistId)
+            .then(() => {
+              $('.ui.search input').val('');
+            });
+        } else {
+          $scope.readd(result.key)
+            .then(() => {
+              $('.ui.search input').val('');
+            });
+        }
       },
       apiSettings: {
         onResponse(videos) {
           return {
             results: $.map(videos, (v) => {
               v.image = v.thumbnail;
-              return v
+              return v;
             })
           };
         },
@@ -84,6 +91,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.readd = function(key) {
       return $video.addByKey($scope.username, key);
+    };
+
+    $scope.addPlaylist = function(key) {
+      return $video.addPlaylistById($scope.username, key);
     };
 
     $scope.skip = function() {

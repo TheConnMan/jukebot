@@ -60,6 +60,13 @@ angular
     });
   }
 
+  function addPlaylistById(user, playlistId) {
+    return $http.post('/api/addPlaylist', {
+      playlistId,
+      user
+    });
+  }
+
   function remove(id) {
     let removedVideo = findById(id);
 
@@ -108,6 +115,7 @@ angular
     push,
     add,
     addByKey,
+    addPlaylistById,
     update,
     getVideos,
     findById,
