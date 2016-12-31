@@ -2,11 +2,15 @@ const Promise = require('promise');
 const request = require('request');
 const moment = require('moment');
 
+const log4js = require('log4js');
+const logger = log4js.getLogger();
+
 module.exports = {
   parseYouTubeLink,
   getYouTubeVideo,
   search,
-  nextRelated
+  nextRelated,
+  getPlaylistVideos
 };
 
 function parseYouTubeLink(link) {
@@ -30,7 +34,8 @@ function getYouTubeVideo(key, user) {
             resolve(video);
           });
         } catch (e) {
-          reject(e);
+          logger.debug(`Video ${key}: ${e}`);
+          resolve(null);
         }
       } else {
         reject(error);
@@ -89,13 +94,23 @@ function nextRelated(key) {
   });
 }
 
-function getPlaylistVideos(playlistId, videos, pageToken) {
+function getPlaylistVideos(playlistId, user) {
+  return new Promise((resolve, reject) => {
+    getPlaylistVideosRecursive(playlistId, [], '').then(videos => {
+      Promise.all(videos.map(function(video) {
+        return getYouTubeVideo(video.snippet.resourceId.videoId, user);
+      })).then(resolve);
+    });
+  });
+}
+
+function getPlaylistVideosRecursive(playlistId, videos, pageToken) {
   return new Promise((resolve, reject) => {
     if (pageToken === '' || pageToken) {
       request(`https://www.googleapis.com/youtube/v3/playlistItems?maxResults=50&part=snippet&key=${process.env.GOOGLE_API_KEY}&playlistId=${playlistId}&pageToken=${pageToken}`, (error, response, body) => {
         if (!error && response.statusCode == 200) {
           let playlist = JSON.parse(body);
-          getPlaylistVideos(playlistId, videos.concat(playlist.items), playlist.nextPageToken).then(function(videos) {
+          getPlaylistVideosRecursive(playlistId, videos.concat(playlist.items), playlist.nextPageToken).then(function(videos) {
             resolve(videos);
           });
         } else {
