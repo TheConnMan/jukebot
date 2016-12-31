@@ -87,3 +87,22 @@ function nextRelated(key) {
     });
   });
 }
+
+function getPlaylistVideos(playlistId, videos, pageToken) {
+  return new Promise((resolve, reject) => {
+    if (pageToken === '' || pageToken) {
+      request(`https://www.googleapis.com/youtube/v3/playlistItems?maxResults=50&part=snippet&key=${process.env.GOOGLE_API_KEY}&playlistId=${playlistId}&pageToken=${pageToken}`, (error, response, body) => {
+        if (!error && response.statusCode == 200) {
+          let playlist = JSON.parse(body);
+          getPlaylistVideos(playlistId, videos.concat(playlist.items), playlist.nextPageToken).then(function(videos) {
+            resolve(videos);
+          });
+        } else {
+          reject(error);
+        }
+      });
+    } else {
+      resolve(videos);
+    }
+  });
+}
