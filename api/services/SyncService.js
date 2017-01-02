@@ -31,6 +31,7 @@ function addVideo(video) {
         video.played = true;
         videoTimeout = setTimeout(endCurrentVideo, video.duration);
         video.save(function() {
+          sendRelatedVideos(video.key);
           resolve(video);
         });
       } else {
@@ -107,6 +108,7 @@ function startVideo(video) {
       logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);
       ChatService.addVideoMessage(video.title + ' is now playing');
+      sendRelatedVideos(video.key);
       if (slack && sails.config.globals.slackSongPlaying) {
         sendSlackPlayingNotification(video).then(function() {
           logger.info('Started playing video ' + video.key);
@@ -114,6 +116,13 @@ function startVideo(video) {
       } else {
         logger.info('Started playing video ' + video.key);
       }
+    });
+}
+
+function sendRelatedVideos(key) {
+  YouTubeService.relatedVideos(key)
+    .then((videos) => {
+      sails.io.sockets.in('relatedVideos').emit('related', videos);
     });
 }
 

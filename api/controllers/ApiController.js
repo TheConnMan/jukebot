@@ -92,6 +92,10 @@ module.exports = {
     });
   },
 
+  subscribeRelatedVideos(req, res) {
+    req.socket.join('relatedVideos');
+  },
+
   skip: function(req, res) {
     var params = req.allParams();
     SyncService.skip(params.username || 'Anonymous');

@@ -1,12 +1,15 @@
 const Promise = require('promise');
 const request = require('request');
 const moment = require('moment');
+var log4js = require('log4js');
+var logger = log4js.getLogger();
 
 module.exports = {
   parseYouTubeLink,
   getYouTubeVideo,
   search,
-  nextRelated
+  nextRelated,
+  relatedVideos
 };
 
 function parseYouTubeLink(link) {
@@ -73,14 +76,27 @@ function search(query, maxResults) {
 }
 
 function nextRelated(key) {
+  return relatedVideos(key)
+    .then((videos) => videos[Math.floor(Math.random() * videos.length)].id.videoId);
+}
+
+function relatedVideos(key) {
   return new Promise((resolve, reject) => {
-    request(`https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${key}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=3&type=video`, (error, response, body) => {
+    request(`https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${key}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=10&type=video`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         var items = JSON.parse(body).items;
         if (items.length === 0) {
           reject('No related video found');
         }
-        resolve(items[Math.floor(Math.random() * items.length)].id.videoId);
+
+        var itemsPromise = items.map((i) => {
+          return getYouTubeVideo(i.id.videoId, 'JukeBot');
+        });
+
+        return Promise.all(itemsPromise)
+          .then((videos) => {
+            resolve(videos);
+          });
       } else {
         reject(error);
       }
