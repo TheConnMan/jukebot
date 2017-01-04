@@ -44,10 +44,10 @@ function addVideo(video) {
 }
 
 function addPlaylist(videos) {
-  let filteredVideos = videos.filter(video => {
-    return video;
+  let nonNullVideos = videos.filter(video => {
+    return !!video;
   });
-  return filteredVideos.reduce((p, video) => {
+  return nonNullVideos.reduce((p, video) => {
     return p.then(resolve => {
       return addVideo(video);
     });
