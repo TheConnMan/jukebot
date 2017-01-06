@@ -17,7 +17,7 @@ angular
   }
 
   function getVideos() {
-    return videos.filter(function(video) { return !video.played || new Date(video.startTime) >= new Date(Date.now() - 3600 * 1000); });
+    return videos.filter(function(video) { return !video.played || new Date(video.startTime) >= new Date(Date.now() - 24 * 3600 * 1000); });
   }
 
   function findById(id) {
@@ -56,6 +56,13 @@ angular
   function addByKey(user, key) {
     return $http.post('/api/add', {
       link: YOUTUBE_URL + key,
+      user
+    });
+  }
+
+  function addPlaylistById(user, playlistId) {
+    return $http.post('/api/addPlaylist', {
+      playlistId,
       user
     });
   }
@@ -108,6 +115,7 @@ angular
     push,
     add,
     addByKey,
+    addPlaylistById,
     update,
     getVideos,
     findById,

@@ -21,8 +21,16 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
     return self.username || 'Anonymous';
   };
 
-  this.differentUser = function(index) {
-    return index === 0 || new Date(this.chats[index].time) - new Date(this.chats[index - 1].time) > 3 * 60 * 1000 || this.chats[index].username != this.chats[index - 1].username;
+  this.showUsername = function(index) {
+    let isFirst = index === 0;
+    if (isFirst) {
+      return true;
+    }
+    let recentPreviousMessage = new Date(this.chats[index].time) - new Date(this.chats[index - 1].time) <= 3 * 60 * 1000;
+    let differentUser = this.chats[index].username !== this.chats[index - 1].username;
+    let differentChatType = this.chats[index].type !== this.chats[index - 1].type;
+    let bothMachineChat = this.chats[index].type !== 'user' && this.chats[index - 1].type !== 'user';
+    return (!recentPreviousMessage || differentUser || differentChatType) && !bothMachineChat;
   };
 
   this.toggleChat = function(newVal) {
@@ -37,6 +45,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
       time: Date.now()
     });
     $('#chat-input input').val('');
+    this.newChat = '';
     typing(false);
   };
 

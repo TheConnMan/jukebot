@@ -3,6 +3,8 @@ jukebot:
   container_name: jukebot
   ports:
     - "8000:1337"
+  volumes:
+    - "/path/to/jukebot/data/:/usr/src/app/data/"
   labels:
     - "traefik.backend=jukebot"
     - "traefik.frontend.rule=Host:jukebot.localhost"
