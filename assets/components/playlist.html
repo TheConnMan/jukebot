@@ -22,35 +22,30 @@
   </div>
 </div>
 
-<!-- UP NEXT -->
-<div ng-if="$ctrl.activeTab==='up-next'">
-  <div id="video-list" ng-if="$ctrl.getVideos().length > 0" class="ui items bottom attached active tab segment">
-    <playlistitem
-      username="$ctrl.username"
-      class="item"
-      video="video"
-      scroll-to-bottom="$ctrl.scrollToBottom()"
-      ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
-    </playlistitem>
-  </div>
-  <h4 ng-if="$ctrl.getVideos().length == 0" class="ui center aligned icon header">
-    <i class="video icon"></i>
-    <div class="content">No Videos</div>
-  </h4>
-</div>
+<div id="video-list" class="ui items bottom attached active tab segment">
+  <playlistitem
+    username="$ctrl.username"
+    class="item"
+    video="video"
+    scroll-to-bottom="$ctrl.scrollToBottom()"
+    showExpectedPlaytime=true
+    showAddedBy=true
+    ng-if="$ctrl.activeTab==='up-next'"
+    ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
+  </playlistitem>
 
-<!-- RELATED -->
-<div ng-if="$ctrl.activeTab==='related'">
-  <div id="video-list" ng-if="$ctrl.relatedVideos.length > 0" class="ui items bottom attached active tab segment">
-    <playlistitem
-      username="$ctrl.username"
-      class="item"
-      video="video"
-      scroll-to-bottom="$ctrl.scrollToBottom()"
-      ng-repeat="video in $ctrl.relatedVideos | orderBy: createdAt track by video.key">
-    </playlistitem>
-  </div>
-  <h4 ng-if="$ctrl.relatedVideos.length == 0" class="ui center aligned icon header">
+  <playlistitem
+    username="$ctrl.username"
+    class="item"
+    video="video"
+    showExpectedPlaytime=false
+    showAddedBy=false
+    scroll-to-bottom="$ctrl.scrollToBottom()"
+    ng-if="$ctrl.activeTab==='related'"
+    ng-repeat="video in $ctrl.relatedVideos | orderBy: createdAt track by video.key">
+  </playlistitem>
+
+  <h4 ng-if="$ctrl.getVideos().length == 0" class="ui center aligned icon header">
     <i class="video icon"></i>
     <div class="content">No Videos</div>
   </h4>

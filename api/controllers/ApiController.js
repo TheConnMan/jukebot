@@ -94,15 +94,19 @@ module.exports = {
 
   subscribeRelatedVideos(req, res) {
     req.socket.join('relatedVideos');
+    Video
+      .find({ playing: true })
+      .then((video) => SyncService.sendRelatedVideos(video.key))
+      .catch()
   },
 
-  skip: function(req, res) {
+  skip(req, res) {
     var params = req.allParams();
     SyncService.skip(params.username || 'Anonymous');
     res.send(200);
   },
 
-  search: function(req, res) {
+  search(req, res) {
     var params = req.allParams();
     YouTubeService.search(params.query, params.maxResults).then(function(videos) {
       res.send(videos);

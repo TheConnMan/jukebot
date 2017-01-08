@@ -1,4 +1,7 @@
 function PlaylistItemController($scope, $http, $video, $storage) {
+  this.showAddedBy = true;
+  this.showExpectedPlaytime = true;
+
   this.formatDuration = function() {
     return $video.formatDuration(this.video.duration);
   };
@@ -42,8 +45,10 @@ angular
   templateUrl: 'components/playlist-item.html',
   controller: PlaylistItemController,
   bindings: {
-    video: '=',
-    username: '=',
-    scrollToBottom: '&'
+    video: '<',
+    username: '<',
+    scrollToBottom: '&',
+    showAddedBy: '<',
+    showExpectedPlaytime: '<'
   }
 });

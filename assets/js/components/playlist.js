@@ -1,10 +1,10 @@
 function PlaylistController($scope, $video, $storage) {
   this.notifications = $storage.get('notifications') === 'true' ||  !$storage.get('notifications');
   this.activeTab = 'up-next';
+  this.relatedVideos = [];
 
   io.socket.get('/api/subscribeRelatedVideos', {});
   io.socket.on('related', (videos) => {
-    debugger;
     this.relatedVideos = videos;
     $scope.$digest();
   });
