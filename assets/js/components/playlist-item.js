@@ -1,7 +1,4 @@
 function PlaylistItemController($scope, $http, $video, $storage) {
-  this.showAddedBy = true;
-  this.showExpectedPlaytime = true;
-
   this.formatDuration = function() {
     return $video.formatDuration(this.video.duration);
   };

@@ -14,6 +14,7 @@ var autoplay = false;
 module.exports = {
   addVideo,
   sendAddMessages,
+  sendRelatedVideos,
   skip,
   setAutoplay,
   getAutoplay
