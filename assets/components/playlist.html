@@ -11,7 +11,7 @@
 </h2>
 <div id="video-list" ng-if="$ctrl.getVideos().length > 0" class="ui items">
   <div class="item" ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
-      <div class="ui image">
+      <div class="ui image" ng-if="video.thumbnail">
         <img ng-src="{{video.thumbnail}}">
       </div>
       <div class="content">
