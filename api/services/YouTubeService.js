@@ -21,12 +21,12 @@ function parseYouTubeLink(link) {
   return match[1] || match[2];
 }
 
-function getYouTubeVideo(key, user) {
+function getYouTubeVideo(key, user, canSave=true) {
   return new Promise((resolve, reject) => {
     request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         try {
-          parseYouTubeVideo(JSON.parse(body), user).exec((err, video) => {
+          parseYouTubeVideo(JSON.parse(body), user, canSave).exec((err, video) => {
             if (err) {
               throw err;
             }
@@ -42,7 +42,7 @@ function getYouTubeVideo(key, user) {
   });
 }
 
-function parseYouTubeVideo(data, user) {
+function parseYouTubeVideo(data, user, canSave) {
   if (data.items.length != 1) {
     throw 'YouTube link did not match a video';
   }
@@ -52,7 +52,8 @@ function parseYouTubeVideo(data, user) {
     duration: moment.duration(item.contentDetails.duration).asMilliseconds(),
     user: user,
     thumbnail: item.snippet.thumbnails.default.url,
-    title: item.snippet.title
+    title: item.snippet.title,
+    isSuggestion: canSave ? false : true
   });
 }
 
@@ -90,7 +91,7 @@ function relatedVideos(key) {
         }
 
         var itemsPromise = items.map((i) => {
-          return getYouTubeVideo(i.id.videoId, 'JukeBot');
+          return getYouTubeVideo(i.id.videoId, 'JukeBot', false);
         });
 
         return Promise.all(itemsPromise)

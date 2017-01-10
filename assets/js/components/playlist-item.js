@@ -46,6 +46,7 @@ angular
     username: '<',
     scrollToBottom: '&',
     showAddedBy: '<',
-    showExpectedPlaytime: '<'
+    showExpectedPlaytime: '<',
+    isSuggestion: '<'
   }
 });

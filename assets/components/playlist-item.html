@@ -13,13 +13,28 @@
   </div>
   <div class="extra">
     <i class="large {{$ctrl.likesVideo() ? 'red' : 'outline'}} link heart icon" ng-click="$ctrl.likeVideo()"></i>
-    <div class="ui mini right floated red basic button" ng-if="!$ctrl.video.played && !$ctrl.video.playing" ng-click="$ctrl.remove()">
-      Remove
-    </div>
-    <div class="ui mini right floated green basic button" ng-if="$ctrl.video.played && !$ctrl.video.playing" ng-click="$ctrl.readd()">
+    <div
+      class="ui mini right floated green basic button"
+      ng-if="$ctrl.isSuggestion"
+      ng-click="$ctrl.readd()">
       Add
     </div>
-    <div class="ui mini right floated yellow basic button" ng-if="$ctrl.video.playing" ng-click="$ctrl.skip()">
+    <div
+      class="ui mini right floated red basic button"
+      ng-if="!$ctrl.video.played && !$ctrl.video.playing && !$ctrl.isSuggestion"
+      ng-click="$ctrl.remove()">
+      Remove
+    </div>
+    <div
+      class="ui mini right floated green basic button"
+      ng-if="$ctrl.video.played && !$ctrl.video.playing"
+      ng-click="$ctrl.readd()">
+      Add
+    </div>
+    <div
+      class="ui mini right floated yellow basic button"
+      ng-if="$ctrl.video.playing"
+      ng-click="$ctrl.skip()">
       Skip
     </div>
   </div>

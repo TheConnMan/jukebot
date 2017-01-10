@@ -30,6 +30,7 @@
     scroll-to-bottom="$ctrl.scrollToBottom()"
     showExpectedPlaytime=true
     showAddedBy=true
+    isSuggestion=false
     ng-if="$ctrl.activeTab==='up-next'"
     ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
   </playlistitem>
@@ -40,6 +41,7 @@
     video="video"
     showExpectedPlaytime=false
     showAddedBy=false
+    isSuggestion=true
     scroll-to-bottom="$ctrl.scrollToBottom()"
     ng-if="$ctrl.activeTab==='related'"
     ng-repeat="video in $ctrl.relatedVideos | orderBy: createdAt track by video.key">

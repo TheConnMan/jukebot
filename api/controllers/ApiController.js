@@ -77,7 +77,8 @@ module.exports = {
     Video.find({
       createdAt: {
         '>=': new Date(Date.now() - 24 * 3600 * 1000)
-      }
+      },
+      isSuggestion: false
     }).exec(function(err, videos) {
       res.send({
         videos: videos
@@ -97,7 +98,7 @@ module.exports = {
     Video
       .find({ playing: true })
       .then((video) => SyncService.sendRelatedVideos(video.key))
-      .catch()
+      .catch();
   },
 
   skip(req, res) {
