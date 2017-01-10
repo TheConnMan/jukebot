@@ -20,10 +20,12 @@
           <div am-time-ago="{{$ctrl.getTime(chat)}}" class="date"></div>
         </div>
         <div class="extra text chat {{chat.type === 'user' ? '' : 'content minimal'}}">
+          <heart video="$ctrl.getVideoByKey(chat.data)" ng-if="chat.type === 'favorite'"></heart>
           {{chat.message}}
         </div>
       </div>
       <div class="content color-black chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername($index)">
+        <heart video="$ctrl.getVideoByKey(chat.data)" ng-if="chat.type === 'favorite'"></heart>
         {{chat.message}}
       </div>
     </div>
