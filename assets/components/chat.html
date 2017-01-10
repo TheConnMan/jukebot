@@ -12,7 +12,7 @@
   </h2>
   <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto; word-break: break-word;">
     <div class="event" ng-repeat="chat in $ctrl.chats | orderBy: time track by $index">
-      <div class="content" ng-if="$ctrl.differentUser($index)">
+      <div class="content" ng-if="$ctrl.showUsername($index)">
         <div class="summary">
           <div class="user">
             {{chat.type == 'user' ? chat.username : 'JukeBot'}}
@@ -23,7 +23,7 @@
           {{chat.message}}
         </div>
       </div>
-      <div class="content color-black chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.differentUser($index)">
+      <div class="content color-black chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername($index)">
         {{chat.message}}
       </div>
     </div>

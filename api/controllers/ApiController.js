@@ -12,7 +12,7 @@ module.exports = {
 
     var index = recentlyLeft.indexOf(username);
     if (index === -1) {
-      ChatService.addMachineMessage(users[id] + ' entered the room');
+      ChatService.addMachineMessage(users[id] + ' entered the room', username);
     } else {
       recentlyLeft.splice(index, 1);
     }
@@ -38,6 +38,19 @@ module.exports = {
     try {
       var key = YouTubeService.parseYouTubeLink(params.link);
       YouTubeService.getYouTubeVideo(key, params.user || 'Anonymous').then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
+        res.send(200);
+      }).catch(function(err) {
+        res.send(400, err);
+      });
+    } catch (err) {
+      res.send(400, err);
+    }
+  },
+
+  addPlaylist: function(req, res) {
+    var params = req.allParams();
+    try {
+      YouTubeService.getPlaylistVideos(params.playlistId, params.user || 'Anonymous').then(SyncService.addPlaylist).then(SyncService.sendPlaylistAddMessages).then(function(video) {
         res.send(200);
       }).catch(function(err) {
         res.send(400, err);

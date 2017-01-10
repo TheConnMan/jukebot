@@ -13,11 +13,14 @@ var autoplay = false;
 
 module.exports = {
   addVideo,
+  addPlaylist,
   sendAddMessages,
   sendRelatedVideos,
+  sendPlaylistAddMessages,
   skip,
   setAutoplay,
-  getAutoplay
+  getAutoplay,
+  startVideo
 };
 
 function addVideo(video) {
@@ -38,6 +41,23 @@ function addVideo(video) {
       } else {
         resolve(video);
       }
+    });
+  });
+}
+
+function addPlaylist(videos) {
+  let nonNullVideos = videos.filter(video => {
+    return !!video;
+  });
+  return nonNullVideos.reduce((p, video) => {
+    return p.then(resolve => {
+      return addVideo(video);
+    });
+  }, new Promise(resolve => {
+    resolve();
+  })).then(resolve => {
+    return new Promise(resolve => {
+      resolve(filteredVideos);
     });
   });
 }
@@ -64,6 +84,24 @@ function sendAddMessages(video) {
   });
 }
 
+function sendPlaylistAddMessages(videos) {
+  return new Promise((resolve, reject) => {
+    Video.publishCreate(videos);
+    if (videos.length !== 0) {
+      ChatService.addVideoMessage(videos.length + ' videos were added to the playlist by ' + videos[0].user);
+      if (slack && sails.config.globals.slackSongAdded) {
+        sendSlackAddedNotification(videos).then(function() {
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    } else {
+      resolve();
+    }
+  });
+}
+
 function skip(username) {
   clearTimeout(videoTimeout);
   endCurrentVideo(username);
@@ -74,7 +112,7 @@ function endCurrentVideo(username) {
     playing: true
   }).exec(function(err, current) {
     if (username) {
-      ChatService.addMachineMessage(username + ' skipped ' + current.title);
+      ChatService.addMachineMessage(username + ' skipped ' + current.title, username);
     }
     current.playing = false;
     current.save(function() {
@@ -106,7 +144,6 @@ function startVideo(video) {
   logger.info('Setting timeout');
   videoTimeout = setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
-      logger.info('Stopping video ' + video.key);
       Video.publishUpdate(video.id, video);
       ChatService.addVideoMessage(video.title + ' is now playing');
       sendRelatedVideos(video.key);
@@ -137,6 +174,13 @@ function sendSlackAddedNotification(video) {
 function sendSlackPlayingNotification(video) {
   return slack.send({
     text: formatVideoTitle(video) + ' is now playing! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    'mrkdwn': true
+  });
+}
+
+function sendSlackAddedPlaylistNotification(size, user) {
+  return slack.send({
+    text: video.user + ' added ' + size + ' videos to the playlist! <' + sails.config.serverUrl + '|Listen to JukeBot>',
     'mrkdwn': true
   });
 }
