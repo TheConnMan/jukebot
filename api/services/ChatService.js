@@ -41,5 +41,5 @@ function addMessage(chat) {
     .then((c) => {
       sails.io.sockets.in('chatting').emit('chat', c);
     })
-    .catch((e) => logger.warning(e));
+    .catch((e) => logger.warn(e));
 }
