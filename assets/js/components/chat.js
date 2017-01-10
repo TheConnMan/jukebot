@@ -7,8 +7,9 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
   $rootScope.$on('likeVideo', function(e, args) {
     io.socket._raw.emit('chat', {
       message: self.getUsername() + ' favorited ' + args.video.title,
-      type: 'machine',
-      time: Date.now()
+      type: 'favorite',
+      time: Date.now(),
+      data: args.video.key
     });
   });
 

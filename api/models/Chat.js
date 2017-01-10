@@ -17,6 +17,10 @@ module.exports = {
       type: 'datetime',
       required: true
     },
+    data: {
+      type: 'string',
+      required: false
+    }
     // room: {
     //   model: 'room'
     // }
