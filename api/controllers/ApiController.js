@@ -96,9 +96,12 @@ module.exports = {
   subscribeRelatedVideos(req, res) {
     req.socket.join('relatedVideos');
     Video
-      .find({ playing: true })
-      .then((video) => SyncService.sendRelatedVideos(video.key))
-      .catch();
+      .findOne({ playing: true })
+      .exec((err, video) => {
+        if (video) {
+          SyncService.sendRelatedVideos(video.key);
+        }
+      });
   },
 
   skip(req, res) {

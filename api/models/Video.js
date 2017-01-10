@@ -30,6 +30,10 @@ module.exports = {
     played: {
       type: 'boolean',
       defaultsTo: false
+    },
+    isSuggestion: {
+      type: 'boolean',
+      defaultsTo: false
     }
   }
 };
