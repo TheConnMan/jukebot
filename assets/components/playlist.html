@@ -25,7 +25,7 @@
           <i class="calendar icon"></i> {{$ctrl.expectedPlayTime(video)}}
         </div>
         <div class="extra">
-          <i class="large {{$ctrl.likesVideo(video.key) ? 'red' : 'outline'}} link heart icon" ng-click="$ctrl.likeVideo(video)"></i>
+          <heart video="video" classes="'large'"></heart>
           <div class="ui mini right floated red basic button" ng-if="!video.played && !video.playing" ng-click="$ctrl.remove(video.id)">
             Remove
           </div>
