@@ -9,7 +9,11 @@ module.exports = {
 };
 
 function getChats() {
-  return Chat.find();
+  return Chat.find({
+    createdAt: {
+      '>=': new Date(Date.now() - 24 * 3600 * 1000)
+    }
+  });
 }
 
 function addUserMessage(chat) {

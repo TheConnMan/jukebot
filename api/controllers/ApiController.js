@@ -100,7 +100,11 @@ module.exports = {
 
   subscribeVideos: function(req, res) {
     Video.watch(req.socket);
-    Video.find().exec(function(err, videos) {
+    Video.find({
+      createdAt: {
+        '>=': new Date(Date.now() - 24 * 3600 * 1000)
+      }
+    }).exec(function(err, videos) {
       Video.subscribe(req.socket, videos);
     });
   },
