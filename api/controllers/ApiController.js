@@ -12,7 +12,7 @@ module.exports = {
 
     var index = recentlyLeft.indexOf(username);
     if (index === -1) {
-      ChatService.addMachineMessage(users[id] + ' entered the room', username);
+      ChatService.addMachineMessage(users[id] + ' entered the room', username, 'userEnter');
     } else {
       recentlyLeft.splice(index, 1);
     }
@@ -100,7 +100,11 @@ module.exports = {
 
   subscribeVideos: function(req, res) {
     Video.watch(req.socket);
-    Video.find().exec(function(err, videos) {
+    Video.find({
+      createdAt: {
+        '>=': new Date(Date.now() - 24 * 3600 * 1000)
+      }
+    }).exec(function(err, videos) {
       Video.subscribe(req.socket, videos);
     });
   },
@@ -125,7 +129,7 @@ function userDisconnected(username) {
   var index = recentlyLeft.indexOf(username);
   if (index !== -1) {
     recentlyLeft.splice(index, 1);
-    ChatService.addMachineMessage(username + ' left the room');
+    ChatService.addMachineMessage(username + ' left the room', username, 'userLeft');
     emitListeners();
     if (Object.keys(users).length === 0) {
       SyncService.setAutoplay(false);

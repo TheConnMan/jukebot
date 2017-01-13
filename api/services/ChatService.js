@@ -9,7 +9,11 @@ module.exports = {
 };
 
 function getChats() {
-  return Chat.find();
+  return Chat.find({
+    createdAt: {
+      '>=': new Date(Date.now() - 24 * 3600 * 1000)
+    }
+  });
 }
 
 function addUserMessage(chat) {
@@ -17,20 +21,20 @@ function addUserMessage(chat) {
   addMessage(chat);
 }
 
-function addMachineMessage(message, username) {
+function addMachineMessage(message, username, type='machine') {
   var chat = {
     message: message,
-    type: 'machine',
+    type: type,
     username: username,
     time: new Date().toISOString()
   };
   addMessage(chat);
 }
 
-function addVideoMessage(message) {
+function addVideoMessage(message, type) {
   var chat = {
     message: message,
-    type: 'video',
+    type: type,
     time: new Date().toISOString()
   };
   addMessage(chat);
@@ -41,5 +45,5 @@ function addMessage(chat) {
     .then((c) => {
       sails.io.sockets.in('chatting').emit('chat', c);
     })
-    .catch((e) => logger.warning(e));
+    .catch((e) => logger.warn(e));
 }
