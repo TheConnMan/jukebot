@@ -63,7 +63,7 @@ function addPlaylist(videos) {
 function sendAddMessages(video) {
   return new Promise(function(resolve, reject) {
     Video.publishCreate(video);
-    ChatService.addVideoMessage(video.title + ' was added to the playlist by ' + video.user);
+    ChatService.addVideoMessage(video.title + ' was added to the playlist by ' + video.user, 'addVideo');
     if (slack && sails.config.globals.slackSongPlaying && sails.config.globals.slackSongAdded) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
@@ -86,7 +86,7 @@ function sendPlaylistAddMessages(videos) {
   return new Promise((resolve, reject) => {
     Video.publishCreate(videos);
     if (videos.length !== 0) {
-      ChatService.addVideoMessage(videos.length + ' videos were added to the playlist by ' + videos[0].user);
+      ChatService.addVideoMessage(videos.length + ' videos were added to the playlist by ' + videos[0].user, 'addVideo');
       if (slack && sails.config.globals.slackSongAdded) {
         sendSlackAddedNotification(videos).then(function() {
           resolve();
@@ -110,7 +110,7 @@ function endCurrentVideo(username) {
     playing: true
   }).exec(function(err, current) {
     if (username) {
-      ChatService.addMachineMessage(username + ' skipped ' + current.title, username);
+      ChatService.addMachineMessage(username + ' skipped ' + current.title, username, 'videoSkipped');
     }
     current.playing = false;
     current.save(function() {
@@ -143,7 +143,7 @@ function startVideo(video) {
   videoTimeout = setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
       Video.publishUpdate(video.id, video);
-      ChatService.addVideoMessage(video.title + ' is now playing');
+      ChatService.addVideoMessage(video.title + ' is now playing', 'videoPlaying');
       if (slack && sails.config.globals.slackSongPlaying) {
         sendSlackPlayingNotification(video).then(function() {
           logger.info('Started playing video ' + video.key);

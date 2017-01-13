@@ -12,7 +12,7 @@ module.exports = {
 
     var index = recentlyLeft.indexOf(username);
     if (index === -1) {
-      ChatService.addMachineMessage(users[id] + ' entered the room', username);
+      ChatService.addMachineMessage(users[id] + ' entered the room', username, 'userEnter');
     } else {
       recentlyLeft.splice(index, 1);
     }
@@ -125,7 +125,7 @@ function userDisconnected(username) {
   var index = recentlyLeft.indexOf(username);
   if (index !== -1) {
     recentlyLeft.splice(index, 1);
-    ChatService.addMachineMessage(username + ' left the room');
+    ChatService.addMachineMessage(username + ' left the room', username, 'userLeft');
     emitListeners();
     if (Object.keys(users).length === 0) {
       SyncService.setAutoplay(false);
