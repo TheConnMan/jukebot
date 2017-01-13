@@ -23,8 +23,8 @@
           <i class="plus icon" ng-if="chat.type === 'addVideo'"></i>
           <i class="play icon" ng-if="chat.type === 'videoPlaying'"></i>
           <i class="fast forward icon" ng-if="chat.type === 'videoSkipped'"></i>
-          <i class="add user icon" ng-if="chat.type === 'userEnter'"></i>
-          <i class="remove user icon" ng-if="chat.type === 'userLeft'"></i>
+          <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
+          <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
           {{chat.message}}
         </div>
       </div>
@@ -32,8 +32,8 @@
         <i class="plus icon" ng-if="chat.type === 'addVideo'"></i>
         <i class="play icon" ng-if="chat.type === 'videoPlaying'"></i>
         <i class="fast forward icon" ng-if="chat.type === 'videoSkipped'"></i>
-        <i class="add user icon" ng-if="chat.type === 'userEnter'"></i>
-        <i class="remove user icon" ng-if="chat.type === 'userLeft'"></i>
+        <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
+        <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
         {{chat.message}}
       </div>
     </div>
