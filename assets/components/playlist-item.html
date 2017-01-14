@@ -1,0 +1,36 @@
+<div class="ui image" ng-if="$ctrl.video.thumbnail">
+  <img ng-src="{{$ctrl.video.thumbnail}}">
+</div>
+<div class="content">
+  <a class="header" ng-href="https://www.youtube.com/watch?v={{$ctrl.video.key}}" target="_blank">
+    {{$ctrl.video.title}}
+  </a>
+  <div class="meta" ng-if="$ctrl.showAddedBy">
+    Added by {{$ctrl.video.user}} ({{$ctrl.formatDuration()}})
+  </div>
+  <div class="meta" ng-if="!$ctrl.video.played && !$ctrl.video.playing && ctrl.showExpectedPlaytime">
+    <i class="calendar icon"></i> {{$ctrl.expectedPlayTime()}}
+  </div>
+  <div class="extra">
+    <i class="large {{$ctrl.likesVideo() ? 'red' : 'outline'}} link heart icon" ng-click="$ctrl.likeVideo()"></i>
+    <div
+      class="ui mini right floated red basic button"
+      ng-if="!$ctrl.video.played && !$ctrl.video.playing && !$ctrl.isSuggestion"
+      ng-init="$ctrl.log('In template: '+ $ctrl.isSuggestion)"
+      ng-click="$ctrl.remove()">
+      Remove
+    </div>
+    <div
+      class="ui mini right floated green basic button"
+      ng-if="$ctrl.video.played && !$ctrl.video.playing || $ctrl.isSuggestion"
+      ng-click="$ctrl.readd()">
+      Add
+    </div>
+    <div
+      class="ui mini right floated yellow basic button"
+      ng-if="$ctrl.video.playing"
+      ng-click="$ctrl.skip()">
+      Skip
+    </div>
+  </div>
+</div>

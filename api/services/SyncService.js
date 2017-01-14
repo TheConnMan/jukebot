@@ -15,6 +15,7 @@ module.exports = {
   addVideo,
   addPlaylist,
   sendAddMessages,
+  sendRelatedVideos,
   sendPlaylistAddMessages,
   skip,
   setAutoplay,
@@ -34,6 +35,7 @@ function addVideo(video) {
         video.played = true;
         videoTimeout = setTimeout(endCurrentVideo, video.duration);
         video.save(function() {
+          sendRelatedVideos(video.key);
           resolve(video);
         });
       } else {
@@ -143,6 +145,7 @@ function startVideo(video) {
   videoTimeout = setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
       Video.publishUpdate(video.id, video);
+      sendRelatedVideos(video.key);
       ChatService.addVideoMessage(video.title + ' is now playing', 'videoPlaying');
       if (slack && sails.config.globals.slackSongPlaying) {
         sendSlackPlayingNotification(video).then(function() {
@@ -151,6 +154,13 @@ function startVideo(video) {
       } else {
         logger.info('Started playing video ' + video.key);
       }
+    });
+}
+
+function sendRelatedVideos(key) {
+  YouTubeService.relatedVideos(key)
+    .then((videos) => {
+      sails.io.sockets.in('relatedVideos').emit('related', videos);
     });
 }
 
