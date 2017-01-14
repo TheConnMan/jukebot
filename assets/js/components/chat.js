@@ -17,6 +17,10 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
   this.typers = '';
   this.notifications = $storage.get('chat-notifications') === 'true' ||  !$storage.get('chat-notifications');
 
+  this.getChats = function() {
+    return this.chats.filter(function(chat) { return new Date(chat.createdAt) >= new Date(Date.now() - 24 * 3600 * 1000); });
+  };
+
   this.getUsername = function() {
     return self.username || 'Anonymous';
   };
@@ -70,7 +74,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
 
   io.socket.on('chat', (c) => {
     this.chats.push(c);
-    if (c.username !== this.getUsername() && this.notifications && c.type !== 'video') {
+    if (c.username !== this.getUsername() && this.notifications && c.type !== 'addVideo' && c.type !== 'videoSkipped' && c.type !== 'videoPlaying') {
       let notification = $notification(c.username || 'JukeBot', {
         body: c.message,
         delay: 4000,

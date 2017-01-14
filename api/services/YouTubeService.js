@@ -53,9 +53,9 @@ function parseYouTubeVideo(data, user, canSave) {
     key: item.id,
     duration: moment.duration(item.contentDetails.duration).asMilliseconds(),
     user: user,
-    thumbnail: item.snippet.thumbnails.default.url,
     title: item.snippet.title,
-    isSuggestion: canSave ? false : true
+    thumbnail: item.snippet.thumbnails ? item.snippet.thumbnails.default.url : null,
+    title: item.snippet.title
   });
 }
 
