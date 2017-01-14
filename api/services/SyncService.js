@@ -18,9 +18,11 @@ module.exports = {
   sendRelatedVideos,
   sendPlaylistAddMessages,
   skip,
+  endCurrentVideo,
   setAutoplay,
   getAutoplay,
-  startVideo
+  startVideo,
+  restartVideo
 };
 
 function addVideo(video) {
@@ -162,6 +164,10 @@ function sendRelatedVideos(key) {
     .then((videos) => {
       sails.io.sockets.in('relatedVideos').emit('related', videos);
     });
+}
+
+function restartVideo(video) {
+  videoTimeout = setTimeout(endCurrentVideo, video.duration + video.startTime.getTime() - Date.now());
 }
 
 function sendSlackAddedNotification(video) {
