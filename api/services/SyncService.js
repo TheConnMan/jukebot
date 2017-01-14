@@ -17,9 +17,11 @@ module.exports = {
   sendAddMessages,
   sendPlaylistAddMessages,
   skip,
+  endCurrentVideo,
   setAutoplay,
   getAutoplay,
-  startVideo
+  startVideo,
+  restartVideo
 };
 
 function addVideo(video) {
@@ -152,6 +154,10 @@ function startVideo(video) {
         logger.info('Started playing video ' + video.key);
       }
     });
+}
+
+function restartVideo(video) {
+  videoTimeout = setTimeout(endCurrentVideo, video.duration + video.startTime.getTime() - Date.now());
 }
 
 function sendSlackAddedNotification(video) {
