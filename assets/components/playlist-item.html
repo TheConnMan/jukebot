@@ -16,6 +16,7 @@
     <div
       class="ui mini right floated red basic button"
       ng-if="!$ctrl.video.played && !$ctrl.video.playing && !$ctrl.isSuggestion"
+      ng-init="$ctrl.log('In template: '+ $ctrl.isSuggestion)"
       ng-click="$ctrl.remove()">
       Remove
     </div>

@@ -28,9 +28,9 @@
     class="item"
     video="video"
     scroll-to-bottom="$ctrl.scrollToBottom()"
-    showExpectedPlaytime=true
-    showAddedBy=true
-    isSuggestion=false
+    show-expected-playtime=true
+    show-added-by=true
+    is-suggestion=false
     ng-if="$ctrl.activeTab==='up-next'"
     ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
   </playlistitem>
@@ -39,9 +39,9 @@
     username="$ctrl.username"
     class="item"
     video="video"
-    showExpectedPlaytime=false
-    showAddedBy=false
-    isSuggestion=true
+    show-expected-playtime=false
+    show-added-by=false
+    is-suggestion=true
     scroll-to-bottom="$ctrl.scrollToBottom()"
     ng-if="$ctrl.activeTab==='related'"
     ng-repeat="video in $ctrl.relatedVideos | orderBy: createdAt track by video.key">
