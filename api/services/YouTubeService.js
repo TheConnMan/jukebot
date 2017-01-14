@@ -1,9 +1,6 @@
 const Promise = require('promise');
 const request = require('request');
 const moment = require('moment');
-var log4js = require('log4js');
-var logger = log4js.getLogger();
-
 const log4js = require('log4js');
 const logger = log4js.getLogger();
 
@@ -12,7 +9,7 @@ module.exports = {
   getYouTubeVideo,
   search,
   nextRelated,
-  relatedVideos
+  relatedVideos,
   getPlaylistVideos
 };
 
@@ -87,9 +84,9 @@ function nextRelated(key) {
     .then((videos) => videos[Math.floor(Math.random() * videos.length)].id.videoId);
 }
 
-function relatedVideos(key) {
+function relatedVideos(key, maxResults = 10) {
   return new Promise((resolve, reject) => {
-    request(`https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${key}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=10&type=video`, (error, response, body) => {
+    request(`https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${key}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=${maxResults}&type=video`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         var items = JSON.parse(body).items;
         if (items.length === 0) {
