@@ -27,7 +27,7 @@ function getYouTubeVideo(key, user, canSave=true) {
     request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         try {
-          parseYouTubeVideo(JSON.parse(body), user, canSave).exec((err, video) => {
+          parseYouTubeVideo(JSON.parse(body), user, canSave).then((video, err) => {
             if (err) {
               throw err;
             }
@@ -49,13 +49,19 @@ function parseYouTubeVideo(data, user, canSave) {
     throw 'YouTube link did not match a video';
   }
   var item = data.items[0];
-  return Video.create({
+  var model = {
     key: item.id,
     duration: moment.duration(item.contentDetails.duration).asMilliseconds(),
     user: user,
     isSuggestion: canSave ? false : true,
     thumbnail: item.snippet.thumbnails ? item.snippet.thumbnails.default.url : null,
     title: item.snippet.title
+  };
+  if (canSave) {
+    return Video.create(model);
+  }
+  return new Promise ((resolve, reject) => {
+    resolve(new Video._model(model));
   });
 }
 
