@@ -95,10 +95,10 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
       accuracy: 'exactly',
       className: 'highlight'
     };
-    $('.chat').mark(self.getUsername(), markOptions);
-    $('.chat').mark('@' + self.getUsername(), markOptions);
-    $('.chat').mark('@here', markOptions);
-    $('.chat').mark('@channel', markOptions);
+    $('.chat > span').mark(self.getUsername(), markOptions);
+    $('.chat > span').mark('@' + self.getUsername(), markOptions);
+    $('.chat > span').mark('@here', markOptions);
+    $('.chat > span').mark('@channel', markOptions);
   }
 
     io.socket.on('typers', (typers) => {
