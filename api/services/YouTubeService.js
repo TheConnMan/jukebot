@@ -73,7 +73,7 @@ function search(query, maxResults) {
           return {
             playlistId: video.id.playlistId,
             key: video.id.videoId,
-            thumbnail: video.snippet.thumbnails.default.url,
+            thumbnail: video.snippet.thumbnails ? video.snippet.thumbnails.default.url : null,
             title: video.snippet.title + (video.id.playlistId && video.snippet.title.toLowerCase().indexOf('playlist') == -1 ? ' (Playlist)' : '')
           };
         });
