@@ -1,8 +1,5 @@
 function HeartController($scope, $storage) {
 
-  $scope.video = this.video;
-  $scope.classes = this.classes;
-
   this.likeVideo = function(video) {
     $storage.likeVideo(video);
     if (this.likesVideo(video.key)) {
