@@ -1,4 +1,4 @@
-var app = angular.module('app', ['notification', 'storage', 'video', 'angularMoment']);
+var app = angular.module('app', ['notification', 'storage', 'video', 'angularMoment', 'ngSanitize']);
 app.controller('controller', function($scope, $rootScope, $notification, $storage, $video, $timeout, $http, $log) {
   $('.ui.search')
     .search({

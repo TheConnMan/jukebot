@@ -25,9 +25,7 @@
           <i class="fast forward icon" ng-if="chat.type === 'videoSkipped'"></i>
           <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
           <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
-          <span>
-            {{chat.message}}
-          </span>
+          <span ng-bind-html="chat.message | linky: '_blank'"></span>
         </div>
       </div>
       <div class="content color-black chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername($index)">
@@ -36,9 +34,7 @@
         <i class="fast forward icon" ng-if="chat.type === 'videoSkipped'"></i>
         <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
         <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
-        <span>
-          {{chat.message}}
-        </span>
+        <span ng-bind-html="chat.message | linky: '_blank'"></span>
       </div>
     </div>
   </div>
