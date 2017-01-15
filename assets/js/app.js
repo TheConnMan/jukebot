@@ -60,6 +60,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       return $storage.likesVideo($video.current().key);
     };
 
+    $scope.likeVideo = function(video) {
+      return $storage.likeVideo(video);
+    };
+
     $scope.likes = function() {
       return $storage.getLikedVideos();
     };
