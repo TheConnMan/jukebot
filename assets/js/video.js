@@ -21,11 +21,11 @@ angular
   }
 
   function findById(id) {
-    return videos.find((v) => v.id.toString() == id);
+    return videos.find((v) => v.id.toString() === id);
   }
 
   function findByKey(key) {
-    return videos.find((v) => v.key == key);
+    return videos.find((v) => v.key === key);
   }
 
   function current() {
