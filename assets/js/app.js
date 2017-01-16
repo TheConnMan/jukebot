@@ -1,4 +1,4 @@
-var app = angular.module('app', ['notification', 'storage', 'video', 'angularMoment']);
+var app = angular.module('app', ['notification', 'storage', 'video', 'angularMoment', 'ngSanitize']);
 app.controller('controller', function($scope, $rootScope, $notification, $storage, $video, $timeout, $http, $log) {
   $('.ui.search')
     .search({
@@ -36,11 +36,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.listeners = {};
     $scope.newChat = '';
 
-    $scope.showVideo = $storage.get('showVideo') !== 'false';
+    $scope.minimizeVideo = $storage.get('minimizeVideo') === 'true';
 
     $scope.toggleVideo = function() {
-      $scope.showVideo = !$scope.showVideo;
-      $storage.set('showVideo', $scope.showVideo);
+      $scope.minimizeVideo = !$scope.minimizeVideo;
+      $storage.set('minimizeVideo', $scope.minimizeVideo);
     };
 
     /*************
@@ -58,6 +58,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.likesCurrentVideo = function() {
       return $storage.likesVideo($video.current().key);
+    };
+
+    $scope.likeVideo = function(video) {
+      return $storage.likeVideo(video);
     };
 
     $scope.likes = function() {

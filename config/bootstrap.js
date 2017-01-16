@@ -15,7 +15,11 @@ module.exports.bootstrap = function(cb) {
     playing: true
   }).then(function(current, err) {
     if (current) {
-      SyncService.startVideo(current);
+      if (Date.now() > current.startTime.getTime() + current.duration) {
+        SyncService.endCurrentVideo('JukeBot');
+      } else {
+        SyncService.restartVideo(current);
+      }
     }
     cb();
   });

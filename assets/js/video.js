@@ -21,7 +21,11 @@ angular
   }
 
   function findById(id) {
-    return videos.find((v) => v.id.toString() == id);
+    return videos.find((v) => v.id === id);
+  }
+
+  function findByKey(key) {
+    return videos.find((v) => v.key === key);
   }
 
   function current() {
@@ -119,6 +123,7 @@ angular
     update,
     getVideos,
     findById,
+    findByKey,
     current,
     subscribe,
     getAll,

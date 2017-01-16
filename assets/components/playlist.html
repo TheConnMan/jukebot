@@ -1,45 +1,54 @@
-<h2 class="ui dividing header">Videos
-  <div class="ui toggle checkbox">
-    <input
-      type="checkbox"
-      ng-model="$ctrl.notifications"
-      ng-change="$ctrl.toggleNotifications($ctrl.notifications)"
-      name="public-chat"
-    >
-    <label>Notifications</label>
+<div class="ui top attached tabular menu">
+  <div
+    ng-click="$ctrl.setTab('up-next')"
+    ng-class="($ctrl.activeTab==='up-next') ? 'active item' : 'item'"
+  >
+    Up Next
+    <div class="ui toggle checkbox pl-8">
+      <input
+        type="checkbox"
+        ng-model="$ctrl.notifications"
+        ng-change="$ctrl.toggleNotifications($ctrl.notifications)"
+        name="public-chat"
+      >
+      <label></label>
+    </div>
   </div>
-</h2>
-<div id="video-list" ng-if="$ctrl.getVideos().length > 0" class="ui items">
-  <div class="item" ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
-      <div class="ui image" ng-if="video.thumbnail">
-        <img ng-src="{{video.thumbnail}}">
-      </div>
-      <div class="content">
-        <a class="header" ng-href="https://www.youtube.com/watch?v={{video.key}}" target="_blank">
-          {{video.title}}
-        </a>
-        <div class="meta">
-          Added by {{video.user}} ({{$ctrl.formatDuration(video.duration)}})
-        </div>
-        <div class="meta" ng-if="!video.played && !video.playing">
-          <i class="calendar icon"></i> {{$ctrl.expectedPlayTime(video)}}
-        </div>
-        <div class="extra">
-          <i class="large {{$ctrl.likesVideo(video.key) ? 'red' : 'outline'}} link heart icon" ng-click="$ctrl.likeVideo(video)"></i>
-          <div class="ui mini right floated red basic button" ng-if="!video.played && !video.playing" ng-click="$ctrl.remove(video.id)">
-            Remove
-          </div>
-          <div class="ui mini right floated green basic button" ng-if="video.played && !video.playing" ng-click="$ctrl.readd(video.key)">
-            Add
-          </div>
-          <div class="ui mini right floated yellow basic button" ng-if="video.playing" ng-click="$ctrl.skip()">
-            Skip
-          </div>
-        </div>
-      </div>
+  <div
+    ng-click="$ctrl.setTab('related')"
+    ng-class="($ctrl.activeTab==='related') ? 'active item' : 'item'"
+  >
+    Related
   </div>
 </div>
-<h4 ng-if="$ctrl.getVideos().length == 0" class="ui center aligned icon header">
-  <i class="video icon"></i>
-  <div class="content">No Videos</div>
-</h4>
+
+<div id="video-list" class="ui items bottom attached active tab segment">
+  <playlistitem
+    username="$ctrl.username"
+    class="item"
+    video="video"
+    scroll-to-bottom="$ctrl.scrollToBottom()"
+    show-expected-playtime=true
+    show-added-by=true
+    is-suggestion=false
+    ng-if="$ctrl.activeTab==='up-next'"
+    ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
+  </playlistitem>
+
+  <playlistitem
+    username="$ctrl.username"
+    class="item"
+    video="video"
+    show-expected-playtime=false
+    show-added-by=false
+    is-suggestion=true
+    scroll-to-bottom="$ctrl.scrollToBottom()"
+    ng-if="$ctrl.activeTab==='related'"
+    ng-repeat="video in $ctrl.relatedVideos | orderBy: createdAt track by video.key">
+  </playlistitem>
+
+  <h4 ng-if="$ctrl.getVideos().length == 0" class="ui center aligned icon header">
+    <i class="video icon"></i>
+    <div class="content">No Videos</div>
+  </h4>
+</div>

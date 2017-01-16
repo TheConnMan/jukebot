@@ -90,7 +90,8 @@ module.exports = {
     Video.find({
       createdAt: {
         '>=': new Date(Date.now() - 24 * 3600 * 1000)
-      }
+      },
+      isSuggestion: false
     }).exec(function(err, videos) {
       res.send({
         videos: videos
@@ -109,13 +110,24 @@ module.exports = {
     });
   },
 
-  skip: function(req, res) {
+  subscribeRelatedVideos(req, res) {
+    req.socket.join('relatedVideos');
+    Video
+      .findOne({ playing: true })
+      .exec((err, video) => {
+        if (video) {
+          SyncService.sendRelatedVideos(video.key);
+        }
+      });
+  },
+
+  skip(req, res) {
     var params = req.allParams();
     SyncService.skip(params.username || 'Anonymous');
     res.send(200);
   },
 
-  search: function(req, res) {
+  search(req, res) {
     var params = req.allParams();
     YouTubeService.search(params.query, params.maxResults).then(function(videos) {
       res.send(videos);

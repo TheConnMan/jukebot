@@ -1,8 +1,13 @@
 # JukeBot
+
+[Demo](https://demo.jukebot.club/)
+
 [![Build Status](https://travis-ci.org/TheConnMan/jukebot.svg?branch=master)](https://travis-ci.org/TheConnMan/jukebot)
 [![Docker Pulls](https://img.shields.io/docker/pulls/theconnman/jukebot.svg)](https://hub.docker.com/r/theconnman/jukebot/)
 
 Slack-Enabled Syncronized Music Listening
+
+![JukeBot](assets/images/JukeBot.png)
 
 **JukeBot** is for Slack teams who want to listen to music together, add music through Slack, and chat about the music in a Slack channel.
 
