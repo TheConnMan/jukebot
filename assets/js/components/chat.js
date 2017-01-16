@@ -1,4 +1,4 @@
-function ChatController($rootScope, $scope, $http, $notification, $storage) {
+function ChatController($rootScope, $scope, $http, $notification, $storage, $video) {
   let self = this;
   let timer = null;
 
@@ -7,8 +7,9 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
   $rootScope.$on('likeVideo', function(e, args) {
     io.socket._raw.emit('chat', {
       message: self.getUsername() + ' favorited ' + args.video.title,
-      type: 'machine',
-      time: Date.now()
+      type: 'favorite',
+      time: Date.now(),
+      data: args.video.key
     });
   });
 
@@ -63,6 +64,10 @@ function ChatController($rootScope, $scope, $http, $notification, $storage) {
 
   this.getTime = function(chat) {
     return new Date(chat.time).getTime();
+  };
+
+  this.getVideoByKey = function(key) {
+    return $video.findByKey(key);
   };
 
   io.socket.on('chats', (c) => {

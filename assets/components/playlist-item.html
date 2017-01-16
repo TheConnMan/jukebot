@@ -12,7 +12,7 @@
     <i class="calendar icon"></i> {{$ctrl.expectedPlayTime()}}
   </div>
   <div class="extra">
-    <i class="large {{$ctrl.likesVideo() ? 'red' : 'outline'}} link heart icon" ng-click="$ctrl.likeVideo()"></i>
+    <heart video="$ctrl.video" classes="'large'"></heart>
     <div
       class="ui mini right floated red basic button"
       ng-if="!$ctrl.video.played && !$ctrl.video.playing && !$ctrl.isSuggestion"
