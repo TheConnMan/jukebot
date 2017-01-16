@@ -36,11 +36,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.listeners = {};
     $scope.newChat = '';
 
-    $scope.showVideo = $storage.get('showVideo') !== 'false';
+    $scope.minimizeVideo = $storage.get('minimizeVideo') === 'true';
 
     $scope.toggleVideo = function() {
-      $scope.showVideo = !$scope.showVideo;
-      $storage.set('showVideo', $scope.showVideo);
+      $scope.minimizeVideo = !$scope.minimizeVideo;
+      $storage.set('minimizeVideo', $scope.minimizeVideo);
     };
 
     /*************
