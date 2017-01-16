@@ -7,7 +7,7 @@
 
 Slack-Enabled Syncronized Music Listening
 
-![JukeBot](https://raw.githubusercontent.com/TheConnMan/jukebot/dev/assets/images/jukebot.png)
+![JukeBot](https://raw.githubusercontent.com/TheConnMan/jukebot/dev/assets/images/JukeBot-Screenshot.png)
 
 **JukeBot** is for Slack teams who want to listen to music together, add music through Slack, and chat about the music in a Slack channel.
 
