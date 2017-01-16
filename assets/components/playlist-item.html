@@ -8,7 +8,7 @@
   <div class="meta" ng-if="$ctrl.showAddedBy">
     Added by {{$ctrl.video.user}} ({{$ctrl.formatDuration()}})
   </div>
-  <div class="meta" ng-if="!$ctrl.video.played && !$ctrl.video.playing && ctrl.showExpectedPlaytime">
+  <div class="meta" ng-if="!$ctrl.video.played && !$ctrl.video.playing && !$ctrl.isSuggestion">
     <i class="calendar icon"></i> {{$ctrl.expectedPlayTime()}}
   </div>
   <div class="extra">
