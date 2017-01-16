@@ -21,7 +21,7 @@ angular
   }
 
   function findById(id) {
-    return videos.find((v) => v.id.toString() === id);
+    return videos.find((v) => v.id === id);
   }
 
   function findByKey(key) {
