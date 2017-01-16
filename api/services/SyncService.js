@@ -1,6 +1,7 @@
 var Promise = require('promise');
 var log4js = require('log4js');
-var logger = log4js.getLogger();
+var logger = log4js.getLogger('api/services/SyncService');
+
 var SlackWebhook = require('slack-webhook');
 var slack = sails.config.globals.slackWebhook ? new SlackWebhook(sails.config.globals.slackWebhook, {
   defaults: {
@@ -54,13 +55,17 @@ function addPlaylist(videos) {
   return nonNullVideos.reduce((p, video) => {
     return p.then(resolve => {
       return addVideo(video);
+    }).catch(err => {
+      logger.error('Error adding video with key ' + video.key, err);
     });
   }, new Promise(resolve => {
     resolve();
   })).then(resolve => {
     return new Promise(resolve => {
-      resolve(filteredVideos);
+      resolve(nonNullVideos);
     });
+  }).catch(err => {
+    logger.error('Error adding all playlist videos', err);
   });
 }
 
