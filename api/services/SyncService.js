@@ -97,7 +97,7 @@ function sendPlaylistAddMessages(videos) {
     if (videos.length !== 0) {
       ChatService.addVideoMessage(videos.length + ' videos were added to the playlist by ' + videos[0].user, 'addVideo');
       if (slack && sails.config.globals.slackSongAdded) {
-        sendSlackAddedNotification(videos).then(function() {
+        sendSlackAddedPlaylistNotification(videos.length, videos[0].user).then(function() {
           resolve();
         });
       } else {
@@ -191,7 +191,7 @@ function sendSlackPlayingNotification(video) {
 
 function sendSlackAddedPlaylistNotification(size, user) {
   return slack.send({
-    text: video.user + ' added ' + size + ' videos to the playlist! <' + sails.config.serverUrl + '|Listen to JukeBot>',
+    text: user + ' added ' + size + ' videos to the playlist! <' + sails.config.serverUrl + '|Listen to JukeBot>',
     'mrkdwn': true
   });
 }
