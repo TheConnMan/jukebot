@@ -87,7 +87,10 @@ function search(query, maxResults) {
 
 function nextRelated(key) {
   return relatedVideos(key)
-    .then((videos) => videos[Math.floor(Math.random() * videos.length)].id.videoId);
+    .then((videos) =>  videos[Math.floor(Math.random() * videos.length)].key)
+    .catch(err => {
+      logger.error('Unable to find related videos', err);
+    });
 }
 
 function relatedVideos(key, maxResults = 10) {
