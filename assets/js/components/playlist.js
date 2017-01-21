@@ -23,7 +23,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
     } else if (obj.verb === 'updated') {
       $video.update(obj.data);
     } else if (obj.verb === 'destroyed') {
-      $video.remove(obj.id);
+      $video.remove(parseInt(obj.id));
     }
     $rootScope.$digest();
   });
