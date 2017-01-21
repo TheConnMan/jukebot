@@ -89,7 +89,7 @@ module.exports = {
   start: function(req, res) {
     Video.find({
       createdAt: {
-        '>=': new Date(Date.now() - 24 * 3600 * 1000)
+        '>=': new Date(Date.now() - sails.config.globals.videoHistory * 60 * 1000)
       },
       isSuggestion: false
     }).exec(function(err, videos) {
@@ -103,7 +103,7 @@ module.exports = {
     Video.watch(req.socket);
     Video.find({
       createdAt: {
-        '>=': new Date(Date.now() - 24 * 3600 * 1000)
+        '>=': new Date(Date.now() - sails.config.globals.videoHistory * 60 * 1000)
       }
     }).exec(function(err, videos) {
       Video.subscribe(req.socket, videos);

@@ -19,7 +19,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   this.notifications = $storage.get('chat-notifications') === 'true' ||  !$storage.get('chat-notifications');
 
   this.getChats = function() {
-    return this.chats.filter(function(chat) { return new Date(chat.createdAt) >= new Date(Date.now() - 24 * 3600 * 1000); });
+    return this.chats.filter(function(chat) { return new Date(chat.createdAt) >= new Date(Date.now() - chatHistory * 60 * 1000); });
   };
 
   this.getUsername = function() {
