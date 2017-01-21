@@ -124,7 +124,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.$watch($video.current, function(currentVideo) {
       $rootScope.title = currentVideo ? currentVideo.title : 'JukeBot';
-      if (currentVideo && $scope.startTime() === 0 && $scope.notifications) {
+      if (currentVideo && $scope.startTime() === 0 && $rootScope.notifications) {
         $notification(currentVideo.title, {
           icon: currentVideo.thumbnail,
           delay: 4000,

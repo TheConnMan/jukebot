@@ -4,6 +4,8 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
   self.activeTab = 'up-next';
   self.relatedVideos = [];
 
+  $rootScope.notifications = self.notifications;
+
   $video.getAll();
   $video.subscribe();
 
@@ -40,6 +42,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
 
   this.toggleNotifications = function(newVal) {
     $storage.set('notifications', newVal);
+    $rootScope.notifications = newVal;
   };
 
   this.scrollToBottom = function() {
