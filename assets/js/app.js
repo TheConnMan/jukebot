@@ -124,7 +124,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.$watch($video.current, function(currentVideo) {
       $rootScope.title = currentVideo ? currentVideo.title : 'JukeBot';
-      if (currentVideo && $scope.startTime() === 0 && $scope.notifications) {
+      if (currentVideo && $scope.startTime() === 0 && $rootScope.notifications) {
         $notification(currentVideo.title, {
           icon: currentVideo.thumbnail,
           delay: 4000,
@@ -145,30 +145,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.$watch('username', function(newUsername) {
       $storage.set('username', $scope.username);
       io.socket._raw.emit('username', newUsername);
-    });
-
-    $video.getAll();
-    $video.subscribe();
-
-    io.socket.on('video', function(obj) {
-      $log.log('Received a video update');
-      $log.log(obj);
-      if (obj.verb === 'created') {
-        if ($video.current() && $scope.username !== obj.data.user && $scope.notifications) {
-          $notification('New Video Added', {
-            body: obj.data.user + ' added ' + obj.data.title,
-            icon: obj.data.thumbnail,
-            delay: 4000,
-            focusWindowOnClick: true
-          });
-        }
-        $video.push(obj.data);
-      } else if (obj.verb === 'updated') {
-        $video.update(obj.data);
-      } else if (obj.verb === 'destroyed') {
-        $video.remove(obj.id);
-      }
-      $scope.$digest();
     });
 
     io.socket.get('/api/subscribeUsers', {
