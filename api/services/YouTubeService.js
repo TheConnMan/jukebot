@@ -86,8 +86,18 @@ function search(query, maxResults) {
 }
 
 function nextRelated(key) {
-  return relatedVideos(key)
-    .then((videos) =>  videos[Math.floor(Math.random() * videos.length)].key)
+  return Promise.all([relatedVideos(key, 5), Video.find({
+      where: {
+        played: true
+      },
+      sort: 'createdAt DESC',
+      limit: 5
+    })])
+    .then(([videos, recent]) =>  {
+      var recentVideoKeys = recent.map(video => video.key);
+      var newVideoKeys = videos.map(video => video.key).filter(key => recentVideoKeys.indexOf(key) === -1);
+      return newVideoKeys.length > 0 ? newVideoKeys[Math.floor(Math.random() * newVideoKeys.length)] : videos[Math.floor(Math.random() * videos.length)].key;
+    })
     .catch(err => {
       logger.error('Unable to find related videos', err);
     });
