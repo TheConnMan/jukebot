@@ -30,10 +30,13 @@ function parseYouTubeLink(link) {
 
 function getYouTubeVideo(key, user, canSave=true) {
   return new Promise((resolve, reject) => {
-    request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, (error, response, body) => {
-      if (!error && response.statusCode == 200) {
+    Youtube.videos.list({
+      id: key,
+      part: 'snippet,contentDetails'
+    }, (error, data) => {
+      if (!error) {
         try {
-          parseYouTubeVideo(JSON.parse(body), user, canSave).then((video, err) => {
+          parseYouTubeVideo(data, user, canSave).then((video, err) => {
             if (err) {
               throw err;
             }
@@ -73,9 +76,14 @@ function parseYouTubeVideo(data, user, canSave) {
 
 function search(query, maxResults) {
   return new Promise((resolve, reject) => {
-    request(`https://www.googleapis.com/youtube/v3/search?q=${query}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=${maxResults || 15}&type=video,playlist`, (error, response, body) => {
-      if (!error && response.statusCode == 200) {
-        var results = JSON.parse(body).items.map(function(video) {
+    Youtube.search.list({
+      q: query,
+      part: 'snippet',
+      maxResults: maxResults || 15,
+      type: 'video,playlist'
+    }, (error, data) => {
+      if (!error) {
+        var results = data.items.map(function(video) {
           var item = {
             playlistId: video.id.playlistId,
             key: video.id.videoId,
@@ -97,7 +105,7 @@ function enrichPlaylist(playlist) {
     Youtube.playlistItems.list({
       playlistId: playlist.playlistId,
       part: 'snippet,contentDetails'
-    }, (err, data) => {
+    }, (error, data) => {
       playlist.playlistItems = data.pageInfo.totalResults;
       resolve(playlist);
     });
@@ -109,7 +117,7 @@ function enrichVideo(video) {
     Youtube.videos.list({
       id: video.key,
       part: 'snippet,contentDetails'
-    }, (err, data) => {
+    }, (error, data) => {
       video.duration = data.items.length == 1 ? moment.duration(data.items[0].contentDetails.duration).asMilliseconds() : undefined;
       resolve(video);
     });
@@ -136,14 +144,18 @@ function nextRelated(key) {
 
 function relatedVideos(key, maxResults = 10) {
   return new Promise((resolve, reject) => {
-    request(`https://www.googleapis.com/youtube/v3/search?relatedToVideoId=${key}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=${maxResults}&type=video`, (error, response, body) => {
-      if (!error && response.statusCode == 200) {
-        var items = JSON.parse(body).items;
-        if (items.length === 0) {
+    Youtube.search.list({
+      relatedToVideoId: key,
+      part: 'snippet',
+      maxResults: maxResults,
+      type: 'video'
+    }, (error, data) => {
+      if (!error) {
+        if (data.items.length === 0) {
           reject('No related video found');
         }
 
-        var itemsPromise = items.map((i) => {
+        var itemsPromise = data.items.map((i) => {
           return getYouTubeVideo(i.id.videoId, 'JukeBot', false);
         });
 
@@ -171,10 +183,14 @@ function getPlaylistVideos(playlistId, user) {
 function getPlaylistVideosRecursive(playlistId, videos, pageToken) {
   return new Promise((resolve, reject) => {
     if (pageToken === '' || pageToken) {
-      request(`https://www.googleapis.com/youtube/v3/playlistItems?maxResults=50&part=snippet&key=${process.env.GOOGLE_API_KEY}&playlistId=${playlistId}&pageToken=${pageToken}`, (error, response, body) => {
-        if (!error && response.statusCode == 200) {
-          let playlist = JSON.parse(body);
-          getPlaylistVideosRecursive(playlistId, videos.concat(playlist.items), playlist.nextPageToken).then(function(videos) {
+      Youtube.playlistItems.list({
+        maxResults: 50,
+        part: 'snippet',
+        playlistId: playlistId,
+        pageToken: pageToken
+      }, (error, data) => {
+        if (!error) {
+          getPlaylistVideosRecursive(playlistId, videos.concat(data.items), data.nextPageToken).then(function(videos) {
             resolve(videos);
           });
         } else {
