@@ -2,7 +2,13 @@ const Promise = require('promise');
 const request = require('request');
 const moment = require('moment');
 const log4js = require('log4js');
+const Youtube = require("youtube-api");
 const logger = log4js.getLogger();
+
+Youtube.authenticate({
+  type: 'key',
+  key: process.env.GOOGLE_API_KEY
+});
 
 module.exports = {
   parseYouTubeLink,
