@@ -102,7 +102,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.skip = function() {
-      return $video.skip();
+      return $video.skip($scope.username);
     };
 
     $scope.findVideoById = function(id) {
