@@ -20,6 +20,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
         onResponse(videos) {
           return {
             results: $.map(videos, (v) => {
+              v.title = v.title + ' (' + (v.playlistId ? v.playlistItems + ' videos' : moment.duration(v.duration).format('H:mm:ss')) + ')';
               v.image = v.thumbnail;
               return v;
             })
