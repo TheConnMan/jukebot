@@ -1,5 +1,5 @@
 <div class="ui top attached tabular menu">
-  <a
+  <div style="cursor: pointer;"
     ng-click="$ctrl.setTab('up-next')"
     ng-class="($ctrl.activeTab==='up-next') ? 'active item' : 'item'"
   >
@@ -13,13 +13,13 @@
       >
       <label></label>
     </div>
-  </a>
-  <a
+  </div>
+  <div style="cursor: pointer;"
     ng-click="$ctrl.setTab('related')"
     ng-class="($ctrl.activeTab==='related') ? 'active item' : 'item'"
   >
     Related
-  </a>
+  </div>
 </div>
 
 <div id="video-list" class="ui items bottom attached active tab segment">
