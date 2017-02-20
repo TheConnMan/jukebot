@@ -14,7 +14,11 @@ function PlaylistItemController($scope, $http, $video, $storage) {
 
   this.readd = function() {
     return $video.addByKey(this.username, this.video.key)
-      .then(() => this.scrollToBottom());
+      .then(() => {
+        if (this.canScroll) {
+          this.scrollToBottom()
+        }
+      });
   };
 
   this.remove = function() {
@@ -47,6 +51,7 @@ angular
     scrollToBottom: '&',
     showAddedBy: '<',
     showExpectedPlaytime: '<',
-    isSuggestion: '<'
+    isSuggestion: '<',
+    canScroll: '<'
   }
 });

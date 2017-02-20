@@ -52,8 +52,19 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
     }, 1000);
   };
 
+  this.scrollToCurrentlyPlaying = function() {
+    let $list = $('#video-list');
+    let $playing = $list.find('.yellow').closest('playlistitem');
+
+    $list.animate({
+      scrollTop: $playing.prop('scrollHeight')
+    }, 1000);
+  }
+
   this.setTab = function(tab) {
     this.activeTab = tab;
+
+    window.setTimeout(() => this.scrollToCurrentlyPlaying(), 250);
   };
 }
 
