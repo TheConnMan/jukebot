@@ -139,6 +139,14 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
             start: $scope.startTime()
           }
         });
+
+        let $playing = $('#video-list .yellow').closest('playlistitem');
+
+        if ($playing.length) {
+          $playing[0].scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
       }, 0);
     }, true);
 
