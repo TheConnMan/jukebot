@@ -47,6 +47,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
 
   this.scrollToBottom = function() {
     let $list = $('#video-list');
+
     $list.animate({
      scrollTop: $list.prop('scrollHeight')
     }, 1000);
@@ -56,9 +57,11 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
     let $list = $('#video-list');
     let $playing = $list.find('.yellow').closest('playlistitem');
 
-    $list.animate({
-      scrollTop: $playing.prop('scrollHeight')
-    }, 1000);
+    if ($playing.length) {
+      $playing[0].scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
   }
 
   this.setTab = function(tab) {
