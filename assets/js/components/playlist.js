@@ -47,13 +47,27 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
 
   this.scrollToBottom = function() {
     let $list = $('#video-list');
+
     $list.animate({
      scrollTop: $list.prop('scrollHeight')
     }, 1000);
   };
 
+  this.scrollToCurrentlyPlaying = function() {
+    let $list = $('#video-list');
+    let $playing = $list.find('.yellow').closest('playlistitem');
+
+    if ($playing.length) {
+      $playing[0].scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+  }
+
   this.setTab = function(tab) {
     this.activeTab = tab;
+
+    window.setTimeout(() => this.scrollToCurrentlyPlaying(), 250);
   };
 }
 
