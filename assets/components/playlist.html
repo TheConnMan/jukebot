@@ -1,5 +1,5 @@
 <div class="ui top attached tabular menu">
-  <div
+  <div style="cursor: pointer;"
     ng-click="$ctrl.setTab('up-next')"
     ng-class="($ctrl.activeTab==='up-next') ? 'active item' : 'item'"
   >
@@ -14,7 +14,7 @@
       <label></label>
     </div>
   </div>
-  <div
+  <div style="cursor: pointer;"
     ng-click="$ctrl.setTab('related')"
     ng-class="($ctrl.activeTab==='related') ? 'active item' : 'item'"
   >
@@ -31,6 +31,7 @@
     show-expected-playtime=true
     show-added-by=true
     is-suggestion=false
+    can-scroll=true
     ng-if="$ctrl.activeTab==='up-next'"
     ng-repeat="video in $ctrl.getVideos() | orderBy: createdAt track by video.id">
   </playlistitem>
@@ -42,6 +43,7 @@
     show-expected-playtime=false
     show-added-by=false
     is-suggestion=true
+    can-scroll=false
     scroll-to-bottom="$ctrl.scrollToBottom()"
     ng-if="$ctrl.activeTab==='related'"
     ng-repeat="video in $ctrl.relatedVideos | orderBy: createdAt track by video.key">

@@ -20,6 +20,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
         onResponse(videos) {
           return {
             results: $.map(videos, (v) => {
+              v.title = v.title + ' (' + (v.playlistId ? v.playlistItems + ' videos' : moment.duration(v.duration).format('H:mm:ss')) + ')';
               v.image = v.thumbnail;
               return v;
             })
@@ -102,7 +103,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.skip = function() {
-      return $video.skip();
+      return $video.skip($scope.username);
     };
 
     $scope.findVideoById = function(id) {
@@ -139,6 +140,14 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
             start: $scope.startTime()
           }
         });
+
+        let $playing = $('#video-list .yellow').closest('playlistitem');
+
+        if ($playing.length) {
+          $playing[0].scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
       }, 0);
     }, true);
 

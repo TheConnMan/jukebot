@@ -8,13 +8,16 @@ function PlaylistItemController($scope, $http, $video, $storage) {
   };
 
   this.skip = function() {
-    return $video.skip(this.username)
-      .then(() => this.scrollToBottom());
+    return $video.skip(this.username);
   };
 
   this.readd = function() {
     return $video.addByKey(this.username, this.video.key)
-      .then(() => this.scrollToBottom());
+      .then(() => {
+        if (this.canScroll) {
+          this.scrollToBottom();
+        }
+      });
   };
 
   this.remove = function() {
@@ -47,6 +50,7 @@ angular
     scrollToBottom: '&',
     showAddedBy: '<',
     showExpectedPlaytime: '<',
-    isSuggestion: '<'
+    isSuggestion: '<',
+    canScroll: '<'
   }
 });

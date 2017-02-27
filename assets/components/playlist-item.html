@@ -5,8 +5,11 @@
   <a class="header" ng-href="https://www.youtube.com/watch?v={{$ctrl.video.key}}" target="_blank">
     {{$ctrl.video.title}}
   </a>
-  <div class="meta" ng-if="$ctrl.showAddedBy">
-    Added by {{$ctrl.video.user}} ({{$ctrl.formatDuration()}})
+  <div class="meta">
+    <div ng-if="$ctrl.showAddedBy">
+      Added by {{$ctrl.video.user}}
+    </div>
+    ({{$ctrl.formatDuration()}})
   </div>
   <div class="meta" ng-if="!$ctrl.video.played && !$ctrl.video.playing && !$ctrl.isSuggestion">
     <i class="calendar icon"></i> {{$ctrl.expectedPlayTime()}}

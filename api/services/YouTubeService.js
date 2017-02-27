@@ -2,7 +2,13 @@ const Promise = require('promise');
 const request = require('request');
 const moment = require('moment');
 const log4js = require('log4js');
+const Youtube = require("youtube-api");
 const logger = log4js.getLogger();
+
+Youtube.authenticate({
+  type: 'key',
+  key: process.env.GOOGLE_API_KEY
+});
 
 module.exports = {
   parseYouTubeLink,
@@ -70,17 +76,42 @@ function search(query, maxResults) {
     request(`https://www.googleapis.com/youtube/v3/search?q=${query}&part=snippet&key=${process.env.GOOGLE_API_KEY}&maxResults=${maxResults || 15}&type=video,playlist`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         var results = JSON.parse(body).items.map(function(video) {
-          return {
+          var item = {
             playlistId: video.id.playlistId,
             key: video.id.videoId,
             thumbnail: video.snippet.thumbnails ? video.snippet.thumbnails.default.url : null,
-            title: video.snippet.title + (video.id.playlistId && video.snippet.title.toLowerCase().indexOf('playlist') == -1 ? ' (Playlist)' : '')
+            title: video.snippet.title
           };
+          return video.id.playlistId ? enrichPlaylist(item) : enrichVideo(item);
         });
-        resolve(results);
+        Promise.all(results).then(resolve);
       } else {
         reject(error);
       }
+    });
+  });
+}
+
+function enrichPlaylist(playlist) {
+  return new Promise((resolve, reject) => {
+    Youtube.playlistItems.list({
+      playlistId: playlist.playlistId,
+      part: 'snippet,contentDetails'
+    }, (err, data) => {
+      playlist.playlistItems = data.pageInfo.totalResults;
+      resolve(playlist);
+    });
+  });
+}
+
+function enrichVideo(video) {
+  return new Promise((resolve, reject) => {
+    Youtube.videos.list({
+      id: video.key,
+      part: 'snippet,contentDetails'
+    }, (err, data) => {
+      video.duration = data.items.length == 1 ? moment.duration(data.items[0].contentDetails.duration).asMilliseconds() : undefined;
+      resolve(video);
     });
   });
 }
