@@ -12,7 +12,13 @@
     ({{$ctrl.formatDuration()}})
   </div>
   <div class="meta" ng-if="!$ctrl.video.played && !$ctrl.video.playing && !$ctrl.isSuggestion">
-    <i class="calendar icon"></i> {{$ctrl.expectedPlayTime()}}
+    <i class="green calendar icon"></i> {{$ctrl.expectedPlayTime()}}
+  </div>
+  <div class="meta" ng-if="$ctrl.video.playing && !$ctrl.isSuggestion">
+    <i class="calendar icon"></i> {{$ctrl.startTime()}}
+  </div>
+  <div class="meta" ng-if="$ctrl.video.played && !$ctrl.video.playing && !$ctrl.isSuggestion">
+    <i class="red calendar icon"></i> {{$ctrl.startTime()}}
   </div>
   <div class="extra">
     <heart video="$ctrl.video" classes="'large'"></heart>
