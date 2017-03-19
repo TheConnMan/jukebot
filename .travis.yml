@@ -12,12 +12,14 @@ script:
 
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    VERSION=`node -e "console.log(require('./package.json').version);"`;
     if [ "$TRAVIS_BRANCH" == "master" ]; then
-      VERSION=`node -e "console.log(require('./package.json').version);"`;
       docker tag theconnman/jukebot theconnman/jukebot:$VERSION;
       docker push theconnman/jukebot:latest;
       docker push theconnman/jukebot:$VERSION;
     elif [ "$TRAVIS_BRANCH" == "dev" ]; then
+      sed -i "s/$VERSION/$VERSION-dev/g" package.json;
+      docker build -t theconnman/jukebot .;
       docker tag theconnman/jukebot theconnman/jukebot:latest-dev;
       docker push theconnman/jukebot:latest-dev;
     fi
