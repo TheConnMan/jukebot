@@ -1,6 +1,6 @@
 var Promise = require('promise');
 var log4js = require('log4js');
-var logger = log4js.getLogger('api/services/SyncService');
+var logger = log4js.getLogger('api/services/sync');
 
 var SlackWebhook = require('slack-webhook');
 var slack = sails.config.globals.slackWebhook ? new SlackWebhook(sails.config.globals.slackWebhook, {
@@ -124,7 +124,7 @@ function endCurrentVideo(username) {
       }
       current.playing = false;
       current.save(function() {
-        logger.info('Publishing end song ' + current.key);
+        logger.debug('Publishing end song ' + current.key);
         Video.publishUpdate(current.id, current);
         findNextVideo(current);
       });
@@ -152,7 +152,6 @@ function startVideo(video) {
   video.playing = true;
   video.played = true;
   video.startTime = new Date();
-  logger.info('Setting timeout');
   videoTimeout = setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
       Video.publishUpdate(video.id, video);
