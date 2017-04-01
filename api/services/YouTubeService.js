@@ -3,7 +3,7 @@ const request = require('request');
 const moment = require('moment');
 const log4js = require('log4js');
 const Youtube = require("youtube-api");
-const logger = log4js.getLogger();
+const logger = log4js.getLogger('api/services/youtube');
 
 Youtube.authenticate({
   type: 'key',
@@ -40,7 +40,7 @@ function getYouTubeVideo(key, user, canSave=true) {
             resolve(video);
           });
         } catch (e) {
-          logger.debug(`Video ${key}: ${e}`);
+          logger.error(`Error parsing video ${key}: ${e}`);
           resolve(null);
         }
       } else {

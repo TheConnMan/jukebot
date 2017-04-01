@@ -115,6 +115,10 @@ angular
     return expectedTime.format('LT');
   }
 
+  function startTime(video) {
+    return moment(video.startTime).format('LT');
+  }
+
   return {
     push,
     add,
@@ -134,6 +138,7 @@ angular
     recent,
     videoInUpcoming,
     formatDuration,
-    expectedPlayTime
+    expectedPlayTime,
+    startTime
   };
 }]);

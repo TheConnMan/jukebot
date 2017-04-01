@@ -1,6 +1,6 @@
 var Promise = require('promise');
 var log4js = require('log4js');
-var logger = log4js.getLogger('api/services/SyncService');
+var logger = log4js.getLogger('api/services/sync');
 
 var SlackWebhook = require('slack-webhook');
 var slack = sails.config.globals.slackWebhook ? new SlackWebhook(sails.config.globals.slackWebhook, {
@@ -118,15 +118,19 @@ function endCurrentVideo(username) {
   Video.findOne({
     playing: true
   }).exec(function(err, current) {
-    if (username) {
-      ChatService.addMachineMessage(username + ' skipped ' + current.title, username, 'videoSkipped');
-    }
-    current.playing = false;
-    current.save(function() {
-      logger.info('Publishing end song ' + current.key);
-      Video.publishUpdate(current.id, current);
+    if (current) {
+      if (username) {
+        ChatService.addMachineMessage(username + ' skipped ' + current.title, username, 'videoSkipped');
+      }
+      current.playing = false;
+      current.save(function() {
+        logger.debug('Publishing end song ' + current.key);
+        Video.publishUpdate(current.id, current);
+        findNextVideo(current);
+      });
+    } else {
       findNextVideo(current);
-    });
+    }
   });
 }
 
@@ -148,7 +152,6 @@ function startVideo(video) {
   video.playing = true;
   video.played = true;
   video.startTime = new Date();
-  logger.info('Setting timeout');
   videoTimeout = setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
       Video.publishUpdate(video.id, video);

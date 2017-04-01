@@ -7,6 +7,10 @@ function PlaylistItemController($scope, $http, $video, $storage) {
     return $video.expectedPlayTime(this.video);
   };
 
+  this.startTime = function() {
+    return $video.startTime(this.video);
+  };
+
   this.skip = function() {
     return $video.skip(this.username);
   };

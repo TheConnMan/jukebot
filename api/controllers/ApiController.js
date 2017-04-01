@@ -1,3 +1,6 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('api/controllers/api');
+
 var users = {};
 var recentlyLeft = [];
 
@@ -12,6 +15,7 @@ module.exports = {
 
     var index = recentlyLeft.indexOf(username);
     if (index === -1) {
+      logger.debug(users[id] + ' entered the room');
       ChatService.addMachineMessage(users[id] + ' entered the room', username, 'userEnter');
     } else {
       recentlyLeft.splice(index, 1);
@@ -141,6 +145,7 @@ function userDisconnected(username) {
   var index = recentlyLeft.indexOf(username);
   if (index !== -1) {
     recentlyLeft.splice(index, 1);
+    logger.debug(username + ' left the room');
     ChatService.addMachineMessage(username + ' left the room', username, 'userLeft');
     emitListeners();
     if (Object.keys(users).length === 0) {
