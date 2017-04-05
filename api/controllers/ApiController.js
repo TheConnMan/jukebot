@@ -54,7 +54,7 @@ module.exports = {
   addPlaylist: function(req, res) {
     var params = req.allParams();
     try {
-      YouTubeService.getPlaylistVideos(params.playlistId, params.user || 'Anonymous').then(SyncService.addPlaylist).then(SyncService.sendPlaylistAddMessages).then(function(video) {
+      YouTubeService.getPlaylistVideos(params.playlistId, params.user || 'Anonymous').then(SyncService.filterVideos).then(SyncService.sendPlaylistAddMessages).then(function(video) {
         res.send(200);
       }).catch(function(err) {
         res.send(400, err);
