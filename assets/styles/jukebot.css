@@ -34,10 +34,6 @@
   padding: .5em;
 }
 
-.items > .item:hover {
-  background-color: #F0F0F0;
-}
-
 .ui.dividing.header .ui.toggle.checkbox {
   top: 7px;
   float: right;
@@ -51,10 +47,6 @@
   width: 25%;
   padding-bottom: 14.0625%;
   margin-left: 37.5%;
-}
-
-.color-black {
-  color: rgba(0, 0, 0, .87);
 }
 
 .d-f {

@@ -29,7 +29,7 @@
           <span ng-bind-html="chat.message | linky: '_blank'"></span>
         </div>
       </div>
-      <div class="content color-black chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername($index)">
+      <div class="content chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername($index)">
         <heart video="$ctrl.getVideoByKey(chat.data)" ng-if="chat.type === 'favorite'"></heart>
         <i class="plus icon" ng-if="chat.type === 'addVideo'"></i>
         <i class="play icon" ng-if="chat.type === 'videoPlaying'"></i>
