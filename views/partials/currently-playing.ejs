@@ -48,5 +48,18 @@
     <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
       {{user}}
     </span>
+    <div style="float: right;" class="ui dropdown">
+      <input type="hidden" value="{{theme}}">
+      <div class="default text">Theme</div>
+      <div class="menu">
+        <div class="item" ng-click="updateTheme('')">Default</div>
+        <div class="item" ng-click="updateTheme('paper')">Paper</div>
+        <div class="item" ng-click="updateTheme('lumen')">Lumen</div>
+        <div class="item" ng-click="updateTheme('superhero')">Superhero</div>
+        <div class="item" ng-click="updateTheme('united')">United</div>
+        <div class="item" ng-click="updateTheme('yeti')">Yeti</div>
+      </div>
+      <i class="dropdown icon"></i>
+    </div>
   </div>
 </div>
