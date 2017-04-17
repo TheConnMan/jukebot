@@ -20,6 +20,10 @@
   top: 6px;
 }
 
+input {
+  height: 34px!important;
+}
+
 .highlight {
   background-color: #fff3b8;
 }

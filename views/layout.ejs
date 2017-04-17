@@ -27,10 +27,8 @@
       var chatHistory = <%= sails.config.globals.chatHistory %>;
     </script>
 
-    <!--STYLES-->
     <link rel="stylesheet" href="/styles/importer.css">
     <link rel="stylesheet" href="/styles/jukebot.css">
-    <!--STYLES END-->
   </head>
 
   <body ng-controller="controller">
@@ -57,6 +55,9 @@
     <script src="/js/components/playlist.js"></script>
     <script src="/js/components/playlist-item.js"></script>
     <script src="/js/components/heart.js"></script>
+
+    <link ng-if="!theme" rel="stylesheet" ng-href="/styles/semantic.min.css">
+    <link ng-if="theme" rel="stylesheet" ng-href="/styles/semantic.{{theme}}.min.css">
 
   </body>
 </html>

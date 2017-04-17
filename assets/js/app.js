@@ -30,6 +30,13 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       }
     });
 
+    $rootScope.theme = $storage.get('theme');
+
+    $scope.updateTheme = function(theme) {
+      $rootScope.theme = theme;
+      $storage.set('theme', theme);
+    };
+
     $rootScope.title = 'JukeBot';
     $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
@@ -140,6 +147,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
             start: $scope.startTime()
           }
         });
+        $('.ui.dropdown').dropdown();
 
         let $playing = $('#video-list .yellow').closest('playlistitem');
 
