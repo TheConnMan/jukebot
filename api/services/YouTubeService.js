@@ -1,4 +1,4 @@
-const Promise = require('bluebird');
+const Promise = require('promise');
 const request = require('request');
 const moment = require('moment');
 const log4js = require('log4js');
@@ -64,23 +64,11 @@ function parseYouTubeVideo(data, user, canSave) {
     title: item.snippet.title
   };
   if (canSave) {
-    return Video.findOne({
-      playing: true
-    }).then(current => {
-      if (!current) {
-        model.startTime = new Date();
-        model.playing = true;
-        model.played = true;
-        videoTimeout = setTimeout(SyncService.endCurrentVideo, model.duration);
-        SyncService.sendRelatedVideos(model.key);
-      }
-      return Video.create(model);
-    });
-  } else {
-    return new Promise ((resolve, reject) => {
-      resolve(new Video._model(model));
-    });
+    return Video.create(model);
   }
+  return new Promise ((resolve, reject) => {
+    resolve(new Video._model(model));
+  });
 }
 
 function search(query, maxResults) {
@@ -172,13 +160,9 @@ function relatedVideos(key, maxResults = 10) {
 
 function getPlaylistVideos(playlistId, user) {
   return getPlaylistVideosRecursive(playlistId, [], '').then(videos => {
-    return Promise.mapSeries(videos, video => {
-      return getYouTubeVideo(video.snippet.resourceId.videoId, user).then(video => {
-        logger.info('Adding video ' + video.key);
-        Video.publishCreate(video);
-        return video;
-      });
-    });
+    return Promise.all(videos.map(function(video) {
+      return getYouTubeVideo(video.snippet.resourceId.videoId, user);
+    }));
   });
 }
 

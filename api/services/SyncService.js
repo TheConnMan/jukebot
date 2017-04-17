@@ -14,7 +14,7 @@ var autoplay = false;
 
 module.exports = {
   addVideo,
-  filterVideos,
+  addPlaylist,
   sendAddMessages,
   sendRelatedVideos,
   sendPlaylistAddMessages,
@@ -48,11 +48,24 @@ function addVideo(video) {
   });
 }
 
-function filterVideos(videos) {
-  return new Promise(resolve => {
-    resolve(videos.filter(video => {
-      return !!video;
-    }));
+function addPlaylist(videos) {
+  let nonNullVideos = videos.filter(video => {
+    return !!video;
+  });
+  return nonNullVideos.reduce((p, video) => {
+    return p.then(resolve => {
+      return addVideo(video);
+    }).catch(err => {
+      logger.error('Error adding video with key ' + video.key, err);
+    });
+  }, new Promise(resolve => {
+    resolve();
+  })).then(resolve => {
+    return new Promise(resolve => {
+      resolve(nonNullVideos);
+    });
+  }).catch(err => {
+    logger.error('Error adding all playlist videos', err);
   });
 }
 
@@ -80,6 +93,7 @@ function sendAddMessages(video) {
 
 function sendPlaylistAddMessages(videos) {
   return new Promise((resolve, reject) => {
+    Video.publishCreate(videos);
     if (videos.length !== 0) {
       ChatService.addVideoMessage(videos.length + ' videos were added to the playlist by ' + videos[0].user, 'addVideo');
       if (slack && sails.config.globals.slackSongAdded) {
