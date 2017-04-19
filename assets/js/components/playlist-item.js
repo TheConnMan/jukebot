@@ -16,17 +16,11 @@ function PlaylistItemController($scope, $http, $video, $storage) {
   };
 
   this.readd = function() {
-    return $video.addByKey(this.username, this.video.key)
-      .then(() => {
-        if (this.canScroll) {
-          this.scrollToBottom();
-        }
-      });
+    return $video.addByKey(this.username, this.video.key);
   };
 
   this.remove = function() {
-    return $video.removePermanently(this.video.id)
-      .then(() => this.scrollToBottom());
+    return $video.removePermanently(this.video.id);
   };
 
   this.likeVideo = function() {
@@ -51,7 +45,6 @@ angular
   bindings: {
     video: '<',
     username: '<',
-    scrollToBottom: '&',
     showAddedBy: '<',
     showExpectedPlaytime: '<',
     isSuggestion: '<',
