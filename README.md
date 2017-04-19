@@ -86,5 +86,6 @@ After that run `docker-compose up -d` and you should be able to access the UI at
 - **GOOGLE_ANALYTICS_ID** (Optional) - [Google Analytics](https://analytics.google.com/) Tracking ID for site analytics
 - **VIDEO_HISTORY** (default: 24 * 60) - Number of minutes played videos will stay in the video playlist
 - **CHAT_HISTORY** (default: 24 * 60) - Number of minutes chats will stay in the chat bar
+- **AUTOPLAY_DISABLE_STREAK** (default: 10) - Disable autoplay if this many songs are autoplayed in a row, useful in case someone is AFK
 - **FLUENTD_HOST** (Optional) Fluent host for logging
 - **FLUENTD_TAGS** (Optional) Add FluentD context tags (format is tag:value,tag2:value2)

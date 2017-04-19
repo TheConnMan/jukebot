@@ -42,6 +42,7 @@ module.exports = {
     try {
       var key = YouTubeService.parseYouTubeLink(params.link);
       YouTubeService.getYouTubeVideo(key, params.user || 'Anonymous').then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
+        SyncService.resetAutoplayStreak();
         res.send(200);
       }).catch(function(err) {
         res.send(400, err);
@@ -55,6 +56,7 @@ module.exports = {
     var params = req.allParams();
     try {
       YouTubeService.getPlaylistVideos(params.playlistId, params.user || 'Anonymous').then(SyncService.addPlaylist).then(SyncService.sendPlaylistAddMessages).then(function(video) {
+        SyncService.resetAutoplayStreak();
         res.send(200);
       }).catch(function(err) {
         res.send(400, err);
@@ -80,9 +82,6 @@ module.exports = {
 
     req.socket.on('autoplay', function(autoplay) {
       SyncService.setAutoplay(autoplay);
-      sails.io.sockets.in('autoplay').emit('autoplay', {
-        autoplay: autoplay
-      });
     });
 
     sails.io.sockets.in(id).emit('autoplay', {

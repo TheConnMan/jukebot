@@ -6,5 +6,6 @@ module.exports.globals = {
   slackSongLinks: process.env.SLACK_SONG_LINKS === 'true',
   googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
   chatHistory: process.env.CHAT_HISTORY ? parseInt(process.env.CHAT_HISTORY) : 24 * 60,
-  videoHistory: process.env.VIDEO_HISTORY ? parseInt(process.env.VIDEO_HISTORY) : 24 * 60
+  videoHistory: process.env.VIDEO_HISTORY ? parseInt(process.env.VIDEO_HISTORY) : 24 * 60,
+  autoplayDisableCount: process.env.AUTOPLAY_DISABLE_STREAK ? parseInt(process.env.AUTOPLAY_DISABLE_STREAK) : 10
 };
