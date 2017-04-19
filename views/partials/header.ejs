@@ -17,11 +17,26 @@
     </div>
     <div class="results" style="width: 100%;"></div>
   </div>
-  <div class="right menu" style="opacity: .75;">
+  <div class="right menu">
+    <div class="item">
+      <div class="ui dropdown">
+        <input type="hidden" value="{{theme}}">
+        <div class="default text">Theme</div>
+        <div class="menu">
+          <div class="item" ng-click="updateTheme('')">Default</div>
+          <div class="item" ng-click="updateTheme('paper')">Paper</div>
+          <div class="item" ng-click="updateTheme('lumen')">Lumen</div>
+          <div class="item" ng-click="updateTheme('superhero')">Superhero</div>
+          <div class="item" ng-click="updateTheme('united')">United</div>
+          <div class="item" ng-click="updateTheme('yeti')">Yeti</div>
+        </div>
+        <i class="dropdown icon"></i>
+      </div>
+    </div>
     <a class="icon item" onclick="$('.favorites').sidebar('toggle');" title="Favorites">
       <i class="large red heart icon"></i>
     </a>
-    <a class="ui item">
+    <a class="ui item" style="opacity: .75;">
       JukeBot v<%= sails.config.globals.version %>
     </a>
     <a class="icon item" href="https://github.com/TheConnMan/jukebot/issues" target="_blank" title="Open an Issue">
