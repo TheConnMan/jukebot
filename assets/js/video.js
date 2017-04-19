@@ -79,8 +79,13 @@ angular
     }
   }
 
-  function removePermanently(id) {
-    return $http.delete(`/api/remove/${id}`);
+  function removePermanently(user, id) {
+    return $http.delete(`/api/remove`, {
+      params: {
+        user,
+        id
+      }
+    });
   }
 
   function upcoming() {
