@@ -6,7 +6,11 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
 
   $rootScope.notifications = self.notifications;
 
-  $video.getAll();
+  $video.getAll().then(function() {
+    setTimeout(function() {
+      self.scrollToCurrentlyPlaying();
+    }, 250);
+  });
   $video.subscribe();
 
   io.socket.on('video', function(obj) {
@@ -54,7 +58,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
         behavior: 'smooth'
       });
     }
-  }
+  };
 
   this.setTab = function(tab) {
     this.activeTab = tab;
