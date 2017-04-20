@@ -20,7 +20,7 @@ function PlaylistItemController($scope, $http, $video, $storage) {
   };
 
   this.remove = function() {
-    return $video.removePermanently(this.video.id);
+    return $video.removePermanently(this.username, this.video.id);
   };
 
   this.likeVideo = function() {

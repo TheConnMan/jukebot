@@ -66,11 +66,16 @@ module.exports = {
 
   remove: function(req, res) {
     var params = req.allParams();
-    Video.destroy({
+    Video.findOne({
       id: params.id
-    }).exec(function(err) {
-      Video.publishDestroy(params.id);
-      res.send(204);
+    }).then(video => {
+      Video.destroy({
+        id: params.id
+      }).exec(function(err) {
+        ChatService.addVideoMessage(video.title + ' was removed from the playlist by ' + params.user, 'removeVideo');
+        Video.publishDestroy(params.id);
+        res.send(204);
+      });
     });
   },
 
