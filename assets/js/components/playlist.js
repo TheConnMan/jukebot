@@ -45,14 +45,6 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
     $rootScope.notifications = newVal;
   };
 
-  this.scrollToBottom = function() {
-    let $list = $('#video-list');
-
-    $list.animate({
-     scrollTop: $list.prop('scrollHeight')
-    }, 1000);
-  };
-
   this.scrollToCurrentlyPlaying = function() {
     let $list = $('#video-list');
     let $playing = $list.find('.yellow').closest('playlistitem');
