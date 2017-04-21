@@ -11,6 +11,7 @@ var slack = sails.config.globals.slackWebhook ? new SlackWebhook(sails.config.gl
 
 var videoTimeout;
 var autoplay = false;
+var autoplayStreak = 0;
 
 module.exports = {
   addVideo,
@@ -23,7 +24,8 @@ module.exports = {
   setAutoplay,
   getAutoplay,
   startVideo,
-  restartVideo
+  restartVideo,
+  resetAutoplayStreak
 };
 
 function addVideo(video) {
@@ -140,7 +142,11 @@ function findNextVideo(lastVideo) {
   }).sort('createdAt ASC').exec(function(err, upcoming) {
     if (upcoming.length > 0) {
       startVideo(upcoming[0]);
+    } else if (autoplay && autoplayStreak === sails.config.globals.autoplayDisableCount) {
+      logger.warn('Disabling autoplay because ' + autoplayStreak + ' songs have been autoplayed');
+      setAutoplay(false);
     } else if (autoplay) {
+      autoplayStreak++;
       YouTubeService.nextRelated(lastVideo.key).then(function(nextKey) {
         return YouTubeService.getYouTubeVideo(nextKey, 'Autoplay');
       }).then(addVideo).then(sendAddMessages);
@@ -209,4 +215,11 @@ function getAutoplay() {
 
 function setAutoplay(val) {
   autoplay = val;
+  sails.io.sockets.in('autoplay').emit('autoplay', {
+    autoplay: autoplay
+  });
+}
+
+function resetAutoplayStreak() {
+  autoplayStreak = 0;
 }

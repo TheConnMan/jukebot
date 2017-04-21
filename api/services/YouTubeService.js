@@ -159,12 +159,10 @@ function relatedVideos(key, maxResults = 10) {
 }
 
 function getPlaylistVideos(playlistId, user) {
-  return new Promise((resolve, reject) => {
-    getPlaylistVideosRecursive(playlistId, [], '').then(videos => {
-      Promise.all(videos.map(function(video) {
-        return getYouTubeVideo(video.snippet.resourceId.videoId, user);
-      })).then(resolve);
-    });
+  return getPlaylistVideosRecursive(playlistId, [], '').then(videos => {
+    return Promise.all(videos.map(function(video) {
+      return getYouTubeVideo(video.snippet.resourceId.videoId, user);
+    }));
   });
 }
 

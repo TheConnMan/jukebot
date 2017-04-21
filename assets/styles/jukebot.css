@@ -20,6 +20,10 @@
   top: 6px;
 }
 
+input {
+  height: 34px!important;
+}
+
 .highlight {
   background-color: #fff3b8;
 }
@@ -32,10 +36,6 @@
 .ui.items > .item {
   margin: 0;
   padding: .5em;
-}
-
-.items > .item:hover {
-  background-color: #F0F0F0;
 }
 
 .ui.dividing.header .ui.toggle.checkbox {
@@ -51,10 +51,6 @@
   width: 25%;
   padding-bottom: 14.0625%;
   margin-left: 37.5%;
-}
-
-.color-black {
-  color: rgba(0, 0, 0, .87);
 }
 
 .d-f {

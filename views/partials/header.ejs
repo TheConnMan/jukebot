@@ -1,27 +1,41 @@
-<div class="ui top attached menu">
+<div class="ui top attached menu" style="height: 55px;">
   <div class="left menu">
     <div class="item">
       <img src="/images/jukebot.png" />
     </div>
     <div class="item">
       <div class="ui left icon input">
-        <input type="text" placeholder="Username..." ng-model="username" enter-press="addVideo()">
+        <input type="text" maxlength="24" placeholder="Username..." ng-model="username" enter-press="addVideo()">
         <i class="user icon"></i>
       </div>
     </div>
   </div>
   <div class="ui search item no-border" style="max-width: 450px; flex-grow: 1;">
-    <div class="ui transparent icon input" style="background-color: #f5f5f5; padding: 8px;">
+    <div class="ui icon input" style="padding: 8px;">
       <input class="prompt" type="text" placeholder="Search YouTube..." style="border-radius: 0;">
       <i class="search link icon" style="right: 8px;"></i>
     </div>
-    <div class="results"></div>
+    <div class="results" style="width: 100%;"></div>
   </div>
-  <div class="right menu" style="opacity: .75;">
+  <div class="right menu">
+    <div class="item">
+      <div class="ui dropdown">
+        <input type="hidden" value="{{theme}}">
+        <div class="default text">Theme</div>
+        <div class="menu">
+          <div class="item" ng-click="updateTheme('')">Default</div>
+          <div class="item" ng-click="updateTheme('lumen')">Lumen</div>
+          <div class="item" ng-click="updateTheme('superhero')">Superhero</div>
+          <div class="item" ng-click="updateTheme('united')">United</div>
+          <div class="item" ng-click="updateTheme('yeti')">Yeti</div>
+        </div>
+        <i class="dropdown icon"></i>
+      </div>
+    </div>
     <a class="icon item" onclick="$('.favorites').sidebar('toggle');" title="Favorites">
       <i class="large red heart icon"></i>
     </a>
-    <a class="ui item">
+    <a class="ui item" style="opacity: .75;">
       JukeBot v<%= sails.config.globals.version %>
     </a>
     <a class="icon item" href="https://github.com/TheConnMan/jukebot/issues" target="_blank" title="Open an Issue">

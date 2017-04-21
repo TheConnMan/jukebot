@@ -27,7 +27,6 @@
     username="$ctrl.username"
     class="item"
     video="video"
-    scroll-to-bottom="$ctrl.scrollToBottom()"
     show-expected-playtime=true
     show-added-by=true
     is-suggestion=false
@@ -44,7 +43,6 @@
     show-added-by=false
     is-suggestion=true
     can-scroll=false
-    scroll-to-bottom="$ctrl.scrollToBottom()"
     ng-if="$ctrl.activeTab==='related'"
     ng-repeat="video in $ctrl.relatedVideos | orderBy: createdAt track by video.key">
   </playlistitem>
