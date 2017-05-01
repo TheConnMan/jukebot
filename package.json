@@ -24,6 +24,7 @@
     "rc": "1.0.1",
     "sails": "~0.12.7",
     "sails-disk": "~0.10.9",
+    "sails-mysql": "^0.11.5",
     "slack-webhook": "^1.0.0",
     "youtube-api": "^2.0.6"
   },
