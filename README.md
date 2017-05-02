@@ -99,6 +99,12 @@ The easiest way to run a MySQL instance is to run it in Docker using the followi
 docker run -d -p 3306:3306 -e MYSQL_DATABASE=sails -e MYSQL_USER=sails -e MYSQL_PASSWORD=sails -e MYSQL_RANDOM_ROOT_PASSWORD=true --name=mysql mysql
 ```
 
+### Developing with MySQL
+
+Using MySQL automatically sets the migration strategy to `safe`, so running with MySQL requires you to run `npm migrate` with the appropriate environment variables to bring the DB schema up to speed.
+
+When developing a new migration script run `grunt db:migrate:create --name=<migration-name>` and implement the `up` and `down` steps once the migration is created.
+
 ## Environment Variables
 
 - **GOOGLE_API_KEY** - Google project API key

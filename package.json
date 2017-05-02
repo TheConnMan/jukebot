@@ -4,6 +4,8 @@
   "description": "Slack-Enabled Syncronized Music Listening",
   "keywords": [],
   "dependencies": {
+    "db-migrate": "^0.10.0-beta.20",
+    "db-migrate-mysql": "^1.1.10",
     "ejs": "2.3.4",
     "fluent-logger": "github:theconnman/fluent-logger-node",
     "grunt": "1.0.1",
@@ -23,6 +25,7 @@
     "moment": "^2.17.1",
     "rc": "1.0.1",
     "sails": "~0.12.7",
+    "sails-db-migrate": "^1.5.0",
     "sails-disk": "~0.10.9",
     "sails-mysql": "^0.11.5",
     "slack-webhook": "^1.0.0",
@@ -30,7 +33,8 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "migrate": "grunt db:migrate:up"
   },
   "main": "app.js",
   "repository": {
