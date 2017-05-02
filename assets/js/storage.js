@@ -16,23 +16,25 @@ angular
   }
 
   return {
-    get(key) {
+    get: function(key) {
       return localStorage[key] || '';
     },
 
-    set(key, value) {
+    set: function(key, value) {
       localStorage[key] = value;
     },
 
-    likeVideo(video) {
-      let likes = likedVideos;
-      let key = video.key;
+    likeVideo: function(video) {
+      var likes = likedVideos;
+      var key = video.key;
 
       if (likes) {
-        let found = likes.find((l) => l.key === key);
+        var found = likes.find(function(l) {
+          return l.key === key;
+        });
 
         if (found) {
-          let index = likes.indexOf(found);
+          var index = likes.indexOf(found);
 
           likes.splice(index, 1);
         } else {
@@ -46,17 +48,19 @@ angular
       }
     },
 
-    likesVideo(videoKey) {
-      let likes = likedVideos;
+    likesVideo: function(videoKey) {
+      var likes = likedVideos;
 
       if (likes) {
-        return !!likes.find((l) => l.key === videoKey);
+        return !!likes.find(function(l) {
+          return l.key === videoKey;
+        });
       } else {
         return false;
       }
     },
 
-    getLikedVideos() {
+    getLikedVideos: function() {
       return likedVideos;
     }
   };

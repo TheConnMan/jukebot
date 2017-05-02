@@ -1,6 +1,6 @@
 function ChatController($rootScope, $scope, $http, $notification, $storage, $video) {
-  let self = this;
-  let timer = null;
+  var self = this;
+  var timer = null;
 
   io.socket.get('/chat/subscribe', {});
 
@@ -27,14 +27,14 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   };
 
   this.showUsername = function(index) {
-    let isFirst = index === 0;
+    var isFirst = index === 0;
     if (isFirst) {
       return true;
     }
-    let recentPreviousMessage = new Date(this.chats[index].time) - new Date(this.chats[index - 1].time) <= 3 * 60 * 1000;
-    let differentUser = this.chats[index].username !== this.chats[index - 1].username;
-    let differentChatType = this.chats[index].type !== this.chats[index - 1].type;
-    let bothMachineChat = this.chats[index].type !== 'user' && this.chats[index - 1].type !== 'user';
+    var recentPreviousMessage = new Date(this.chats[index].time) - new Date(this.chats[index - 1].time) <= 3 * 60 * 1000;
+    var differentUser = this.chats[index].username !== this.chats[index - 1].username;
+    var differentChatType = this.chats[index].type !== this.chats[index - 1].type;
+    var bothMachineChat = this.chats[index].type !== 'user' && this.chats[index - 1].type !== 'user';
     return (!recentPreviousMessage || differentUser || differentChatType) && !bothMachineChat;
   };
 
@@ -70,17 +70,17 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
     return $video.findByKey(key);
   };
 
-  io.socket.on('chats', (c) => {
+  io.socket.on('chats', function(c) {
     this.chats = c;
     $scope.$digest();
     highlightChats();
     scrollChatToBottom();
   });
 
-  io.socket.on('chat', (c) => {
+  io.socket.on('chat', function(c) {
     this.chats.push(c);
     if (c.username !== this.getUsername() && this.notifications && c.type !== 'addVideo' && c.type !== 'videoSkipped' && c.type !== 'videoPlaying') {
-      let notification = $notification(c.username || 'JukeBot', {
+      var notification = $notification(c.username || 'JukeBot', {
         body: c.message,
         delay: 4000,
         icon: '/images/jukebot-72.png',
@@ -96,7 +96,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   });
 
   function highlightChats() {
-    let markOptions = {
+    var markOptions = {
       accuracy: 'exactly',
       className: 'highlight'
     };
@@ -106,7 +106,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
     $('.chat > span').mark('@channel', markOptions);
   }
 
-    io.socket.on('typers', (typers) => {
+    io.socket.on('typers', function(typers) {
       if (typers.indexOf(self.getUsername()) !== -1) {
         typers.splice(typers.indexOf(self.getUsername()), 1);
       }
@@ -130,7 +130,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   }
 
   function scrollChatToBottom() {
-    let $list = $('#chat-list');
+    var $list = $('#chat-list');
     $list.animate({
      scrollTop: $list.prop('scrollHeight')
     }, 1000);
