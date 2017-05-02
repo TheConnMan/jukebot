@@ -20,7 +20,7 @@ exports.up = function(db, callback) {
   }).then(callback);
 };
 
-exports.down = function(db) {
+exports.down = function(db, callback) {
   return db.dropTable('chat', null, db.dropTable('video', null, callback));
 };
 
