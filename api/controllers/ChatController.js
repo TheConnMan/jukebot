@@ -6,7 +6,7 @@ module.exports = {
       User.findOne({
         id: req.session.passport.user
       }).then(user => {
-        subscribe(req, res, user.name);
+        subscribe(req, res, user ? user.name : null);
       });
     } else {
       subscribe(req, res, null);

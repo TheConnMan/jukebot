@@ -10,7 +10,7 @@ module.exports = {
       User.findOne({
         id: req.session.passport.user
       }).then(user => {
-        subscribeUsers(req, res, user.name);
+        subscribeUsers(req, res, user ? user.name : null);
       });
     } else {
       subscribeUsers(req, res, null);
