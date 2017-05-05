@@ -53,6 +53,14 @@ input {
   margin-left: 37.5%;
 }
 
+#chat-list [data-tooltip]:not([data-position]):before {
+  left: 75%;
+}
+
+#chat-list [data-tooltip]:not([data-position]):after {
+  left: 100%;
+}
+
 .d-f {
   display: flex;
 }

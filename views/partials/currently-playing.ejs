@@ -20,7 +20,7 @@
       {{currentVideo().title}} <i class="youtube icon"></i>
     </a>
     <div class="meta">
-      <span class="date">Added by {{currentVideo().user}}</span>
+      <span class="date">Added by <span ng-attr-data-tooltip="{{currentVideo().realuser ? currentVideo().realuser : undefined}}" data-variation="mini" data-inverted="">{{currentVideo().user}}</span></span>
     </div>
   </div>
   <div class="content" ng-if="!currentVideo().id">
@@ -45,8 +45,8 @@
     <i style="float: right;" class="large floated right forward link icon" ng-if="currentVideo().id" ng-click="skip()"></i>
   </div>
   <div class="listeners extra content">
-    <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
-      {{user}}
+    <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index" ng-attr-data-tooltip="{{user.realuser ? user.realuser : undefined}}" data-variation="mini" data-inverted="">
+      {{user.username}}
     </span>
   </div>
 </div>

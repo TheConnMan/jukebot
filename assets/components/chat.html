@@ -14,7 +14,7 @@
     <div class="event" ng-repeat="chat in $ctrl.getChats() | orderBy: time track by $index">
       <div class="content" ng-if="$ctrl.showUsername($index)">
         <div class="summary">
-          <div class="user">
+          <div class="user" ng-attr-data-tooltip="{{chat.type == 'user' && chat.realuser ? chat.realuser : undefined}}" data-variation="mini" data-inverted="">
             {{chat.type == 'user' ? chat.username : 'JukeBot'}}
           </div>
           <div am-time-ago="{{$ctrl.getTime(chat)}}" class="date"></div>

@@ -23,6 +23,8 @@
     "include-all": "^1.0.0",
     "log4js": "^1.0.1",
     "moment": "^2.17.1",
+    "passport": "^0.3.2",
+    "passport-google-oauth": "^1.0.0",
     "rc": "1.0.1",
     "sails": "~0.12.7",
     "sails-db-migrate": "^1.5.0",

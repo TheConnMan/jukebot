@@ -108,6 +108,8 @@ When developing a new migration script run `grunt db:migrate:create --name=<migr
 ## Environment Variables
 
 - **GOOGLE_API_KEY** - Google project API key
+- **GOOGLE_ID** - Google OAuth application ID (set up a [Google App](https://cloud.google.com/console#/project), create OAuth credentials, and enable the Google+ API)
+- **GOOGLE_SECRET** - Google OAuth secret key
 - **SLACK_WEBHOOK** (Optional) - [Slack Incoming Webhook URL](https://my.slack.com/apps/A0F7XDUAZ-incoming-webhooks) for sending song addition and currently now playing notifications
 - **SLACK_SONG_ADDED** (default: true) - Toggle for "Song Added" Slack notifications, only applicable if **SLACK_WEBHOOK** is provided
 - **SLACK_SONG_PLAYING** (default: true) - Toggle for "New Song Playing" Slack notifications, only applicable if **SLACK_WEBHOOK** is provided

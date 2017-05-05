@@ -20,7 +20,8 @@ module.exports = {
     data: {
       type: 'string',
       required: false
-    }
+    },
+    realuser: 'String'
     // room: {
     //   model: 'room'
     // }
