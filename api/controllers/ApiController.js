@@ -6,35 +6,15 @@ var recentlyLeft = [];
 
 module.exports = {
   subscribeUsers: function(req, res) {
-    var params = req.allParams();
-    var id = req.socket.id;
-    req.socket.join('listeners');
-
-    var username = params.username || 'Anonymous';
-    users[id] = username;
-
-    var index = recentlyLeft.indexOf(username);
-    if (index === -1) {
-      logger.debug(users[id] + ' entered the room');
-      ChatService.addMachineMessage(users[id] + ' entered the room', username, 'userEnter');
+    if (req.session.passport) {
+      User.findOne({
+        id: req.session.passport.user
+      }).then(user => {
+        subscribeUsers(req, res, user.name);
+      });
     } else {
-      recentlyLeft.splice(index, 1);
+      subscribeUsers(req, res, null);
     }
-    emitListeners();
-
-    req.socket.on('disconnect', function() {
-      var username = users[id];
-      recentlyLeft.push(username);
-      delete users[id];
-      setTimeout(function() {
-        userDisconnected(username);
-      }, 1000);
-    });
-
-    req.socket.on('username', function(d) {
-      users[id] = d || 'Anonymous';
-      emitListeners();
-    });
   },
 
   add: function(req, res) {
@@ -144,6 +124,41 @@ module.exports = {
     });
   }
 };
+
+function subscribeUsers(req, res, realuser) {
+  var params = req.allParams();
+  var id = req.socket.id;
+  req.socket.join('listeners');
+
+  var username = params.username || 'Anonymous';
+  users[id] = {
+    username,
+    realuser
+  };
+
+  var index = recentlyLeft.indexOf(username);
+  if (index === -1) {
+    logger.debug(users[id].username + ' entered the room');
+    ChatService.addMachineMessage(users[id].username + ' entered the room', username, 'userEnter');
+  } else {
+    recentlyLeft.splice(index, 1);
+  }
+  emitListeners();
+
+  req.socket.on('disconnect', function() {
+    var username = users[id].username;
+    recentlyLeft.push(username);
+    delete users[id];
+    setTimeout(function() {
+      userDisconnected(username);
+    }, 1000);
+  });
+
+  req.socket.on('username', function(d) {
+    users[id].username = d || 'Anonymous';
+    emitListeners();
+  });
+}
 
 function userDisconnected(username) {
   var index = recentlyLeft.indexOf(username);
