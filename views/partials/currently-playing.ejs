@@ -46,7 +46,7 @@
   </div>
   <div class="listeners extra content">
     <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index" ng-attr-data-tooltip="{{user.realuser ? user.realuser : undefined}}" data-variation="mini" data-inverted="">
-      {{user.username}}
+      {{user.username}}{{$last ? '' : ', '}}
     </span>
   </div>
 </div>
