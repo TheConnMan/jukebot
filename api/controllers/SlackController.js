@@ -17,7 +17,7 @@ module.exports = {
       switch (command) {
         case 'add':
           var key = YouTubeService.parseYouTubeLink(args[0]);
-          YouTubeService.getYouTubeVideo(key, '@' + params.user_name).then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
+          YouTubeService.getYouTubeVideo(key, '@' + params.user_name, null).then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
             res.send('Successfully added "' + video.title + '"');
           }).catch(function(err) {
             res.send(err);

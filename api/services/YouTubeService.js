@@ -28,12 +28,12 @@ function parseYouTubeLink(link) {
   return match[1] || match[2];
 }
 
-function getYouTubeVideo(key, user, canSave=true) {
+function getYouTubeVideo(key, user, realuser, canSave=true) {
   return new Promise((resolve, reject) => {
     request(`https://www.googleapis.com/youtube/v3/videos?id=${key}&part=snippet,contentDetails&key=${process.env.GOOGLE_API_KEY}`, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         try {
-          parseYouTubeVideo(JSON.parse(body), user, canSave).then((video, err) => {
+          parseYouTubeVideo(JSON.parse(body), user, realuser, canSave).then((video, err) => {
             if (err) {
               throw err;
             }
@@ -50,7 +50,7 @@ function getYouTubeVideo(key, user, canSave=true) {
   });
 }
 
-function parseYouTubeVideo(data, user, canSave) {
+function parseYouTubeVideo(data, user, realuser, canSave) {
   if (data.items.length != 1) {
     throw 'YouTube link did not match a video';
   }
@@ -59,6 +59,7 @@ function parseYouTubeVideo(data, user, canSave) {
     key: item.id,
     duration: moment.duration(item.contentDetails.duration).asMilliseconds(),
     user: user,
+    realuser: realuser,
     isSuggestion: canSave ? false : true,
     thumbnail: item.snippet.thumbnails ? item.snippet.thumbnails.default.url : null,
     title: item.snippet.title
@@ -144,7 +145,7 @@ function relatedVideos(key, maxResults = 10) {
         }
 
         var itemsPromise = items.map((i) => {
-          return getYouTubeVideo(i.id.videoId, 'JukeBot', false);
+          return getYouTubeVideo(i.id.videoId, 'JukeBot', null, false);
         });
 
         return Promise.all(itemsPromise)
@@ -158,10 +159,10 @@ function relatedVideos(key, maxResults = 10) {
   });
 }
 
-function getPlaylistVideos(playlistId, user) {
+function getPlaylistVideos(playlistId, user, realuser) {
   return getPlaylistVideosRecursive(playlistId, [], '').then(videos => {
     return Promise.all(videos.map(function(video) {
-      return getYouTubeVideo(video.snippet.resourceId.videoId, user);
+      return getYouTubeVideo(video.snippet.resourceId.videoId, user, realuser);
     }));
   });
 }

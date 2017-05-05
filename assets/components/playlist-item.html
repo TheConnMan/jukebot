@@ -7,7 +7,7 @@
   </a>
   <div class="meta">
     <div ng-if="$ctrl.showAddedBy">
-      Added by {{$ctrl.video.user}}
+      Added by <span ng-attr-data-tooltip="{{$ctrl.video.realuser ? $ctrl.video.realuser : undefined}}" data-variation="mini" data-inverted="">{{$ctrl.video.user}}</span>
     </div>
     ({{$ctrl.formatDuration()}})
   </div>

@@ -20,10 +20,14 @@ module.exports = {
   add: function(req, res) {
     var params = req.allParams();
     try {
-      var key = YouTubeService.parseYouTubeLink(params.link);
-      YouTubeService.getYouTubeVideo(key, params.user || 'Anonymous').then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
-        SyncService.resetAutoplayStreak();
-        res.send(200);
+      User.findOne({
+        id: req.session.passport ? req.session.passport.user : null
+      }).then(user => {
+        var key = YouTubeService.parseYouTubeLink(params.link);
+        YouTubeService.getYouTubeVideo(key, params.user || 'Anonymous', user ? user.name : null).then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
+          SyncService.resetAutoplayStreak();
+          res.send(200);
+        });
       }).catch(function(err) {
         res.send(400, err);
       });
@@ -35,9 +39,13 @@ module.exports = {
   addPlaylist: function(req, res) {
     var params = req.allParams();
     try {
-      YouTubeService.getPlaylistVideos(params.playlistId, params.user || 'Anonymous').then(SyncService.addPlaylist).then(SyncService.sendPlaylistAddMessages).then(function(video) {
-        SyncService.resetAutoplayStreak();
-        res.send(200);
+      User.findOne({
+        id: req.session.passport ? req.session.passport.user : null
+      }).then(user => {
+        YouTubeService.getPlaylistVideos(params.playlistId, params.user || 'Anonymous', user ? user.name : null).then(SyncService.addPlaylist).then(SyncService.sendPlaylistAddMessages).then(function(video) {
+          SyncService.resetAutoplayStreak();
+          res.send(200);
+        });
       }).catch(function(err) {
         res.send(400, err);
       });

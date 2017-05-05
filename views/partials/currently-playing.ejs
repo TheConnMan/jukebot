@@ -20,7 +20,7 @@
       {{currentVideo().title}} <i class="youtube icon"></i>
     </a>
     <div class="meta">
-      <span class="date">Added by {{currentVideo().user}}</span>
+      <span class="date">Added by <span ng-attr-data-tooltip="{{currentVideo().realuser ? currentVideo().realuser : undefined}}" data-variation="mini" data-inverted="">{{currentVideo().user}}</span></span>
     </div>
   </div>
   <div class="content" ng-if="!currentVideo().id">
