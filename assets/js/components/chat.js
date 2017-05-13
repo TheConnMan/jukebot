@@ -16,7 +16,6 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   this.chats = [];
   this.newChat = '';
   this.typers = '';
-  this.notifications = $storage.get('chat-notifications') === 'true' ||  !$storage.get('chat-notifications');
 
   this.getChats = function() {
     return this.chats.filter(function(chat) { return new Date(chat.createdAt) >= new Date(Date.now() - chatHistory * 60 * 1000); });
@@ -32,10 +31,6 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
     let differentChatType = this.chats[index].type !== this.chats[index - 1].type;
     let bothMachineChat = this.chats[index].type !== 'user' && this.chats[index - 1].type !== 'user';
     return (!recentPreviousMessage || differentUser || differentChatType) && !bothMachineChat;
-  };
-
-  this.toggleChat = function(newVal) {
-    $storage.set('chat-notifications', newVal);
   };
 
   this.sendChat = function() {
@@ -75,7 +70,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
 
   io.socket.on('chat', (c) => {
     this.chats.push(c);
-    if (c.username !== $rootScope.profile.username && this.notifications && c.type !== 'addVideo' && c.type !== 'videoSkipped' && c.type !== 'videoPlaying') {
+    if (c.username !== $rootScope.profile.username && $rootScope.profile.chatNotifications && c.type !== 'addVideo' && c.type !== 'videoSkipped' && c.type !== 'videoPlaying') {
       let notification = $notification(c.username || 'Anonymous', {
         body: c.message,
         delay: 4000,
