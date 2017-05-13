@@ -6,7 +6,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
 
   $rootScope.$on('likeVideo', function(e, args) {
     io.socket._raw.emit('chat', {
-      message: self.getUsername() + ' favorited ' + args.video.title,
+      message: $rootScope.profile.username + ' favorited ' + args.video.title,
       type: 'favorite',
       time: Date.now(),
       data: args.video.key
@@ -20,10 +20,6 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
 
   this.getChats = function() {
     return this.chats.filter(function(chat) { return new Date(chat.createdAt) >= new Date(Date.now() - chatHistory * 60 * 1000); });
-  };
-
-  this.getUsername = function() {
-    return self.username || 'Anonymous';
   };
 
   this.showUsername = function(index) {
@@ -45,7 +41,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   this.sendChat = function() {
     io.socket._raw.emit('chat', {
       message: this.newChat,
-      username: this.getUsername(),
+      username: $rootScope.profile.username,
       type: 'user',
       time: Date.now()
     });
@@ -79,8 +75,8 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
 
   io.socket.on('chat', (c) => {
     this.chats.push(c);
-    if (c.username !== this.getUsername() && this.notifications && c.type !== 'addVideo' && c.type !== 'videoSkipped' && c.type !== 'videoPlaying') {
-      let notification = $notification(c.username || 'JukeBot', {
+    if (c.username !== $rootScope.profile.username && this.notifications && c.type !== 'addVideo' && c.type !== 'videoSkipped' && c.type !== 'videoPlaying') {
+      let notification = $notification(c.username || 'Anonymous', {
         body: c.message,
         delay: 4000,
         icon: '/images/jukebot-72.png',
@@ -100,15 +96,15 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
       accuracy: 'exactly',
       className: 'highlight'
     };
-    $('.chat > span').mark(self.getUsername(), markOptions);
-    $('.chat > span').mark('@' + self.getUsername(), markOptions);
+    $('.chat > span').mark($rootScope.profile.username, markOptions);
+    $('.chat > span').mark('@' + $rootScope.profile.username, markOptions);
     $('.chat > span').mark('@here', markOptions);
     $('.chat > span').mark('@channel', markOptions);
   }
 
     io.socket.on('typers', (typers) => {
-      if (typers.indexOf(self.getUsername()) !== -1) {
-        typers.splice(typers.indexOf(self.getUsername()), 1);
+      if (typers.indexOf($rootScope.profile.username) !== -1) {
+        typers.splice(typers.indexOf($rootScope.profile.username), 1);
       }
       if (typers.length === 0) {
         self.typers = '';
@@ -125,7 +121,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   function typing(isTyping) {
     io.socket._raw.emit('typers', {
       typing: isTyping,
-      username: self.getUsername()
+      username: $rootScope.profile.username
     });
   }
 
@@ -141,8 +137,5 @@ angular
 .module('app')
 .component('chat', {
   templateUrl: 'components/chat.html',
-  controller: ChatController,
-  bindings: {
-    username: '='
-  }
+  controller: ChatController
 });
