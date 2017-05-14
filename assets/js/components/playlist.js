@@ -1,5 +1,5 @@
 function PlaylistController($rootScope, $scope, $video, $storage, $log, $notification) {
-  let self = this;
+  var self = this;
   self.notifications = $storage.get('notifications') === 'true' ||  !$storage.get('notifications');
   self.activeTab = 'up-next';
   self.relatedVideos = [];
@@ -35,7 +35,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
   });
 
   io.socket.get('/api/subscribeRelatedVideos', {});
-  io.socket.on('related', (videos) => {
+  io.socket.on('related', function(videos) {
     this.relatedVideos = videos;
     $scope.$digest();
   });
@@ -50,8 +50,8 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
   };
 
   this.scrollToCurrentlyPlaying = function() {
-    let $list = $('#video-list');
-    let $playing = $list.find('.yellow').closest('playlistitem');
+    var $list = $('#video-list');
+    var $playing = $list.find('.yellow').closest('playlistitem');
 
     if ($playing.length) {
       $playing[0].scrollIntoView({
@@ -63,7 +63,9 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
   this.setTab = function(tab) {
     this.activeTab = tab;
 
-    window.setTimeout(() => this.scrollToCurrentlyPlaying(), 250);
+    window.setTimeout(function() {
+      this.scrollToCurrentlyPlaying();
+    }, 250);
   };
 }
 

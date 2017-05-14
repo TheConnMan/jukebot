@@ -3,23 +3,23 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
   $('.ui.search')
     .search({
       minCharacters: 3,
-      onSelect(result, response) {
+      onSelect: function(result, response) {
         if (result.playlistId) {
           $scope.addPlaylist(result.playlistId)
-            .then(() => {
+            .then(function() {
               $('.ui.search input').val('');
             });
         } else {
           $scope.readd(result.key)
-            .then(() => {
+            .then(function() {
               $('.ui.search input').val('');
             });
         }
       },
       apiSettings: {
-        onResponse(videos) {
+        onResponse: function(videos) {
           return {
-            results: $.map(videos, (v) => {
+            results: $.map(videos, function(v) {
               v.title = v.title + ' (' + (v.playlistId ? v.playlistItems + ' videos' : moment.duration(v.duration).format('H:mm:ss')) + ')';
               v.image = v.thumbnail;
               return v;
@@ -55,11 +55,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
      * Favorites *
      *************/
     $scope.likeCurrentVideo = function() {
-      let video = $video.current();
+      var video = $video.current();
       $storage.likeVideo(video);
       if ($scope.likesCurrentVideo()) {
         $scope.$emit('likeVideo', {
-          video
+          video: video
         });
       }
     };
@@ -93,8 +93,10 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       if ($scope.link) {
         $video
           .add(link, user)
-          .success(() => $scope.link = '')
-          .error((e) => {
+          .success(function() {
+            $scope.link = '';
+          })
+          .error(function(e) {
             $scope.link = '';
             sweetAlert('Error', e, 'error');
           });
@@ -125,7 +127,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
      ******************************/
 
     $scope.startTime = function() {
-      let video = $video.current();
+      var video = $video.current();
 
       return video ? Math.max(Math.floor(($scope.initTime - new Date(video.startTime).getTime()) / 1000), 0) : 0;
     };
@@ -141,7 +143,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       }
       setTimeout(function() {
         $('.ui.embed').embed({
-          url: currentVideo ? `//www.youtube.com/embed/${currentVideo.key}` : '',
+          url: currentVideo ? '//www.youtube.com/embed/' + currentVideo.key : '',
           autoplay: true,
           parameters: {
             start: $scope.startTime()
@@ -149,7 +151,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
         });
         $('.ui.dropdown').dropdown();
 
-        let $playing = $('#video-list .yellow').closest('playlistitem');
+        var $playing = $('#video-list .yellow').closest('playlistitem');
 
         if ($playing.length) {
           $playing[0].scrollIntoView({

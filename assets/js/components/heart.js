@@ -4,7 +4,7 @@ function HeartController($scope, $storage) {
     $storage.likeVideo(video);
     if (this.likesVideo(video.key)) {
       $scope.$emit('likeVideo', {
-        video
+        video: video
       });
     }
   };
