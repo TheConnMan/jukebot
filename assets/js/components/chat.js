@@ -6,7 +6,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
 
   $rootScope.$on('likeVideo', function(e, args) {
     io.socket._raw.emit('chat', {
-      message: $rootScope.profile.username + ' favorited ' + args.video.title,
+      message: ($rootScope.profile.username || 'Anonymous') + ' favorited ' + args.video.title,
       type: 'favorite',
       time: Date.now(),
       data: args.video.key

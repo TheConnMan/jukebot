@@ -76,9 +76,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.addVideo = function() {
-      $log.log('Adding video');
-      $log.log($scope.link);
-      $log.log($rootScope.profile.username);
       if ($scope.link) {
         $video
           .add(link, user)
