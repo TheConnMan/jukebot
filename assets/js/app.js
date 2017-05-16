@@ -1,5 +1,5 @@
-var app = angular.module('app', ['notification', 'storage', 'video', 'angularMoment', 'ngSanitize']);
-app.controller('controller', function($scope, $rootScope, $notification, $storage, $video, $timeout, $http, $log) {
+var app = angular.module('app', ['notification', 'storage', 'profile', 'video', 'angularMoment', 'ngSanitize']);
+app.controller('controller', function($scope, $rootScope, $notification, $storage, $profile, $video, $timeout, $http, $log) {
   $('.ui.search')
     .search({
       minCharacters: 3,
@@ -30,26 +30,15 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       }
     });
 
-    $rootScope.theme = $storage.get('theme');
-
     $scope.updateTheme = function(theme) {
-      $rootScope.theme = theme;
-      $storage.set('theme', theme);
+      $rootScope.profile.theme = theme;
     };
 
     $rootScope.title = 'JukeBot';
-    $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
     $scope.autoplay = false;
     $scope.listeners = {};
     $scope.newChat = '';
-
-    $scope.minimizeVideo = $storage.get('minimizeVideo') === 'true';
-
-    $scope.toggleVideo = function() {
-      $scope.minimizeVideo = !$scope.minimizeVideo;
-      $storage.set('minimizeVideo', $scope.minimizeVideo);
-    };
 
     /*************
      * Favorites *
@@ -87,9 +76,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.addVideo = function() {
-      $log.log('Adding video');
-      $log.log($scope.link);
-      $log.log($scope.username);
       if ($scope.link) {
         $video
           .add(link, user)
@@ -102,15 +88,15 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.readd = function(key) {
-      return $video.addByKey($scope.username, key);
+      return $video.addByKey($rootScope.profile.username, key);
     };
 
     $scope.addPlaylist = function(key) {
-      return $video.addPlaylistById($scope.username, key);
+      return $video.addPlaylistById($rootScope.profile.username, key);
     };
 
     $scope.skip = function() {
-      return $video.skip($scope.username);
+      return $video.skip($rootScope.profile.username);
     };
 
     $scope.findVideoById = function(id) {
@@ -159,13 +145,12 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       }, 0);
     }, true);
 
-    $scope.$watch('username', function(newUsername) {
-      $storage.set('username', $scope.username);
-      io.socket._raw.emit('username', newUsername);
+    $rootScope.$watch('profile.username', function() {
+      io.socket._raw.emit('username', $rootScope.profile.username);
     });
 
     io.socket.get('/api/subscribeUsers', {
-      username: $scope.username
+      username: $rootScope.profile.username
     });
 
     /************

@@ -1,10 +1,7 @@
 function PlaylistController($rootScope, $scope, $video, $storage, $log, $notification) {
   let self = this;
-  self.notifications = $storage.get('notifications') === 'true' ||  !$storage.get('notifications');
   self.activeTab = 'up-next';
   self.relatedVideos = [];
-
-  $rootScope.notifications = self.notifications;
 
   $video.getAll().then(function() {
     setTimeout(function() {
@@ -17,7 +14,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
     $log.log('Received a video update');
     $log.log(obj);
     if (obj.verb === 'created') {
-      if ($video.current() && $scope.username !== obj.data.user && self.notifications) {
+      if ($video.current() && $rootScope.profile.username !== obj.data.user && $rootScope.profile.videoNotifications) {
         $notification('New Video Added', {
           body: obj.data.user + ' added ' + obj.data.title,
           icon: obj.data.thumbnail,
@@ -44,11 +41,6 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
     return $video.getVideos();
   };
 
-  this.toggleNotifications = function(newVal) {
-    $storage.set('notifications', newVal);
-    $rootScope.notifications = newVal;
-  };
-
   this.scrollToCurrentlyPlaying = function() {
     let $list = $('#video-list');
     let $playing = $list.find('.yellow').closest('playlistitem');
@@ -71,8 +63,5 @@ angular
 .module('app')
 .component('playlist', {
   templateUrl: 'components/playlist.html',
-  controller: PlaylistController,
-  bindings: {
-    username: '='
-  }
+  controller: PlaylistController
 });

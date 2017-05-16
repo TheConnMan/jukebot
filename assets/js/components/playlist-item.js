@@ -1,4 +1,4 @@
-function PlaylistItemController($scope, $http, $video, $storage) {
+function PlaylistItemController($rootScope, $scope, $http, $video, $storage) {
   this.formatDuration = function() {
     return $video.formatDuration(this.video.duration);
   };
@@ -12,15 +12,15 @@ function PlaylistItemController($scope, $http, $video, $storage) {
   };
 
   this.skip = function() {
-    return $video.skip(this.username);
+    return $video.skip();
   };
 
   this.readd = function() {
-    return $video.addByKey(this.username, this.video.key);
+    return $video.addByKey($rootScope.profile.username, this.video.key);
   };
 
   this.remove = function() {
-    return $video.removePermanently(this.username, this.video.id);
+    return $video.removePermanently($rootScope.profile.username, this.video.id);
   };
 
   this.likeVideo = function() {
@@ -44,7 +44,6 @@ angular
   controller: PlaylistItemController,
   bindings: {
     video: '<',
-    username: '<',
     showAddedBy: '<',
     showExpectedPlaytime: '<',
     isSuggestion: '<',
