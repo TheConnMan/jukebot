@@ -57,6 +57,10 @@ input {
   left: 100%;
 }
 
+.ui.left.sidebar, .ui.right.sidebar {
+  width: 500px!important;
+}
+
 .d-f {
   display: flex;
 }
