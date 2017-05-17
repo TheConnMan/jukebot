@@ -34,15 +34,17 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   };
 
   this.sendChat = function() {
-    io.socket._raw.emit('chat', {
-      message: this.newChat,
-      username: $rootScope.profile.username,
-      type: 'user',
-      time: Date.now()
-    });
-    $('#chat-input input').val('');
-    this.newChat = '';
-    typing(false);
+    if (this.newChat) {
+      io.socket._raw.emit('chat', {
+        message: this.newChat,
+        username: $rootScope.profile.username,
+        type: 'user',
+        time: Date.now()
+      });
+      $('#chat-input input').val('');
+      this.newChat = '';
+      typing(false);
+    }
   };
 
   this.typingDebounce = function() {
