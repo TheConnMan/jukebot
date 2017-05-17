@@ -60,6 +60,14 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.likeVideo = function(video) {
       return $favorites.likeVideo(video);
     };
+
+    $scope.getFavorites = function() {
+      return $rootScope.favorites.filter(favorite => !$scope.favoriteFilter || favorite.title.toLowerCase().indexOf($scope.favoriteFilter.toLowerCase()) !== -1);
+    };
+
+    $scope.clearFavoritesFilter = function() {
+      $scope.favoriteFilter = '';
+    };
     /*****************
      * End Favorites *
      *****************/

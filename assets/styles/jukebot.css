@@ -16,8 +16,12 @@
   top: 6px;
 }
 
-input {
+input, .ui.action.input > .button, .ui.action.input > .buttons > .button {
   height: 34px!important;
+}
+
+.ui.favorites input, .ui.favorites .action > .button {
+  border-radius: 0!important;
 }
 
 .highlight {
