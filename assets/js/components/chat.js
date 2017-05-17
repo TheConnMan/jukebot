@@ -22,14 +22,16 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
   };
 
   this.showUsername = function(index) {
+    var filteredChats = this.getChats();
+
     let isFirst = index === 0;
     if (isFirst) {
       return true;
     }
-    let recentPreviousMessage = new Date(this.chats[index].time) - new Date(this.chats[index - 1].time) <= 3 * 60 * 1000;
-    let differentUser = this.chats[index].username !== this.chats[index - 1].username;
-    let differentChatType = this.chats[index].type !== this.chats[index - 1].type;
-    let bothMachineChat = this.chats[index].type !== 'user' && this.chats[index - 1].type !== 'user';
+    let recentPreviousMessage = new Date(filteredChats[index].time) - new Date(filteredChats[index - 1].time) <= 3 * 60 * 1000;
+    let differentUser = filteredChats[index].username !== filteredChats[index - 1].username;
+    let differentChatType = filteredChats[index].type !== filteredChats[index - 1].type;
+    let bothMachineChat = filteredChats[index].type !== 'user' && filteredChats[index - 1].type !== 'user';
     return (!recentPreviousMessage || differentUser || differentChatType) && !bothMachineChat;
   };
 
