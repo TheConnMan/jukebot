@@ -3,7 +3,7 @@ angular
 .factory('$profile', ['$rootScope', '$http', '$storage', function($rootScope, $http, $storage) {
 
   $rootScope.profile = {
-    username: $storage.get('username'),
+    username: $storage.get('username') || 'Anonymous',
     theme: $storage.get('theme'),
     minimizeVideo: $storage.get('minimizeVideo') === 'true',
     videoNotifications: $storage.get('videoNotifications') === 'true' || !$storage.get('videoNotifications'),
