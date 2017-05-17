@@ -1,7 +1,7 @@
-function HeartController($scope, $storage) {
+function HeartController($scope, $favorites) {
 
   this.likeVideo = function(video) {
-    $storage.likeVideo(video);
+    $favorites.likeVideo(video);
     if (this.likesVideo(video.key)) {
       $scope.$emit('likeVideo', {
         video
@@ -10,7 +10,7 @@ function HeartController($scope, $storage) {
   };
 
   this.likesVideo = function(key) {
-    return $storage.likesVideo(key);
+    return $favorites.likesVideo(key);
   };
 }
 

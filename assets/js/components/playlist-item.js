@@ -1,4 +1,4 @@
-function PlaylistItemController($rootScope, $scope, $http, $video, $storage) {
+function PlaylistItemController($rootScope, $scope, $http, $video, $favorites) {
   this.formatDuration = function() {
     return $video.formatDuration(this.video.duration);
   };
@@ -24,7 +24,7 @@ function PlaylistItemController($rootScope, $scope, $http, $video, $storage) {
   };
 
   this.likeVideo = function() {
-    $storage.likeVideo(this.video);
+    $favorites.likeVideo(this.video);
     if (this.likesVideo(this.video.key)) {
       $scope.$emit('likeVideo', {
         video: this.video

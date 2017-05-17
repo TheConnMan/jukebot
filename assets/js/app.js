@@ -1,5 +1,5 @@
-var app = angular.module('app', ['notification', 'storage', 'profile', 'video', 'angularMoment', 'ngSanitize']);
-app.controller('controller', function($scope, $rootScope, $notification, $storage, $profile, $video, $timeout, $http, $log) {
+var app = angular.module('app', ['notification', 'storage', 'profile', 'favorites', 'video', 'angularMoment', 'ngSanitize']);
+app.controller('controller', function($scope, $rootScope, $notification, $storage, $profile, $favorites, $video, $timeout, $http, $log) {
   $('.ui.search')
     .search({
       minCharacters: 3,
@@ -45,7 +45,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
      *************/
     $scope.likeCurrentVideo = function() {
       let video = $video.current();
-      $storage.likeVideo(video);
+      $favorites.likeVideo(video);
       if ($scope.likesCurrentVideo()) {
         $scope.$emit('likeVideo', {
           video
@@ -54,15 +54,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.likesCurrentVideo = function() {
-      return $storage.likesVideo($video.current().key);
+      return $favorites.likesVideo($video.current().key);
     };
 
     $scope.likeVideo = function(video) {
-      return $storage.likeVideo(video);
-    };
-
-    $scope.likes = function() {
-      return $storage.getLikedVideos();
+      return $favorites.likeVideo(video);
     };
     /*****************
      * End Favorites *
