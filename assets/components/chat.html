@@ -11,7 +11,7 @@
   </h2>
   <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto; word-break: break-word;">
     <div class="event" ng-repeat="chat in $ctrl.getChats() | orderBy: time track by $index">
-      <div class="content" ng-if="$ctrl.showUsername($index)">
+      <div class="content" ng-if="$ctrl.showUsername(chat)">
         <div class="summary">
           <div class="user" ng-attr-data-tooltip="{{chat.type == 'user' && chat.realuser ? chat.realuser : undefined}}" data-variation="mini" data-inverted="">
             {{chat.type == 'user' ? chat.username : 'JukeBot'}}
@@ -29,7 +29,7 @@
           <span ng-bind-html="chat.message | linky: '_blank'"></span>
         </div>
       </div>
-      <div class="content chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername($index)">
+      <div class="content chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername(chat)">
         <heart video="$ctrl.getVideoByKey(chat.data)" ng-if="chat.type === 'favorite'"></heart>
         <i class="plus icon" ng-if="chat.type === 'addVideo'"></i>
         <i class="remove icon" ng-if="chat.type === 'removeVideo'"></i>
