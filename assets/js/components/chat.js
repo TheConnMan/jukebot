@@ -42,6 +42,10 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
     return chat.message.match(urlRegex) || [];
   };
 
+  this.furlChat = function(chat, furled) {
+    chat.furled = furled;
+  };
+
   this.sendChat = function() {
     if (this.newChat) {
       io.socket._raw.emit('chat', {

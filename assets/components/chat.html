@@ -27,7 +27,9 @@
           <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
           <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
           <span ng-bind-html="chat.message | linky: '_blank'"></span>
-          <img class="ui fluid image" ng-repeat="image in $ctrl.getImages(chat) track by $index" ng-src="{{image}}" />
+          <i ng-if="$ctrl.getImages(chat).length !== 0 && !chat.furled" class="large caret down link icon" ng-click="$ctrl.furlChat(chat, true)"></i>
+          <i ng-if="$ctrl.getImages(chat).length !== 0 && chat.furled" class="large caret right link icon" ng-click="$ctrl.furlChat(chat, false)"></i>
+          <img class="ui fluid image" ng-if="!chat.furled" ng-repeat="image in $ctrl.getImages(chat) track by $index" ng-src="{{image}}" />
         </div>
       </div>
       <div class="content chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername(chat)">
@@ -39,7 +41,9 @@
         <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
         <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
         <span ng-bind-html="chat.message | linky: '_blank'"></span>
-        <img class="ui fluid image" ng-repeat="image in $ctrl.getImages(chat) track by $index" ng-src="{{image}}" />
+        <i ng-if="$ctrl.getImages(chat).length !== 0 && !chat.furled" class="large caret down link icon" ng-click="$ctrl.furlChat(chat, true)"></i>
+        <i ng-if="$ctrl.getImages(chat).length !== 0 && chat.furled" class="large caret right link icon" ng-click="$ctrl.furlChat(chat, false)"></i>
+        <img class="ui fluid image" ng-if="!chat.furled" ng-repeat="image in $ctrl.getImages(chat) track by $index" ng-src="{{image}}" />
       </div>
     </div>
   </div>
