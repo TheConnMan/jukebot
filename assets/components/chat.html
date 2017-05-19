@@ -27,6 +27,7 @@
           <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
           <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
           <span ng-bind-html="chat.message | linky: '_blank'"></span>
+          <img class="ui fluid image" ng-repeat="image in $ctrl.getImages(chat) track by $index" ng-src="{{image}}" />
         </div>
       </div>
       <div class="content chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername(chat)">
@@ -38,6 +39,7 @@
         <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
         <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
         <span ng-bind-html="chat.message | linky: '_blank'"></span>
+        <img class="ui fluid image" ng-repeat="image in $ctrl.getImages(chat) track by $index" ng-src="{{image}}" />
       </div>
     </div>
   </div>

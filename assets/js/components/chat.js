@@ -1,4 +1,7 @@
 function ChatController($rootScope, $scope, $http, $notification, $storage, $video) {
+
+  var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])\.(gif|png|jpg)/ig;
+
   let self = this;
   let timer = null;
 
@@ -33,6 +36,10 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
     let differentChatType = this.chats[index].type !== this.chats[index - 1].type;
     let bothMachineChat = this.chats[index].type !== 'user' && this.chats[index - 1].type !== 'user';
     return (!recentPreviousMessage || differentUser || differentChatType) && !bothMachineChat;
+  };
+
+  this.getImages = function(chat) {
+    return chat.message.match(urlRegex) || [];
   };
 
   this.sendChat = function() {
