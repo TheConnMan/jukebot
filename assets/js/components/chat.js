@@ -35,7 +35,7 @@ function ChatController($rootScope, $scope, $http, $notification, $storage, $vid
     let differentUser = this.chats[index].username !== this.chats[index - 1].username;
     let differentChatType = this.chats[index].type !== this.chats[index - 1].type;
     let bothMachineChat = this.chats[index].type !== 'user' && this.chats[index - 1].type !== 'user';
-    return (!recentPreviousMessage || differentUser || differentChatType) && !bothMachineChat;
+    return !recentPreviousMessage || ((differentUser || differentChatType) && !bothMachineChat);
   };
 
   this.getImages = function(chat) {
