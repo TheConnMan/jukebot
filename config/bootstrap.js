@@ -45,12 +45,6 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
-  passport.use(new GoogleStrategy({
-    clientID: sails.config.globals.oauth.google.clientID,
-    clientSecret: sails.config.globals.oauth.google.clientSecret,
-    callbackURL: sails.config.serverUrl + '/auth/google/callback'
-  }, verifyHandler));
-
   if (process.env.FLUENTD_HOST) {
     var tags = (process.env.FLUENTD_TAGS ? process.env.FLUENTD_TAGS.split(',') : []).reduce((allTags, tag) => {
       var pair = tag.split(':');
@@ -63,6 +57,16 @@ module.exports.bootstrap = function(cb) {
       timeout: 3.0,
       tags
     }));
+  }
+
+  if (sails.config.globals.oauth.google.clientID && sails.config.globals.oauth.google.clientSecret) {
+    passport.use(new GoogleStrategy({
+      clientID: sails.config.globals.oauth.google.clientID,
+      clientSecret: sails.config.globals.oauth.google.clientSecret,
+      callbackURL: sails.config.serverUrl + '/auth/google/callback'
+    }, verifyHandler));
+  } else {
+    logger.warn('No Google OAuth environment variables were provided, authentication is disabled');
   }
 
   Video.findOne({
