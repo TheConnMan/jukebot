@@ -1,6 +1,11 @@
 <div class="ui favorites inverted overlay right vertical menu sidebar" style="z-index: 5;">
   <a class="header item">Favorites</a>
-  <div class="item" ng-repeat="video in likes() | orderBy: 'title' track by $index">
+  <div class="ui fluid action left icon input">
+    <i class="filter icon"></i>
+    <input type="text" ng-model="favoriteFilter" placeholder="Favorites filter">
+    <div class="ui button" ng-click="clearFavoritesFilter()">Clear</div>
+  </div>
+  <div class="item" ng-repeat="video in getFavorites() | orderBy: 'title' track by $index">
     <i class="link {{videoInUpcoming(video.key) ? 'check' : 'plus'}} icon" ng-click="readd(video.key)"></i>
     <i class="link remove icon" ng-click="likeVideo(video)"></i>
     {{video.title}}

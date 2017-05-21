@@ -17,6 +17,7 @@ module.exports = {
       type: 'string',
       required: true
     },
+    realuser: 'String',
     startTime: {
       type: 'datetime'
     },

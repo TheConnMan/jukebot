@@ -7,8 +7,7 @@
     <div class="ui toggle checkbox pl-8">
       <input
         type="checkbox"
-        ng-model="$ctrl.notifications"
-        ng-change="$ctrl.toggleNotifications($ctrl.notifications)"
+        ng-model="$root.profile.videoNotifications"
         name="public-chat"
       >
       <label></label>
@@ -24,7 +23,6 @@
 
 <div id="video-list" class="ui items bottom attached active tab segment">
   <playlistitem
-    username="$ctrl.username"
     class="item"
     video="video"
     show-expected-playtime=true
@@ -36,7 +34,6 @@
   </playlistitem>
 
   <playlistitem
-    username="$ctrl.username"
     class="item"
     video="video"
     show-expected-playtime=false

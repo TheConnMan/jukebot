@@ -3,8 +3,7 @@
     <div class="ui toggle checkbox">
       <input
         type="checkbox"
-        ng-model="$ctrl.notifications"
-        ng-change="$ctrl.toggleChat($ctrl.notifications)"
+        ng-model="$root.profile.chatNotifications"
         name="public-chat"
       >
       <label>Notifications</label>
@@ -12,9 +11,9 @@
   </h2>
   <div id="chat-list" class="ui feed fg-1" style="overflow-y: auto; word-break: break-word;">
     <div class="event" ng-repeat="chat in $ctrl.getChats() | orderBy: time track by $index">
-      <div class="content" ng-if="$ctrl.showUsername($index)">
+      <div class="content" ng-if="$ctrl.showUsername(chat)">
         <div class="summary">
-          <div class="user">
+          <div class="user" ng-attr-data-content="{{chat.type == 'user' && chat.realuser ? chat.realuser : undefined}}">
             {{chat.type == 'user' ? chat.username : 'JukeBot'}}
           </div>
           <div am-time-ago="{{$ctrl.getTime(chat)}}" class="date"></div>
@@ -28,9 +27,12 @@
           <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
           <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
           <span ng-bind-html="chat.message | linky: '_blank'"></span>
+          <i ng-if="$ctrl.getImages(chat).length !== 0 && !chat.furled" class="large caret down link icon" ng-click="$ctrl.furlChat(chat, true)"></i>
+          <i ng-if="$ctrl.getImages(chat).length !== 0 && chat.furled" class="large caret right link icon" ng-click="$ctrl.furlChat(chat, false)"></i>
+          <img class="ui fluid image" ng-if="!chat.furled" ng-repeat="image in $ctrl.getImages(chat) track by $index" ng-src="{{image}}" />
         </div>
       </div>
-      <div class="content chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername($index)">
+      <div class="content chat {{chat.type === 'user' ? '' : 'content minimal'}}" ng-if="!$ctrl.showUsername(chat)">
         <heart video="$ctrl.getVideoByKey(chat.data)" ng-if="chat.type === 'favorite'"></heart>
         <i class="plus icon" ng-if="chat.type === 'addVideo'"></i>
         <i class="remove icon" ng-if="chat.type === 'removeVideo'"></i>
@@ -39,6 +41,9 @@
         <i class="user icon" ng-if="chat.type === 'userEnter'"></i>
         <i class="eject icon" ng-if="chat.type === 'userLeft'"></i>
         <span ng-bind-html="chat.message | linky: '_blank'"></span>
+        <i ng-if="$ctrl.getImages(chat).length !== 0 && !chat.furled" class="large caret down link icon" ng-click="$ctrl.furlChat(chat, true)"></i>
+        <i ng-if="$ctrl.getImages(chat).length !== 0 && chat.furled" class="large caret right link icon" ng-click="$ctrl.furlChat(chat, false)"></i>
+        <img class="ui fluid image" ng-if="!chat.furled" ng-repeat="image in $ctrl.getImages(chat) track by $index" ng-src="{{image}}" />
       </div>
     </div>
   </div>

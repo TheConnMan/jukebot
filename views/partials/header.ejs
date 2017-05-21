@@ -3,9 +3,20 @@
     <div class="item">
       <img src="/images/jukebot.png" />
     </div>
+    <% if (auth) { %>
+      <a class="item" href="<%= user ? '/auth/logout' : '/auth/google' %>">
+        <% if (user) { %>
+          <i class="sign out icon"></i>
+          <%= user.name %>
+        <% } else { %>
+          <i class="google icon"></i>
+          Login
+        <% } %>
+      </a>
+    <% } %>
     <div class="item">
       <div class="ui left icon input">
-        <input type="text" maxlength="24" placeholder="Username..." ng-model="username" enter-press="addVideo()">
+        <input type="text" maxlength="24" placeholder="Username..." ng-model="profile.username">
         <i class="user icon"></i>
       </div>
     </div>
@@ -20,7 +31,7 @@
   <div class="right menu">
     <div class="item">
       <div class="ui dropdown">
-        <input type="hidden" value="{{theme}}">
+        <input type="hidden" value="{{profile.theme}}">
         <div class="default text">Theme</div>
         <div class="menu">
           <div class="item" ng-click="updateTheme('')">Default</div>

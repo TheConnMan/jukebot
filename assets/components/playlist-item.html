@@ -6,7 +6,7 @@
     {{$ctrl.video.title}}
   </a>
   <div class="meta">
-    <div ng-if="$ctrl.showAddedBy">
+    <div ng-if="$ctrl.showAddedBy" ng-attr-data-content="{{$ctrl.video.realuser ? $ctrl.video.realuser : undefined}}">
       Added by {{$ctrl.video.user}}
     </div>
     ({{$ctrl.formatDuration()}})

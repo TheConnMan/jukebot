@@ -1,5 +1,5 @@
-<div class="ui card" style="width: 100%; max-height: calc(100vh - 77px);">
-  <div class="ui embed {{minimizeVideo ? 'minimized' : ''}}" ng-if="currentVideo().id"></div>
+<div class="ui card playing" style="width: 100%; max-height: calc(100vh - 77px);">
+  <div class="ui embed {{profile.minimizeVideo ? 'minimized' : ''}}" ng-if="currentVideo().id"></div>
   <div class="content" ng-if="currentVideo().id">
     <span class="right floated">
       <i
@@ -8,7 +8,7 @@
         class="big heart {{likesCurrentVideo() ? 'red' : 'outline'}} like icon">
       </i>
       <div class="ui toggle checkbox">
-        <input type="checkbox" ng-click="toggleVideo()" ng-model="minimizeVideo">
+        <input type="checkbox" ng-model="profile.minimizeVideo">
         <label>Minimize Video</label>
       </div>
     </span>
@@ -20,7 +20,7 @@
       {{currentVideo().title}} <i class="youtube icon"></i>
     </a>
     <div class="meta">
-      <span class="date">Added by {{currentVideo().user}}</span>
+      <span class="date">Added by <span ng-attr-data-content="{{currentVideo().realuser ? currentVideo().realuser : undefined}}">{{currentVideo().user}}</span></span>
     </div>
   </div>
   <div class="content" ng-if="!currentVideo().id">
@@ -45,8 +45,8 @@
     <i style="float: right;" class="large floated right forward link icon" ng-if="currentVideo().id" ng-click="skip()"></i>
   </div>
   <div class="listeners extra content">
-    <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index">
-      {{user}}
+    <span class="item" ng-repeat="user in listenerUsernames() | orderBy: user track by $index" ng-attr-data-content="{{user.realuser ? user.realuser : undefined}}">
+      {{user.username}}{{$last ? '' : ', '}}
     </span>
   </div>
 </div>

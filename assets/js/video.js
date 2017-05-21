@@ -1,6 +1,6 @@
 angular
 .module('video', [])
-.factory('$video', ['$http', '$log', function($http, $log) {
+.factory('$video', ['$rootScope', '$http', '$log', function($rootScope, $http, $log) {
   var videos = [];
   const YOUTUBE_URL = 'https://www.youtube.com/watch?v=';
 
@@ -44,9 +44,9 @@ angular
     });
   }
 
-  function skip(username) {
+  function skip() {
     return $http.post('/api/skip', {
-      username
+      username: $rootScope.profile.username
     });
   }
 

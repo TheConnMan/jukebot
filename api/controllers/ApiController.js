@@ -6,44 +6,28 @@ var recentlyLeft = [];
 
 module.exports = {
   subscribeUsers: function(req, res) {
-    var params = req.allParams();
-    var id = req.socket.id;
-    req.socket.join('listeners');
-
-    var username = params.username || 'Anonymous';
-    users[id] = username;
-
-    var index = recentlyLeft.indexOf(username);
-    if (index === -1) {
-      logger.debug(users[id] + ' entered the room');
-      ChatService.addMachineMessage(users[id] + ' entered the room', username, 'userEnter');
+    if (req.session.passport) {
+      User.findOne({
+        id: req.session.passport.user
+      }).then(user => {
+        subscribeUsers(req, res, user ? user.name : null);
+      });
     } else {
-      recentlyLeft.splice(index, 1);
+      subscribeUsers(req, res, null);
     }
-    emitListeners();
-
-    req.socket.on('disconnect', function() {
-      var username = users[id];
-      recentlyLeft.push(username);
-      delete users[id];
-      setTimeout(function() {
-        userDisconnected(username);
-      }, 1000);
-    });
-
-    req.socket.on('username', function(d) {
-      users[id] = d || 'Anonymous';
-      emitListeners();
-    });
   },
 
   add: function(req, res) {
     var params = req.allParams();
     try {
-      var key = YouTubeService.parseYouTubeLink(params.link);
-      YouTubeService.getYouTubeVideo(key, params.user || 'Anonymous').then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
-        SyncService.resetAutoplayStreak();
-        res.send(200);
+      User.findOne({
+        id: req.session.passport ? req.session.passport.user : null
+      }).then(user => {
+        var key = YouTubeService.parseYouTubeLink(params.link);
+        YouTubeService.getYouTubeVideo(key, params.user || 'Anonymous', user ? user.name : null).then(SyncService.addVideo).then(SyncService.sendAddMessages).then(function(video) {
+          SyncService.resetAutoplayStreak();
+          res.send(200);
+        });
       }).catch(function(err) {
         res.send(400, err);
       });
@@ -55,9 +39,13 @@ module.exports = {
   addPlaylist: function(req, res) {
     var params = req.allParams();
     try {
-      YouTubeService.getPlaylistVideos(params.playlistId, params.user || 'Anonymous').then(SyncService.addPlaylist).then(SyncService.sendPlaylistAddMessages).then(function(video) {
-        SyncService.resetAutoplayStreak();
-        res.send(200);
+      User.findOne({
+        id: req.session.passport ? req.session.passport.user : null
+      }).then(user => {
+        YouTubeService.getPlaylistVideos(params.playlistId, params.user || 'Anonymous', user ? user.name : null).then(SyncService.addPlaylist).then(SyncService.sendPlaylistAddMessages).then(function(video) {
+          SyncService.resetAutoplayStreak();
+          res.send(200);
+        });
       }).catch(function(err) {
         res.send(400, err);
       });
@@ -144,6 +132,41 @@ module.exports = {
     });
   }
 };
+
+function subscribeUsers(req, res, realuser) {
+  var params = req.allParams();
+  var id = req.socket.id;
+  req.socket.join('listeners');
+
+  var username = params.username || 'Anonymous';
+  users[id] = {
+    username,
+    realuser
+  };
+
+  var index = recentlyLeft.indexOf(username);
+  if (index === -1) {
+    logger.debug(users[id].username + ' entered the room');
+    ChatService.addMachineMessage(users[id].username + ' entered the room', username, 'userEnter');
+  } else {
+    recentlyLeft.splice(index, 1);
+  }
+  emitListeners();
+
+  req.socket.on('disconnect', function() {
+    var username = users[id].username;
+    recentlyLeft.push(username);
+    delete users[id];
+    setTimeout(function() {
+      userDisconnected(username);
+    }, 1000);
+  });
+
+  req.socket.on('username', function(d) {
+    users[id].username = d || 'Anonymous';
+    emitListeners();
+  });
+}
 
 function userDisconnected(username) {
   var index = recentlyLeft.indexOf(username);

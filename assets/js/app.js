@@ -1,5 +1,5 @@
-var app = angular.module('app', ['notification', 'storage', 'video', 'angularMoment', 'ngSanitize']);
-app.controller('controller', function($scope, $rootScope, $notification, $storage, $video, $timeout, $http, $log) {
+var app = angular.module('app', ['notification', 'storage', 'profile', 'favorites', 'video', 'angularMoment', 'ngSanitize']);
+app.controller('controller', function($scope, $rootScope, $notification, $storage, $profile, $favorites, $video, $timeout, $http, $log) {
   $('.ui.search')
     .search({
       minCharacters: 3,
@@ -30,33 +30,22 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       }
     });
 
-    $rootScope.theme = $storage.get('theme');
-
     $scope.updateTheme = function(theme) {
-      $rootScope.theme = theme;
-      $storage.set('theme', theme);
+      $rootScope.profile.theme = theme;
     };
 
     $rootScope.title = 'JukeBot';
-    $scope.username = $storage.get('username');
     $scope.initTime = new Date().getTime();
     $scope.autoplay = false;
     $scope.listeners = {};
     $scope.newChat = '';
-
-    $scope.minimizeVideo = $storage.get('minimizeVideo') === 'true';
-
-    $scope.toggleVideo = function() {
-      $scope.minimizeVideo = !$scope.minimizeVideo;
-      $storage.set('minimizeVideo', $scope.minimizeVideo);
-    };
 
     /*************
      * Favorites *
      *************/
     $scope.likeCurrentVideo = function() {
       let video = $video.current();
-      $storage.likeVideo(video);
+      $favorites.likeVideo(video);
       if ($scope.likesCurrentVideo()) {
         $scope.$emit('likeVideo', {
           video
@@ -65,15 +54,19 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.likesCurrentVideo = function() {
-      return $storage.likesVideo($video.current().key);
+      return $favorites.likesVideo($video.current().key);
     };
 
     $scope.likeVideo = function(video) {
-      return $storage.likeVideo(video);
+      return $favorites.likeVideo(video);
     };
 
-    $scope.likes = function() {
-      return $storage.getLikedVideos();
+    $scope.getFavorites = function() {
+      return $rootScope.favorites.filter(favorite => !$scope.favoriteFilter || favorite.title.toLowerCase().indexOf($scope.favoriteFilter.toLowerCase()) !== -1);
+    };
+
+    $scope.clearFavoritesFilter = function() {
+      $scope.favoriteFilter = '';
     };
     /*****************
      * End Favorites *
@@ -87,9 +80,6 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.addVideo = function() {
-      $log.log('Adding video');
-      $log.log($scope.link);
-      $log.log($scope.username);
       if ($scope.link) {
         $video
           .add(link, user)
@@ -102,15 +92,15 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     };
 
     $scope.readd = function(key) {
-      return $video.addByKey($scope.username, key);
+      return $video.addByKey($rootScope.profile.username, key);
     };
 
     $scope.addPlaylist = function(key) {
-      return $video.addPlaylistById($scope.username, key);
+      return $video.addPlaylistById($rootScope.profile.username, key);
     };
 
     $scope.skip = function() {
-      return $video.skip($scope.username);
+      return $video.skip($rootScope.profile.username);
     };
 
     $scope.findVideoById = function(id) {
@@ -156,16 +146,23 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
             behavior: 'smooth'
           });
         }
+        $scope.popupVideo();
       }, 0);
     }, true);
 
-    $scope.$watch('username', function(newUsername) {
-      $storage.set('username', $scope.username);
-      io.socket._raw.emit('username', newUsername);
+    $scope.popupVideo = function() {
+      $('.playing span[data-content]').popup({
+        variation: 'inverted',
+        position: 'top center'
+      });
+    };
+
+    $rootScope.$watch('profile.username', function() {
+      io.socket._raw.emit('username', $rootScope.profile.username);
     });
 
     io.socket.get('/api/subscribeUsers', {
-      username: $scope.username
+      username: $rootScope.profile.username
     });
 
     /************
@@ -205,6 +202,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
      io.socket.on('listening', function(obj) {
        $scope.listeners = obj.users;
        $scope.$digest();
+       setTimeout($scope.popupListeners);
      });
 
     $scope.toggleListeners = function() {
@@ -217,6 +215,13 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.listenerCount = function() {
       return Object.keys($scope.listeners).length;
+    };
+
+    $scope.popupListeners = function() {
+      $('.listeners span[data-content]').popup({
+        variation: 'inverted',
+        position: 'top center'
+      });
     };
     /*****************
      * End Listeners *

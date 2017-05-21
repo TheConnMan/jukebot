@@ -1,14 +1,12 @@
 function PlaylistController($rootScope, $scope, $video, $storage, $log, $notification) {
   let self = this;
-  self.notifications = $storage.get('notifications') === 'true' ||  !$storage.get('notifications');
   self.activeTab = 'up-next';
   self.relatedVideos = [];
-
-  $rootScope.notifications = self.notifications;
 
   $video.getAll().then(function() {
     setTimeout(function() {
       self.scrollToCurrentlyPlaying();
+      self.popup();
     }, 250);
   });
   $video.subscribe();
@@ -17,7 +15,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
     $log.log('Received a video update');
     $log.log(obj);
     if (obj.verb === 'created') {
-      if ($video.current() && $scope.username !== obj.data.user && self.notifications) {
+      if ($video.current() && $rootScope.profile.username !== obj.data.user && $rootScope.profile.videoNotifications) {
         $notification('New Video Added', {
           body: obj.data.user + ' added ' + obj.data.title,
           icon: obj.data.thumbnail,
@@ -32,6 +30,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
       $video.remove(parseInt(obj.id));
     }
     $rootScope.$digest();
+    setTimeout(self.popup);
   });
 
   io.socket.get('/api/subscribeRelatedVideos', {});
@@ -42,11 +41,6 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
 
   this.getVideos = function() {
     return $video.getVideos();
-  };
-
-  this.toggleNotifications = function(newVal) {
-    $storage.set('notifications', newVal);
-    $rootScope.notifications = newVal;
   };
 
   this.scrollToCurrentlyPlaying = function() {
@@ -60,6 +54,13 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
     }
   };
 
+  this.popup = function() {
+    $('#video-list div[data-content]').popup({
+      variation: 'inverted',
+      position: 'top center'
+    });
+  };
+
   this.setTab = function(tab) {
     this.activeTab = tab;
 
@@ -71,8 +72,5 @@ angular
 .module('app')
 .component('playlist', {
   templateUrl: 'components/playlist.html',
-  controller: PlaylistController,
-  bindings: {
-    username: '='
-  }
+  controller: PlaylistController
 });

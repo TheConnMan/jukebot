@@ -148,7 +148,7 @@ function findNextVideo(lastVideo) {
     } else if (autoplay) {
       autoplayStreak++;
       YouTubeService.nextRelated(lastVideo.key).then(function(nextKey) {
-        return YouTubeService.getYouTubeVideo(nextKey, 'Autoplay');
+        return YouTubeService.getYouTubeVideo(nextKey, 'Autoplay', null);
       }).then(addVideo).then(sendAddMessages);
     }
   });
