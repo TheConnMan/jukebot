@@ -49,8 +49,6 @@ To use a Slack Slash Command you'll need to set one up (preferably after the run
 
 ## Deployment
 
-**WARNING:** Data persistence is not currently a priority. Videos are considered to be transient and once they are more than 24 hours old they aren't shown in the UI. Due to this, schema migrations are not a high priority.
-
 ### Deployment without HTTPS
 
 **JukeBot** can easily be run with Docker using the following command:
