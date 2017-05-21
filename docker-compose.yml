@@ -3,14 +3,15 @@ jukebot:
   container_name: jukebot
   ports:
     - "8000:1337"
-  volumes:
-    - "/path/to/jukebot/data/:/usr/src/app/data/"
   labels:
     - "traefik.backend=jukebot"
     - "traefik.frontend.rule=Host:jukebot.localhost"
   environment:
     - SERVER_URL=http://jukebot.localhost
+    - MYSQL_HOST=mysql
   env_file: .env
+  links:
+    - mysql
   restart: always
 
 traefik:
@@ -24,4 +25,19 @@ traefik:
     - /var/run/docker.sock:/var/run/docker.sock
     - /path/to/jukebot/traefik.toml:/traefik.toml
     - /path/to/jukebot/acme.json:/acme.json
+  restart: always
+
+mysql:
+  image: mysql
+  container_name: mysql
+  command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  ports:
+    - "3306:3306"
+  volumes:
+    - /data/mysql:/var/lib/mysql
+  environment:
+    - MYSQL_USER=sails
+    - MYSQL_PASSWORD=sails
+    - MYSQL_DATABASE=sails
+    - MYSQL_RANDOM_ROOT_PASSWORD=yes
   restart: always
