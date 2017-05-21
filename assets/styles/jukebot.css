@@ -53,14 +53,6 @@ input, .ui.action.input > .button, .ui.action.input > .buttons > .button {
   margin-left: 37.5%;
 }
 
-#chat-list [data-tooltip]:not([data-position]):before {
-  left: 75%;
-}
-
-#chat-list [data-tooltip]:not([data-position]):after {
-  left: 100%;
-}
-
 .ui.left.sidebar, .ui.right.sidebar {
   width: 500px!important;
 }

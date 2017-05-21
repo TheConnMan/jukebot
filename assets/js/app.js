@@ -146,8 +146,16 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
             behavior: 'smooth'
           });
         }
+        $scope.popupVideo();
       }, 0);
     }, true);
+
+    $scope.popupVideo = function() {
+      $('.playing span[data-content]').popup({
+        variation: 'inverted',
+        position: 'top center'
+      });
+    };
 
     $rootScope.$watch('profile.username', function() {
       io.socket._raw.emit('username', $rootScope.profile.username);
@@ -194,6 +202,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
      io.socket.on('listening', function(obj) {
        $scope.listeners = obj.users;
        $scope.$digest();
+       setTimeout($scope.popupListeners);
      });
 
     $scope.toggleListeners = function() {
@@ -206,6 +215,13 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
 
     $scope.listenerCount = function() {
       return Object.keys($scope.listeners).length;
+    };
+
+    $scope.popupListeners = function() {
+      $('.listeners span[data-content]').popup({
+        variation: 'inverted',
+        position: 'top center'
+      });
     };
     /*****************
      * End Listeners *

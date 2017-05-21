@@ -6,6 +6,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
   $video.getAll().then(function() {
     setTimeout(function() {
       self.scrollToCurrentlyPlaying();
+      self.popup();
     }, 250);
   });
   $video.subscribe();
@@ -29,6 +30,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
       $video.remove(parseInt(obj.id));
     }
     $rootScope.$digest();
+    setTimeout(self.popup);
   });
 
   io.socket.get('/api/subscribeRelatedVideos', {});
@@ -50,6 +52,13 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
         behavior: 'smooth'
       });
     }
+  };
+
+  this.popup = function() {
+    $('#video-list div[data-content]').popup({
+      variation: 'inverted',
+      position: 'top center'
+    });
   };
 
   this.setTab = function(tab) {
