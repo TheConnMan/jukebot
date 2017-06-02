@@ -24,7 +24,6 @@ module.exports = {
           });
           break;
         case 'skip':
-          var params = req.allParams();
           SyncService.skip(params.user_name);
           res.send('Successfully skipped.');
           break;
