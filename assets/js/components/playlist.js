@@ -55,7 +55,7 @@ function PlaylistController($rootScope, $scope, $video, $storage, $log, $notific
   };
 
   this.popup = function() {
-    $('#video-list div[data-content]').popup({
+    $('#video-list span[data-content]').popup({
       variation: 'inverted',
       position: 'top center'
     });
