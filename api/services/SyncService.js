@@ -151,7 +151,10 @@ function findNextVideo(lastVideo) {
       autoplayStreak++;
       YouTubeService.nextRelated(lastVideo.key).then(function(nextKey) {
         return YouTubeService.getYouTubeVideo(nextKey, 'Autoplay', null);
-      }).then(addVideo).then(sendAddMessages);
+      }).then(video => {
+        video.autoplay = true;
+        return addVideo(video);
+      }).then(sendAddMessages);
     }
   });
 }
