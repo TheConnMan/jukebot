@@ -67,9 +67,6 @@ function parseYouTubeVideo(data, user, realuser, canSave) {
     thumbnail: item.snippet.thumbnails ? item.snippet.thumbnails.default.url : null,
     title: item.snippet.title
   };
-  if (canSave) {
-    return Video.create(model);
-  }
   return new Promise ((resolve, reject) => {
     resolve(new Video._model(model));
   });
