@@ -1,6 +1,7 @@
 module.exports.globals = {
   version: process.env.npm_package_version,
-  slackWebhook: process.env.SLACK_WEBHOOK,
+  slackWebhook: process.env.SLACK_WEBHOOK ? process.env.SLACK_WEBHOOK.split(',') : [],
+  slashToken: process.env.SLASH_TOKEN ? process.env.SLASH_TOKEN.split(',') : [],
   slackSongAdded: process.env.SLACK_SONG_ADDED !== 'false',
   slackSongPlaying: process.env.SLACK_SONG_PLAYING !== 'false',
   slackSongLinks: process.env.SLACK_SONG_LINKS === 'true',
