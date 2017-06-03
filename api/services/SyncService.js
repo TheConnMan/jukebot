@@ -41,13 +41,12 @@ function addVideo(video) {
         video.playing = true;
         video.played = true;
         videoTimeout = setTimeout(endCurrentVideo, video.duration);
-        video.save(function() {
-          sendRelatedVideos(video.key);
-          resolve(video);
-        });
-      } else {
-        resolve(video);
+        sendRelatedVideos(video.key);
       }
+      Video.create(video).then(video => {
+        Video.publishCreate(video);
+        resolve(video);
+      });
     });
   });
 }
@@ -57,7 +56,7 @@ function addPlaylist(videos) {
     return !!video;
   });
   return nonNullVideos.reduce((p, video) => {
-    return p.then(resolve => {
+    return p.then(() => {
       return addVideo(video);
     }).catch(err => {
       logger.error('Error adding video with key ' + video.key, err);
@@ -75,7 +74,6 @@ function addPlaylist(videos) {
 
 function sendAddMessages(video) {
   return new Promise(function(resolve, reject) {
-    Video.publishCreate(video);
     ChatService.addVideoMessage(video.title + ' was added to the playlist by ' + video.user, 'addVideo');
     if (sails.config.globals.slackSongPlaying && sails.config.globals.slackSongAdded) {
       sendSlackAddedNotification(video).then(function() {
@@ -97,7 +95,6 @@ function sendAddMessages(video) {
 
 function sendPlaylistAddMessages(videos) {
   return new Promise((resolve, reject) => {
-    Video.publishCreate(videos);
     if (videos.length !== 0) {
       ChatService.addVideoMessage(videos.length + ' videos were added to the playlist by ' + videos[0].user, 'addVideo');
       if (sails.config.globals.slackSongAdded) {
