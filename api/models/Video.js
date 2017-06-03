@@ -35,6 +35,10 @@ module.exports = {
     isSuggestion: {
       type: 'boolean',
       defaultsTo: false
+    },
+    autoplay: {
+      type: 'boolean',
+      defaultsTo: false
     }
   }
 };
