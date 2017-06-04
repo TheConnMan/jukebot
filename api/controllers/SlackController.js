@@ -9,7 +9,7 @@ var help = [
 module.exports = {
   slash: function(req, res) {
     var params = req.allParams();
-    if (params.token !== process.env.SLASH_TOKEN) {
+    if (sails.config.globals.slashToken.indexOf(params.token) === -1) {
       res.send(401);
     } else {
       var args = params.text.split(' ');
@@ -24,7 +24,6 @@ module.exports = {
           });
           break;
         case 'skip':
-          var params = req.allParams();
           SyncService.skip(params.user_name);
           res.send('Successfully skipped.');
           break;
