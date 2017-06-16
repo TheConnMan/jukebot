@@ -77,7 +77,7 @@ function search(query, maxResults) {
     Youtube.search.list({
       q: 'Eric Prydz Live @ Ultra Music Festival 2014',
       part: 'snippet',
-      maxResults: maxResults || 15,
+      maxResults: maxResults || 1,
       type: 'video,playlist'
     }, (error, data) => {
       if (!error) {
