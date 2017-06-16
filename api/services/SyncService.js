@@ -12,7 +12,7 @@ var slackWebhooks = sails.config.globals.slackWebhook.map(webhook => {
 });
 
 var videoTimeout;
-var autoplay = false;
+var autoplay = true;
 var autoplayStreak = 0;
 
 module.exports = {
@@ -79,7 +79,7 @@ function sendAddMessages(video) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
-    } else if (video.playing && sails.config.globals.slackSongPlaying ) {
+    } else if (video.playing && sails.config.globals.slackSongPlaying) {
       sendSlackAddedNotification(video).then(function() {
         resolve(video);
       });
@@ -162,17 +162,17 @@ function startVideo(video) {
   video.startTime = new Date();
   videoTimeout = setTimeout(endCurrentVideo, video.duration);
   video.save(() => {
-      Video.publishUpdate(video.id, video);
-      sendRelatedVideos(video.key);
-      ChatService.addVideoMessage(video.title + ' is now playing', 'videoPlaying');
-      if (sails.config.globals.slackSongPlaying) {
-        sendSlackPlayingNotification(video).then(function() {
-          logger.info('Started playing video ' + video.key);
-        });
-      } else {
+    Video.publishUpdate(video.id, video);
+    sendRelatedVideos(video.key);
+    ChatService.addVideoMessage(video.title + ' is now playing', 'videoPlaying');
+    if (sails.config.globals.slackSongPlaying) {
+      sendSlackPlayingNotification(video).then(function() {
         logger.info('Started playing video ' + video.key);
-      }
-    });
+      });
+    } else {
+      logger.info('Started playing video ' + video.key);
+    }
+  });
 }
 
 function sendRelatedVideos(key) {
