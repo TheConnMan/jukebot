@@ -109,7 +109,9 @@ module.exports = {
   subscribeRelatedVideos(req, res) {
     req.socket.join('relatedVideos');
     Video
-      .findOne({ playing: true })
+      .findOne({
+        playing: true
+      })
       .exec((err, video) => {
         if (video) {
           SyncService.sendRelatedVideos(video.key);
@@ -175,9 +177,9 @@ function userDisconnected(username) {
     logger.debug(username + ' left the room');
     ChatService.addMachineMessage(username + ' left the room', username, 'userLeft');
     emitListeners();
-    if (Object.keys(users).length === 0) {
-      SyncService.setAutoplay(false);
-    }
+    //    if (Object.keys(users).length === 0) {
+    //      SyncService.setAutoplay(false);
+    //    }
   }
 }
 

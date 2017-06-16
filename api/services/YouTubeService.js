@@ -28,10 +28,10 @@ function parseYouTubeLink(link) {
   return match[1] || match[2];
 }
 
-function getYouTubeVideo(key, user, realuser, canSave=true) {
+function getYouTubeVideo(key, user, realuser, canSave = true) {
   return new Promise((resolve, reject) => {
     Youtube.videos.list({
-      id: key,
+      id: 'pe5_AMrBsW8',
       part: 'snippet,contentDetails'
     }, (error, data) => {
       if (!error) {
@@ -67,7 +67,7 @@ function parseYouTubeVideo(data, user, realuser, canSave) {
     thumbnail: item.snippet.thumbnails ? item.snippet.thumbnails.default.url : null,
     title: item.snippet.title
   };
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     resolve(new Video._model(model));
   });
 }
@@ -75,7 +75,7 @@ function parseYouTubeVideo(data, user, realuser, canSave) {
 function search(query, maxResults) {
   return new Promise((resolve, reject) => {
     Youtube.search.list({
-      q: query,
+      q: 'Eric Prydz Live @ Ultra Music Festival 2014',
       part: 'snippet',
       maxResults: maxResults || 15,
       type: 'video,playlist'
@@ -130,7 +130,7 @@ function nextRelated(key) {
       sort: 'createdAt DESC',
       limit: 5
     })])
-    .then(([videos, recent]) =>  {
+    .then(([videos, recent]) => {
       var recentVideoKeys = recent.map(video => video.key);
       var newVideoKeys = videos.map(video => video.key).filter(key => recentVideoKeys.indexOf(key) === -1);
       return newVideoKeys.length > 0 ? newVideoKeys[Math.floor(Math.random() * newVideoKeys.length)] : videos[Math.floor(Math.random() * videos.length)].key;
@@ -169,7 +169,7 @@ function relatedVideos(key, maxResults = 10) {
 }
 
 function getPlaylistVideos(playlistId, user, realuser) {
-  return getPlaylistVideosRecursive(playlistId, [], '').then(videos => {
+  return getPlaylistVideosRecursive('PL67TTGFHkyr5mOARn3P9z7shG0fQ0eGJ5', [], '').then(videos => {
     return Promise.all(videos.map(function(video) {
       return getYouTubeVideo(video.snippet.resourceId.videoId, user, realuser);
     }));
@@ -182,11 +182,11 @@ function getPlaylistVideosRecursive(playlistId, videos, pageToken) {
       Youtube.playlistItems.list({
         maxResults: 50,
         part: 'snippet',
-        playlistId: playlistId,
+        playlistId: 'PL67TTGFHkyr5mOARn3P9z7shG0fQ0eGJ5',
         pageToken: pageToken
       }, (error, data) => {
         if (!error) {
-          getPlaylistVideosRecursive(playlistId, videos.concat(data.items), data.nextPageToken).then(function(videos) {
+          getPlaylistVideosRecursive('playlistId', videos.concat(data.items), data.nextPageToken).then(function(videos) {
             resolve(videos);
           });
         } else {
