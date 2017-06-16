@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/TheConnMan/jukebot.svg?branch=master)](https://travis-ci.org/TheConnMan/jukebot) [![Docker Pulls](https://img.shields.io/docker/pulls/theconnman/jukebot.svg)](https://hub.docker.com/r/theconnman/jukebot/)
 
-Slack-Enabled Syncronized Music Listening
+Slack-Enabled Synchronized Music Listening
 
 ![JukeBot](https://raw.githubusercontent.com/TheConnMan/jukebot/dev/assets/images/JukeBot-Screenshot.png)
 
@@ -103,7 +103,7 @@ To use a Slack Slash Command you'll need to set one up (preferably after the run
 4. Copy the **Token** and use it as the **SLASH_TOKEN** environment variable
 5. Customize the name to **JukeBot**
 6. Check the box to "Show this command in the autocomplete list"
-7. Add the description "Slack-Enabled Syncronized Music Listening"
+7. Add the description "Slack-Enabled Synchronized Music Listening"
 8. Add the usage hint "add
 
   <youtube-url> - Add a YouTube video to the playlist"</youtube-url>

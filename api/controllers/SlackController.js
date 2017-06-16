@@ -1,5 +1,5 @@
 var help = [
-  'JukeBot - Slack-Enabled Syncronized Music Listening',
+  'JukeBot - Slack-Enabled Synchronized Music Listening',
   'Available Commands:',
   '    add [youtube-link] - Add a video to the queue',
   '    skip - skip the currently playing music video',

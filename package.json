@@ -1,7 +1,7 @@
 {
   "name": "JukeBot",
   "version": "1.7.1",
-  "description": "Slack-Enabled Syncronized Music Listening",
+  "description": "Slack-Enabled Synchronized Music Listening",
   "keywords": [],
   "dependencies": {
     "db-migrate": "^0.10.0-beta.20",
