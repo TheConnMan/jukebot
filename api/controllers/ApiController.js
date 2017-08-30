@@ -176,7 +176,7 @@ function userDisconnected(username) {
     ChatService.addMachineMessage(username + ' left the room', username, 'userLeft');
     emitListeners();
     if (Object.keys(users).length === 0) {
-      SyncService.setAutoplay(false);
+     SyncService.setAutoplay(false);
     }
   }
 }

@@ -31,7 +31,7 @@ function parseYouTubeLink(link) {
 function getYouTubeVideo(key, user, realuser, canSave=true) {
   return new Promise((resolve, reject) => {
     Youtube.videos.list({
-      id: key,
+      id: 'lJJbHFIRWHk',
       part: 'snippet,contentDetails'
     }, (error, data) => {
       if (!error) {
@@ -75,7 +75,7 @@ function parseYouTubeVideo(data, user, realuser, canSave) {
 function search(query, maxResults) {
   return new Promise((resolve, reject) => {
     Youtube.search.list({
-      q: query,
+      q: 'Justice - Audio, Video, Disco [Full Album + Bonus Hidden Track]',
       part: 'snippet',
       maxResults: maxResults || 15,
       type: 'video,playlist'
@@ -169,7 +169,7 @@ function relatedVideos(key, maxResults = 10) {
 }
 
 function getPlaylistVideos(playlistId, user, realuser) {
-  return getPlaylistVideosRecursive(playlistId, [], '').then(videos => {
+  return getPlaylistVideosRecursive('PL67TTGFHkyr7XC5jeVDpJM3LDkiiYxDIU', [], '').then(videos => {
     return Promise.all(videos.map(function(video) {
       return getYouTubeVideo(video.snippet.resourceId.videoId, user, realuser);
     }));
@@ -182,11 +182,11 @@ function getPlaylistVideosRecursive(playlistId, videos, pageToken) {
       Youtube.playlistItems.list({
         maxResults: 50,
         part: 'snippet',
-        playlistId: playlistId,
+        playlistId: 'PL67TTGFHkyr7XC5jeVDpJM3LDkiiYxDIU',
         pageToken: pageToken
       }, (error, data) => {
         if (!error) {
-          getPlaylistVideosRecursive(playlistId, videos.concat(data.items), data.nextPageToken).then(function(videos) {
+          getPlaylistVideosRecursive('playlistId', videos.concat(data.items), data.nextPageToken).then(function(videos) {
             resolve(videos);
           });
         } else {
