@@ -140,7 +140,7 @@ function nextRelated(key) {
     });
 }
 
-function relatedVideos(key, maxResults = 10) {
+function relatedVideos(key, maxResults = 1) {
   return new Promise((resolve, reject) => {
     Youtube.search.list({
       relatedToVideoId: key,
@@ -180,7 +180,7 @@ function getPlaylistVideosRecursive(playlistId, videos, pageToken) {
   return new Promise((resolve, reject) => {
     if (pageToken === '' || pageToken) {
       Youtube.playlistItems.list({
-        maxResults: 50,
+        maxResults: 1,
         part: 'snippet',
         playlistId: 'PL67TTGFHkyr7XC5jeVDpJM3LDkiiYxDIU',
         pageToken: pageToken

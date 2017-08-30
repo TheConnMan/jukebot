@@ -12,7 +12,7 @@ var slackWebhooks = sails.config.globals.slackWebhook.map(webhook => {
 });
 
 var videoTimeout;
-var autoplay = false;
+var autoplay = true;
 var autoplayStreak = 0;
 
 module.exports = {

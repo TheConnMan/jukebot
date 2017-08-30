@@ -26,7 +26,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
             })
           };
         },
-        url: 'api/search?query={query}&maxResults=10'
+        url: 'api/search?query={query}&maxResults=1'
       }
     });
 
