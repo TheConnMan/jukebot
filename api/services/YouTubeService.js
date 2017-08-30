@@ -77,7 +77,7 @@ function search(query, maxResults) {
     Youtube.search.list({
       q: 'Justice - Audio, Video, Disco [Full Album + Bonus Hidden Track]',
       part: 'snippet',
-      maxResults: maxResults || 15,
+      maxResults: maxResults || 1,
       type: 'video,playlist'
     }, (error, data) => {
       if (!error) {
