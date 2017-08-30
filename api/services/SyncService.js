@@ -222,7 +222,7 @@ function getAutoplay() {
 }
 
 function setAutoplay(val) {
-  autoplay = val;
+  autoplay = true;
   sails.io.sockets.in('autoplay').emit('autoplay', {
     autoplay: autoplay
   });
