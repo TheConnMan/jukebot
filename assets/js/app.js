@@ -132,7 +132,7 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
       setTimeout(function() {
         $('.ui.embed').embed({
           url: currentVideo ? `//www.youtube.com/embed/${currentVideo.key}` : '',
-          autoplay: true,
+          autoplay: 1,
           parameters: {
             start: $scope.startTime()
           }
