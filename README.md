@@ -43,7 +43,7 @@ The default database is on disk, so it is recommended to run **JukeBot** with a 
 The easiest way to run a MySQL instance is to run it in Docker using the following command:
 
 ```bash
-docker run -d -p 3306:3306 -e MYSQL_DATABASE=sails -e MYSQL_USER=sails -e MYSQL_PASSWORD=sails -e MYSQL_RANDOM_ROOT_PASSWORD=true --name=mysql mysql --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+docker run -d -p 3306:3306 -e MYSQL_DATABASE=sails -e MYSQL_USER=sails -e MYSQL_PASSWORD=sails -e MYSQL_RANDOM_ROOT_PASSWORD=true --name=mysql mysql:5 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 ```
 
 Take a look at the `docker-compose.yml` file for a full setup of **JukeBot**, MySQL, and Traefik (a reverse proxy for HTTPS support).
