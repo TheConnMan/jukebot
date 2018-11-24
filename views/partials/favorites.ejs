@@ -4,6 +4,9 @@
     <i class="filter icon"></i>
     <input type="text" ng-model="favoriteFilter" placeholder="Favorites filter">
     <div class="ui button" ng-click="clearFavoritesFilter()">Clear</div>
+    <div class="ui blue icon button" ng-click="randomFavorite()">
+      <i class="random icon"></i>
+    </div>
   </div>
   <div class="item" ng-repeat="video in getFavorites() | orderBy: 'title' track by $index">
     <i class="link {{videoInUpcoming(video.key) ? 'check' : 'plus'}} icon" ng-click="readd(video.key)"></i>

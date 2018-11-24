@@ -68,6 +68,11 @@ app.controller('controller', function($scope, $rootScope, $notification, $storag
     $scope.clearFavoritesFilter = function() {
       $scope.favoriteFilter = '';
     };
+
+    $scope.randomFavorite = function() {
+      const favorites = $scope.getFavorites();
+      $scope.readd(favorites[Math.floor(Math.random() * favorites.length)].key);
+    };
     /*****************
      * End Favorites *
      *****************/
