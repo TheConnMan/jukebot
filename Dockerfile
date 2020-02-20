@@ -1,10 +1,11 @@
-FROM alpine:3.4
+FROM alpine:3.8
 
-RUN apk add --no-cache nodejs git
+RUN apk add --no-cache git npm
 
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app
+
 RUN npm install
 
 COPY . /usr/src/app
