@@ -22,7 +22,7 @@
     "grunt-sync": "0.5.2",
     "include-all": "^1.0.0",
     "log4js": "^1.0.1",
-    "moment": "^2.19.3",
+    "moment": "^2.29.4",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "rc": "1.0.1",
