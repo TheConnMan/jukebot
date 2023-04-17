@@ -31,7 +31,7 @@
     "sails-disk": "~0.10.9",
     "sails-mysql": "^0.11.5",
     "slack-webhook": "^1.0.0",
-    "youtube-api": "^2.0.9"
+    "youtube-api": "^3.0.1"
   },
   "scripts": {
     "debug": "node debug app.js",
