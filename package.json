@@ -6,7 +6,7 @@
   "dependencies": {
     "db-migrate": "^0.10.2",
     "db-migrate-mysql": "^1.1.10",
-    "ejs": "^2.5.7",
+    "ejs": "^3.1.7",
     "fluent-logger": "github:theconnman/fluent-logger-node",
     "grunt": "1.0.1",
     "grunt-contrib-clean": "1.0.0",
